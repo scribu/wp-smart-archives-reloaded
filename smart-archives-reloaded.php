@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.0
+Version: 1.1b
 Description: (<a href="options-general.php?page=smart-archives"><strong>Settings</strong></a>) A simple, clean and future-proof way to present your archives.
 Author: scribu
 Author URI: http://scribu.net
@@ -14,19 +14,29 @@ class smartArchives {
 	function __construct() {
 		$this->cachefile = dirname(__FILE__) . '/cache.txt';
 
-		add_action('smart_archives', array(&$this, 'display')); // add custom action for displaying the archives
-		add_action('publish_post', array(&$this, 'generate')); // generate archives after a new post
+		add_shortcode('smart_archives', array(&$this, 'shortcode'));
+		add_action('smart_archives', array(&$this, 'display'));
+		add_action('smart_archives_update', array(&$this, 'generate'));
 	}
 
-	function display() {
+	function shortcode() {
+		return $this->display(FALSE);
+	}
+
+	function display($echo = TRUE) {
 		if ( !file_exists($this->cachefile) )
 			$this->generate();
 
-		echo file_get_contents($this->cachefile);
+		$output = file_get_contents($this->cachefile);
+
+		if ($echo)
+			echo $output;
+		else
+			return $output;
 	}
 
 	function generate() {
-		$fh = fopen($this->cachefile, 'w') or die('Could not open file!');
+		$fh = fopen($this->cachefile, 'w');
 
 		global $wpdb;
 		setlocale(LC_ALL, WPLANG); // set localization language; please see instructions
@@ -129,4 +139,14 @@ if ( is_admin() )
 else
 	$smartArchives = new smartArchives();
 
+// Install
+function smart_archives_install() {
+	global $smartArchivesAdmin;
+
+	$smartArchivesAdmin = new smartArchivesAdmin();
+
+	$smartArchivesAdmin->install();
+}
+
+register_activation_hook(__FILE__, 'smart_archives_install');
 ?>

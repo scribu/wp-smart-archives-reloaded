@@ -8,9 +8,12 @@ class smartArchivesAdmin extends smartArchives {
 	function __construct() {
 		$this->cachefile = dirname(dirname(__FILE__)) . '/cache.txt';
 
-		add_option('smart-archives', $this->options); // set default options
-
 		add_action('admin_menu', array(&$this, 'page_init'));
+	}
+
+	function install() {
+		add_option('smart-archives', $this->options);
+		wp_schedule_event(time(), 'daily', 'smart_archives_update');
 	}
 
 	// Options Page
