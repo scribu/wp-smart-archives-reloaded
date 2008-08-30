@@ -1,8 +1,8 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.1b
-Description: (<a href="options-general.php?page=smart-archives"><strong>Settings</strong></a>) A simple, clean and future-proof way to present your archives.
+Version: 1.1
+Description: (<a href="options-general.php?page=smart-archives"><strong>Settings</strong></a>) An elegant and easy way to present your archives.
 Author: scribu
 Author URI: http://scribu.net
 Plugin URI: http://scribu.net/projects/smart-archives-reloaded.html
@@ -14,9 +14,9 @@ class smartArchives {
 	function __construct() {
 		$this->cachefile = dirname(__FILE__) . '/cache.txt';
 
-		add_shortcode('smart_archives', array(&$this, 'shortcode'));
-		add_action('smart_archives', array(&$this, 'display'));
-		add_action('smart_archives_update', array(&$this, 'generate'));
+		add_shortcode('smart_archives', array(&$this, 'shortcode'));	// shortcode for displaying the archives
+		add_action('smart_archives', array(&$this, 'display'));		// hook for displaying the archives anywhere
+		add_action('smart_archives_update', array(&$this, 'generate'));	// hook for wp_cron
 	}
 
 	function shortcode() {
@@ -36,7 +36,7 @@ class smartArchives {
 	}
 
 	function generate() {
-		$fh = fopen($this->cachefile, 'w');
+		$fh = fopen($this->cachefile, 'w') or die("Can't open cache file!");
 
 		global $wpdb;
 		setlocale(LC_ALL, WPLANG); // set localization language; please see instructions
@@ -139,14 +139,9 @@ if ( is_admin() )
 else
 	$smartArchives = new smartArchives();
 
-// Install
-function smart_archives_install() {
-	global $smartArchivesAdmin;
+// Activate
+register_activation_hook(__FILE__, create_function('', '$admin = new smartArchivesAdmin(); $admin->activate();') );
 
-	$smartArchivesAdmin = new smartArchivesAdmin();
-
-	$smartArchivesAdmin->install();
-}
-
-register_activation_hook(__FILE__, 'smart_archives_install');
+// Deactivate
+register_deactivation_hook(__FILE__, create_function('', '$admin = new smartArchivesAdmin(); $admin->deactivate();') );
 ?>

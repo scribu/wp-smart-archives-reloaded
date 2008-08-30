@@ -1,8 +1,9 @@
 <?php
 class smartArchivesAdmin extends smartArchives {
-	var $options = array(
+	var $defaults = array(
 		'format' => 'both',
-		'catID' => ''
+		'catID' => '',
+		'interval' => 'daily'
 	);
 
 	function __construct() {
@@ -11,9 +12,17 @@ class smartArchivesAdmin extends smartArchives {
 		add_action('admin_menu', array(&$this, 'page_init'));
 	}
 
-	function install() {
-		add_option('smart-archives', $this->options);
-		wp_schedule_event(time(), 'daily', 'smart_archives_update');
+	function activate() {
+		add_option('smart-archives', $this->defaults) or extract(get_option('smart-archives'));
+
+		if ( !$interval )
+			$interval = $this->defaults['interval'];
+
+		wp_schedule_event(time(), $interval, 'smart_archives_update');
+	}
+
+	function deactivate() {
+		wp_clear_scheduled_hook('smart_archives_update');
 	}
 
 	// Options Page
@@ -23,18 +32,23 @@ class smartArchivesAdmin extends smartArchives {
 	}
 
 	function page() {
-		$this->options = get_option('smart-archives'); // load options
+		$options = get_option('smart-archives'); // load options
 
 		// Update options
 		if ( $_POST['submit-options'] ) {
-			foreach ($this->options as $name => $value)
+			foreach ($this->defaults as $name => $value)
 				$newoptions[$name] = $_POST[$name];
 
-			if($newoptions != $this->options) {
-				$this->options = $newoptions;
-				update_option('smart-archives', $this->options);
+			if ( $newoptions != $options ) {
+				update_option('smart-archives', $newoptions);
 
-				$this->generate(); // rebuild the archive with changed settings
+				if ( $newoptions['interval'] != $options['interval'] )
+					wp_reschedule_event(time(), $newoptions['interval'], 'smart_archives_update');
+
+				if ( $newoptions['format'] != $options['format'] || $newoptions['catID'] != $options['catID'])
+					$this->generate(); // rebuild the archive with changed settings
+
+				$options = $newoptions;
 			}
 
 			echo '<div class="updated"><p>Options <strong>saved</strong>.</p></div>';
@@ -48,7 +62,7 @@ class smartArchivesAdmin extends smartArchives {
 			<th scope="row" valign="top">Format</th>
 			<td>
 			<?php foreach (array('block', 'list', 'both') as $value) { ?>
-				<input type="radio"<?php if ($value === $this->options['format']) echo ' checked="checked"'; ?> name="format" value="<?php echo $value; ?>" />
+				<input type="radio"<?php if ($value === $options['format']) echo ' checked="checked"'; ?> name="format" value="<?php echo $value; ?>" />
 				<label><?php echo $value; ?></label>
 				<br class="clear" />
 			<?php } ?>
@@ -57,10 +71,26 @@ class smartArchivesAdmin extends smartArchives {
 		<tr>
 			<th scope="row" valign="top">Exclude Categories by ID</th>
 			<td>
-				<input type="text" name="catID" value="<?php echo $this->options['catID']; ?>" style="width: 250px" />
-				<label>A list of category IDs (space separated) that you want to exclude from the list archives</label>
+				<input type="text" name="catID" value="<?php echo $options['catID']; ?>" style="width: 250px" />
+				<label>(space separated)</label>
+
+				<p>A list of category IDs  that you want to exclude from the list archives.</p>
 			</td>
 		</tr>
+		<tr>
+			<th scope="row" valign="top">Cache Update</th>
+			<td>
+			<?php foreach (array('hourly', 'twicedaily', 'daily') as $value) { ?>
+				<input type="radio"<?php if ($value === $options['interval']) echo ' checked="checked"'; ?> name="interval" value="<?php echo $value; ?>" />
+				<label><?php echo str_replace('twicedaily', 'twice daily', $value); ?></label>
+
+				<br class="clear" />
+			<?php } ?>
+
+				<p>Set how often you want the cache to be updated.</p>
+			</td>
+		</tr>
+		<tr>
 	</table>
 
 	<p class="submit">
