@@ -4,7 +4,7 @@ Donate link: http://scribu.net/projects
 Tags: custom-fields, images, thumbs
 Requires at least: 2.3
 Tested up to: 2.6+
-Stable tag: 1.1
+Stable tag: trunk
 
 An elegant and easy way to present your archives.
 
@@ -24,8 +24,8 @@ See a live [example](http://scribu.net/arhiva) on my site.
 
 The plugin can be installed in 3 easy steps:
 
-1. Unzip "Custom Field Images" archive and put the folder into your plugins folder (/wp-content/plugins/).
+1. Unzip "Smart Archives Reloaded" archive and put the folder into your plugins folder (/wp-content/plugins/).
 1. Activate the plugin from the Plugins menu.
-1. Insert `[smart_archives]` in a page or post.
+1. Create a new page or post with `[smart_archives]` in it.
 
-Alternatively, you can add `<?php do_action('smart_archives'); ?>` anywhere in your theme, where you want the archives displayed.
+Alternatively, you can add `<?php smart_archives(); ?>` anywhere in your theme, where you want the archives displayed.

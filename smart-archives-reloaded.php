@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.1
+Version: 1.1.1
 Description: (<a href="options-general.php?page=smart-archives"><strong>Settings</strong></a>) An elegant and easy way to present your archives.
 Author: scribu
 Author URI: http://scribu.net
@@ -14,25 +14,20 @@ class smartArchives {
 	function __construct() {
 		$this->cachefile = dirname(__FILE__) . '/cache.txt';
 
-		add_shortcode('smart_archives', array(&$this, 'shortcode'));	// shortcode for displaying the archives
+		add_shortcode('smart_archives', array(&$this, 'load'));	// shortcode for displaying the archives
 		add_action('smart_archives', array(&$this, 'display'));		// hook for displaying the archives anywhere
 		add_action('smart_archives_update', array(&$this, 'generate'));	// hook for wp_cron
 	}
 
-	function shortcode() {
-		return $this->display(FALSE);
+	function display() {
+		echo $this->load();
 	}
 
-	function display($echo = TRUE) {
+	function load() {
 		if ( !file_exists($this->cachefile) )
 			$this->generate();
 
-		$output = file_get_contents($this->cachefile);
-
-		if ($echo)
-			echo $output;
-		else
-			return $output;
+		return file_get_contents($this->cachefile);
 	}
 
 	function generate() {
@@ -144,4 +139,9 @@ register_activation_hook(__FILE__, create_function('', '$admin = new smartArchiv
 
 // Deactivate
 register_deactivation_hook(__FILE__, create_function('', '$admin = new smartArchivesAdmin(); $admin->deactivate();') );
+
+// Functions
+function smart_archives() {
+	do_action('smart_archives');
+}
 ?>
