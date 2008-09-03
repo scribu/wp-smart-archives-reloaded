@@ -29,3 +29,8 @@ The plugin can be installed in 3 easy steps:
 1. Create a new page or post with `[smart_archives]` in it.
 
 Alternatively, you can add `<?php smart_archives(); ?>` anywhere in your theme, where you want the archives displayed.
+
+== Frequently Asked Questions ==
+
+= "Can't open cache file!" =
+Go to your plugin directory, create an empty file called "cache.txt" and change it's permissions (chmod) to 757.
