@@ -1,21 +1,33 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.1.1
-Description: (<a href="options-general.php?page=smart-archives"><strong>Settings</strong></a>) An elegant and easy way to present your archives.
+Version: 1.2b
+Description: (<a href="options-general.php?page=smart-archives">Settings</a>) An elegant and easy way to present your archives.
 Author: scribu
 Author URI: http://scribu.net
 Plugin URI: http://scribu.net/projects/smart-archives-reloaded.html
+
+Copyright (C) 2008 scribu.net (scribu AT gmail DOT com)
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+define('SAR_CACHE', dirname(__FILE__) . '/cache.txt');
+
 class smartArchives {
-	var $cachefile;
-
 	function __construct() {
-		$this->cachefile = dirname(__FILE__) . '/cache.txt';
-
-		add_shortcode('smart_archives', array(&$this, 'load'));	// shortcode for displaying the archives
-		add_action('smart_archives', array(&$this, 'display'));		// hook for displaying the archives anywhere
+		add_shortcode('smart_archives', array(&$this, 'load'));			// shortcode for displaying the archives
 		add_action('smart_archives_update', array(&$this, 'generate'));	// hook for wp_cron
 	}
 
@@ -24,124 +36,139 @@ class smartArchives {
 	}
 
 	function load() {
-		if ( !file_exists($this->cachefile) )
-			$this->generate();
+		$output = @file_get_contents(SAR_CACHE);
 
-		return file_get_contents($this->cachefile);
+		if ( $output )
+			return $output;
+		else {
+			$this->generate();
+			return file_get_contents(SAR_CACHE);
+		}
 	}
 
 	function generate() {
-		$fh = fopen($this->cachefile, 'w') or die("Can't open cache file!");
+		$fh = fopen(SAR_CACHE, 'w') or die("Can't open cache file!");
 
 		global $wpdb;
-		setlocale(LC_ALL, WPLANG); // set localization language; please see instructions
 
-		extract(get_option('smart-archives')); // load options
+		setlocale(LC_ALL, WPLANG);	// set localization language; please see instructions
 
-		$now = gmdate("Y-m-d H:i:s",(time()+((get_settings('gmt_offset'))*3600))); // get the current GMT date
-		$bogusDate = "/01/2001"; // used for the strtotime() function below
+		extract(get_option('smart-archives'));	// load options
 
-		$yearsWithPosts = $wpdb->get_results("
-			SELECT DISTINCT year(post_date) AS `year`, count(ID) as posts
+		$bogusDate = "/01/2001";	// used for the strtotime() function below
+		
+		$query = $wpdb->prepare("
+			SELECT DISTINCT year(post_date) AS year
 			FROM $wpdb->posts
 			WHERE post_type = 'post'
 			AND post_status = 'publish'
 			GROUP BY year(post_date)
-			ORDER BY post_date DESC");
+			HAVING count(ID) > 0
+			ORDER BY post_date DESC
+		");
 
-		foreach ($yearsWithPosts as $currentYear)
-			for ($currentMonth = 1; $currentMonth <= 12; $currentMonth++)
-				$monthsWithPosts[$currentYear->year][$currentMonth] = $wpdb->get_results("
-					SELECT ID, post_title FROM $wpdb->posts
+		$yearsWithPosts = $wpdb->get_results($query);
+
+		if ( !$yearsWithPosts )
+			return;
+
+		foreach ( $yearsWithPosts as $current)
+			for ( $i = 1; $i <= 12; $i++ ) {
+				$query = $wpdb->prepare("
+					SELECT ID, post_title
+					FROM $wpdb->posts
 					WHERE post_type = 'post'
 					AND post_status = 'publish'
-					AND year(post_date) = '$currentYear->year'
-					AND month(post_date) = '$currentMonth'
-					ORDER BY post_date DESC");
+					AND year(post_date) = %d
+					AND month(post_date) = %d
+					AND post_date < CURRENT_TIMESTAMP
+					ORDER BY post_date DESC
+				", $current->year, $i);
 
-		if (($format == 'both') || ($format == 'block')) { // check to see if we are supposed to display the block
+				$monthsWithPosts[$current->year][$i] = $wpdb->get_results($query);
+			}
 
+		if ( $format == 'both' || $format == 'block' ) {
 			// get the shortened month name; strftime() should localize
-			for($currentMonth = 1; $currentMonth <= 12; $currentMonth++)
-				$shortMonths[$currentMonth] = ucfirst(strftime("%b", strtotime("$currentMonth"."$bogusDate")));
+			for($i = 1; $i <= 12; $i++)
+				$shortMonths[$i] = ucfirst(strftime("%b", strtotime($i.$bogusDate)));
 
-			if ($yearsWithPosts) {
-				foreach ($yearsWithPosts as $currentYear) {
-					$archives .= '<strong><a href="'.get_year_link($currentYear->year, $currentYear->year).'">'.$currentYear->year.'</a>:</strong> ';
+			$archives .= "<ul id=\"smart-archives-block\">\n";
 
-					for ($currentMonth = 1; $currentMonth <= 12; $currentMonth++)
-						if ($monthsWithPosts[$currentYear->year][$currentMonth]) $archives .= '<a href="'.get_month_link($currentYear->year, $currentMonth).'">'.$shortMonths[$currentMonth].'</a> ';
-						else $archives .= '<span class="emptymonth">'.$shortMonths[$currentMonth].'</span> ';
+			foreach ( $yearsWithPosts as $current ) {
+				$archives .= "\t".'<li><strong><a href="' . get_year_link($current->year) . '">' . $current->year . '</a>:</strong> ';
 
-					$archives .= '<br />';
-				}
-				$archives .= '<br /><br />';
+				for ( $i = 1; $i <= 12; $i++ )
+					if ( $monthsWithPosts[$current->year][$i] )
+						$archives .= '<a href="'.get_month_link($current->year, $i).'">'.$shortMonths[$i].'</a> ';
+					else
+						$archives .= '<span class="emptymonth">'.$shortMonths[$i].'</span> ';
+
+				$archives .= "</li>\n";
 			}
 
-			if ($format == 'block')
-				fwrite($fh, $archives); // write archives to file if not displaying list format
+			$archives .= "</ul>\n";
+
+			if ( $format == 'block' )
+				fwrite($fh, $archives);	// write archives to file if not displaying list format
 		}
 
-	if (($format == 'both') || ($format == 'list')) { //check to see if we are supposed to display the list
+		if ( $format == 'both' || $format == 'list' ) {
 			// get the month name; strftime() should localize
-			for($currentMonth = 1; $currentMonth <= 12; $currentMonth++)
-				$monthNames[$currentMonth] = ucfirst(strftime("%B", strtotime("$currentMonth"."$bogusDate")));
+			for ( $i = 1; $i <= 12; $i++ )
+				$monthNames[$i] = ucfirst(strftime("%B", strtotime($i.$bogusDate)));
 
-		if ($yearsWithPosts) {
-			if ($catID != '') { // at least one category was specified to be excluded
-				$catIDs = explode(" ", $catID); // put the category(ies) into an array
-				foreach($yearsWithPosts as $currentYear) {
-					for ($currentMonth = 12; $currentMonth >= 1; $currentMonth--) {
-						if ($monthsWithPosts[$currentYear->year][$currentMonth]) {
-							$archives .= '<h2><a href="'.get_month_link($currentYear->year, $currentMonth).'">'.$monthNames[$currentMonth].' '.$currentYear->year.'</a></h2>';
-							$archives .= '<ul>';
-							foreach ($monthsWithPosts[$currentYear->year][$currentMonth] as $post) {
-								if ($post->post_date <= $now) {
-									$cats = wp_get_post_categories($post->ID);
-									$found = false;
-									foreach ($cats as $cat) if (in_array($cat, $catIDs)) $found = true;
-									if (!$found)
-										$archives .= '<li><a href="'.get_permalink($post->ID).'">'.$post->post_title.'</a></li>';
-								}
-							}
-							$archives .= '</ul>';
+			$archives .= "\n<div id=\"smart-archives-list\">\n";
+
+			$catIDs = explode(' ', $catID);	// put the category(ies) into an array
+
+			foreach ( $yearsWithPosts as $current )
+				for ( $i = 12; $i >= 1; $i-- ) {
+					if ( !$monthsWithPosts[$current->year][$i] )
+						continue;
+
+					$tmp = '';
+
+					foreach ( $monthsWithPosts[$current->year][$i] as $post ) {
+						if ( !empty($catIDs) ) {
+							$cats = wp_get_post_categories($post->ID);
+
+							foreach ( $cats as $cat)
+								if ( in_array($cat, $catIDs))
+									continue 2;	// skip to next post
 						}
+
+						$tmp .= '<li><a href="'.get_permalink($post->ID).'">'.$post->post_title.'</a></li>'."\n";
 					}
+
+					if ( !$tmp )
+						continue;
+
+					$archives .= "\n" . '<h2><a href="' . get_month_link($current->year, $i) . '">' . $monthNames[$i] . ' ' . $current->year . '</a></h2>' . "\n";
+					$archives .= "<ul>\n" . $tmp . "</ul>\n";
 				}
-			} else { // we don't need to exclude any categories
-				foreach($yearsWithPosts as $currentYear) {
-					for ($currentMonth = 12; $currentMonth >= 1; $currentMonth--) {
-						if ($monthsWithPosts[$currentYear->year][$currentMonth]) {
-							$archives .= '<h2><a href="'.get_month_link($currentYear->year, $currentMonth).'">'.$monthNames[$currentMonth].' '.$currentYear->year.'</a></h2>';
-							$archives .= '<ul>';
-							foreach ($monthsWithPosts[$currentYear->year][$currentMonth] as $post)
-								$archives .= '<li><a href="'.get_permalink($post->ID).'">'.$post->post_title.'</a></li>';
-							$archives .= '</ul>';
-						}
-					}
-				}
-			}
+
+			$archives .= "</div>\n";
+
+			fwrite($fh, $archives);	// write archives to file
 		}
-		fwrite($fh, $archives); // write archives to file
-	}
-	fclose($fh); // close archives file
+		fclose($fh);	// close archives file
 	}
 }
 
 // Init
-if ( is_admin() )
+if ( is_admin() ) {
 	require_once('inc/admin.php');
-else
+	$smartArchivesAdmin	= new smartArchivesAdmin();
+
+	register_activation_hook(__FILE__, array(&$smartArchivesAdmin, 'activate') );
+	register_deactivation_hook(__FILE__, array(&$smartArchivesAdmin, 'deactivate') );
+} else
 	$smartArchives = new smartArchives();
 
-// Activate
-register_activation_hook(__FILE__, create_function('', '$admin = new smartArchivesAdmin(); $admin->activate();') );
-
-// Deactivate
-register_deactivation_hook(__FILE__, create_function('', '$admin = new smartArchivesAdmin(); $admin->deactivate();') );
-
-// Functions
+// Template tag
 function smart_archives() {
-	do_action('smart_archives');
+	global $smartArchives;
+	$smartArchives->display();
 }
-?>
+

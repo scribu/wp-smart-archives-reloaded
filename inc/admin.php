@@ -5,10 +5,9 @@ class smartArchivesAdmin extends smartArchives {
 		'catID' => '',
 		'interval' => 'daily'
 	);
+	var $nonce = 'smart-archives-options';
 
 	function __construct() {
-		$this->cachefile = dirname(dirname(__FILE__)) . '/cache.txt';
-
 		add_action('admin_menu', array(&$this, 'page_init'));
 	}
 
@@ -25,7 +24,8 @@ class smartArchivesAdmin extends smartArchives {
 		wp_clear_scheduled_hook('smart_archives_update');
 	}
 
-	// Options Page
+// Options page methods
+
 	function page_init() {
 		if ( current_user_can('manage_options') )
 			add_options_page('Smart Archives', 'Smart Archives', 8, 'smart-archives', array(&$this, 'page'));
@@ -35,7 +35,9 @@ class smartArchivesAdmin extends smartArchives {
 		$options = get_option('smart-archives'); // load options
 
 		// Update options
-		if ( $_POST['submit-options'] ) {
+		if ( 'Save' == $_POST['action'] ) {
+			check_admin_referer($this->nonce);
+
 			foreach ($this->defaults as $name => $value)
 				$newoptions[$name] = $_POST[$name];
 
@@ -55,8 +57,9 @@ class smartArchivesAdmin extends smartArchives {
 		}
 	?>
 <div class="wrap">
+
 <h2>Smart Archives Options</h2>
-<form name="sar-options" method="post" action="<?= str_replace( '%7E', '~', $_SERVER['REQUEST_URI']); ?>">
+<form name="sar-options" method="post" action="">
 	<table class="form-table">
 		<tr>
 			<th scope="row" valign="top">Format</th>
@@ -93,8 +96,10 @@ class smartArchivesAdmin extends smartArchives {
 		<tr>
 	</table>
 
+	<?php wp_nonce_field($this->nonce); ?>
+
 	<p class="submit">
-	<input type="submit" name="submit-options" value="Save Options" />
+		<input type="submit" name="action" value="Save" />
 	</p>
 </form>
 
@@ -103,5 +108,3 @@ class smartArchivesAdmin extends smartArchives {
 	}
 }
 
-$smartArchivesAdmin = new smartArchivesAdmin();
-?>
