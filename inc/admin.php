@@ -2,8 +2,7 @@
 class smartArchivesAdmin extends smartArchives {
 	var $options = array(
 		'format' => 'both',
-		'cats' => '',
-		'tags' => '',
+		'catID' => '',
 		'interval' => 'daily'
 	);
 
@@ -47,7 +46,7 @@ class smartArchivesAdmin extends smartArchives {
 		if ( $newoptions['interval'] != $this->options['interval'] )
 			wp_reschedule_event(time(), $newoptions['interval'], 'smart_archives_update');
 
-		if ( ($newoptions['format'] != $this->options['format']) || ($newoptions['cats'] != $this->options['cats']) )
+		if ( ($newoptions['format'] != $this->options['format']) || ($newoptions['catID'] != $this->options['catID']) )
 			$this->generate(); // rebuild the archive with changed settings
 
 		$this->options = $newoptions;
@@ -77,7 +76,7 @@ class smartArchivesAdmin extends smartArchives {
 		<tr>
 			<th scope="row" valign="top">Exclude Categories by ID</th>
 			<td>
-				<input type="text" name="cats" value="<?php echo $this->options['cats']; ?>" style="width: 250px" />
+				<input type="text" name="catID" value="<?php echo $this->options['catID']; ?>" style="width: 250px" />
 				<label>(space separated)</label>
 
 				<p>A list of category IDs  that you want to exclude from the list archives.</p>
