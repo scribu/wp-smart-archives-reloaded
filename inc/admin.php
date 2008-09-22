@@ -1,10 +1,12 @@
 <?php
 class smartArchivesAdmin extends smartArchives {
-	var $defaults = array(
+	var $options = array(
 		'format' => 'both',
-		'catID' => '',
+		'cats' => '',
+		'tags' => '',
 		'interval' => 'daily'
 	);
+
 	var $nonce = 'smart-archives-options';
 
 	function __construct() {
@@ -12,12 +14,9 @@ class smartArchivesAdmin extends smartArchives {
 	}
 
 	function activate() {
-		add_option('smart-archives', $this->defaults) or extract(get_option('smart-archives'));
+		add_option('smart-archives', $this->options);
 
-		if ( !$interval )
-			$interval = $this->defaults['interval'];
-
-		wp_schedule_event(time(), $interval, 'smart_archives_update');
+		wp_schedule_event(time(), $this->options['interval'], 'smart_archives_update');
 	}
 
 	function deactivate() {
@@ -31,30 +30,34 @@ class smartArchivesAdmin extends smartArchives {
 			add_options_page('Smart Archives', 'Smart Archives', 8, 'smart-archives', array(&$this, 'page'));
 	}
 
+	function update_options() {
+		if ( 'Save' != $_POST['action'] )
+			return;
+
+		check_admin_referer($this->nonce);
+
+		foreach ( $this->options as $name => $value )
+			$newoptions[$name] = $_POST[$name];
+
+		if ( $newoptions == $this->options )
+			return;
+
+		update_option('smart-archives', $newoptions);	// First update, then generate
+
+		if ( $newoptions['interval'] != $this->options['interval'] )
+			wp_reschedule_event(time(), $newoptions['interval'], 'smart_archives_update');
+
+		if ( ($newoptions['format'] != $this->options['format']) || ($newoptions['cats'] != $this->options['cats']) )
+			$this->generate(); // rebuild the archive with changed settings
+
+		$this->options = $newoptions;
+
+		echo '<div class="updated"><p>Options <strong>saved</strong>.</p></div>';
+	}
+
 	function page() {
-		$options = get_option('smart-archives'); // load options
-
-		// Update options
-		if ( 'Save' == $_POST['action'] ) {
-			check_admin_referer($this->nonce);
-
-			foreach ($this->defaults as $name => $value)
-				$newoptions[$name] = $_POST[$name];
-
-			if ( $newoptions != $options ) {
-				update_option('smart-archives', $newoptions);
-
-				if ( $newoptions['interval'] != $options['interval'] )
-					wp_reschedule_event(time(), $newoptions['interval'], 'smart_archives_update');
-
-				if ( $newoptions['format'] != $options['format'] || $newoptions['catID'] != $options['catID'])
-					$this->generate(); // rebuild the archive with changed settings
-
-				$options = $newoptions;
-			}
-
-			echo '<div class="updated"><p>Options <strong>saved</strong>.</p></div>';
-		}
+		$this->options = get_option('smart-archives');
+		$this->update_options();
 	?>
 <div class="wrap">
 
@@ -65,7 +68,7 @@ class smartArchivesAdmin extends smartArchives {
 			<th scope="row" valign="top">Format</th>
 			<td>
 			<?php foreach (array('block', 'list', 'both') as $value) { ?>
-				<input type="radio"<?php if ($value === $options['format']) echo ' checked="checked"'; ?> name="format" value="<?php echo $value; ?>" />
+				<input type="radio"<?php if ($value == $this->options['format']) echo ' checked="checked"'; ?> name="format" value="<?php echo $value; ?>" />
 				<label><?php echo $value; ?></label>
 				<br class="clear" />
 			<?php } ?>
@@ -74,7 +77,7 @@ class smartArchivesAdmin extends smartArchives {
 		<tr>
 			<th scope="row" valign="top">Exclude Categories by ID</th>
 			<td>
-				<input type="text" name="catID" value="<?php echo $options['catID']; ?>" style="width: 250px" />
+				<input type="text" name="cats" value="<?php echo $this->options['cats']; ?>" style="width: 250px" />
 				<label>(space separated)</label>
 
 				<p>A list of category IDs  that you want to exclude from the list archives.</p>
@@ -84,7 +87,7 @@ class smartArchivesAdmin extends smartArchives {
 			<th scope="row" valign="top">Cache Update</th>
 			<td>
 			<?php foreach (array('hourly', 'twicedaily', 'daily') as $value) { ?>
-				<input type="radio"<?php if ($value === $options['interval']) echo ' checked="checked"'; ?> name="interval" value="<?php echo $value; ?>" />
+				<input type="radio"<?php if ($value == $this->options['interval']) echo ' checked="checked"'; ?> name="interval" value="<?php echo $value; ?>" />
 				<label><?php echo str_replace('twicedaily', 'twice daily', $value); ?></label>
 
 				<br class="clear" />

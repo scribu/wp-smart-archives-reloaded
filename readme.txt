@@ -4,7 +4,7 @@ Donate link: http://scribu.net/projects
 Tags: custom-fields, images, thumbs
 Requires at least: 2.3
 Tested up to: 2.6+
-Stable tag: trunk
+Stable tag: 1.2
 
 An elegant and easy way to present your archives.
 

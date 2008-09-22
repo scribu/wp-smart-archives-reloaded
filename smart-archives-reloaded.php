@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.2
+Version: 1.2.1a
 Description: (<a href="options-general.php?page=smart-archives">Settings</a>) An elegant and easy way to present your archives.
 Author: scribu
 Author URI: http://scribu.net
@@ -38,28 +38,23 @@ class smartArchives {
 	function load() {
 		$output = @file_get_contents(SAR_CACHE);
 
-		if ( $output )
-			return $output;
-		else {
-			$this->generate();
-			return file_get_contents(SAR_CACHE);
-		}
+		return $output ? $output : $this->generate();
 	}
 
 	function generate() {
-		$fh = fopen(SAR_CACHE, 'w') or die("Can't open cache file!");
+		$fh = @fopen(SAR_CACHE, 'w') or die("Can't open cache file!");
 
 		global $wpdb;
+	
+		extract(get_option('smart-archives'));
 
 		setlocale(LC_ALL, WPLANG);	// set localization language; please see instructions
-
-		extract(get_option('smart-archives'));	// load options
 
 		$bogusDate = "/01/2001";	// used for the strtotime() function below
 		
 		$query = $wpdb->prepare("
 			SELECT DISTINCT year(post_date) AS year
-			FROM $wpdb->posts
+			FROM {$wpdb->posts}
 			WHERE post_type = 'post'
 			AND post_status = 'publish'
 			GROUP BY year(post_date)
@@ -76,7 +71,7 @@ class smartArchives {
 			for ( $i = 1; $i <= 12; $i++ ) {
 				$query = $wpdb->prepare("
 					SELECT ID, post_title
-					FROM $wpdb->posts
+					FROM {$wpdb->posts}
 					WHERE post_type = 'post'
 					AND post_status = 'publish'
 					AND year(post_date) = %d
@@ -120,7 +115,7 @@ class smartArchives {
 
 			$archives .= "\n<div id=\"smart-archives-list\">\n";
 
-			$catIDs = explode(' ', $catID);	// put the category(ies) into an array
+			$exclude_cats = explode(' ', $catID);
 
 			foreach ( $yearsWithPosts as $current )
 				for ( $i = 12; $i >= 1; $i-- ) {
@@ -130,22 +125,21 @@ class smartArchives {
 					$tmp = '';
 
 					foreach ( $monthsWithPosts[$current->year][$i] as $post ) {
-						if ( !empty($catIDs) ) {
-							$cats = wp_get_post_categories($post->ID);
+						if ( $catID != '' ) {
+							$post_cats = wp_get_post_categories($post->ID);
 
-							foreach ( $cats as $cat)
-								if ( in_array($cat, $catIDs))
-									continue 2;	// skip to next post
+							if ( array_intersect($post_cats, $exclude_cats) )
+									continue;	// skip to next post
 						}
 
 						$tmp .= '<li><a href="'.get_permalink($post->ID).'">'.$post->post_title.'</a></li>'."\n";
 					}
 
 					if ( !$tmp )
-						continue;
+						continue;	// skip to next month
 
-					$archives .= "\n" . '<h2><a href="' . get_month_link($current->year, $i) . '">' . $monthNames[$i] . ' ' . $current->year . '</a></h2>' . "\n";
-					$archives .= "<ul>\n" . $tmp . "</ul>\n";
+					$archives .= "\n".'<h2><a href="'.get_month_link($current->year, $i).'">'.$monthNames[$i].' '.$current->year.'</a></h2>'."\n";
+					$archives .= "<ul>\n$tmp</ul>\n";
 				}
 
 			$archives .= "</div>\n";
@@ -153,6 +147,8 @@ class smartArchives {
 			fwrite($fh, $archives);	// write archives to file
 		}
 		fclose($fh);	// close archives file
+
+		return $archives;
 	}
 }
 
