@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.3
+Version: 1.3.1
 Description: An elegant and easy way to present your archives.
 Author: scribu
 Author URI: http://scribu.net
@@ -23,12 +23,13 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-define('SAR_CACHE', dirname(__FILE__) . '/cache.txt');
-
 class displaySAR {
-	var $options;
+	private $options;
+	private $cache;
 
 	public function __construct(scbOptions $options) {
+		$this->cache = dirname(__FILE__) . '/cache.txt';
+
 		$this->options = $options;
 
 		add_shortcode('smart_archives', array($this, 'load'));			// shortcode for displaying the archives
@@ -36,14 +37,14 @@ class displaySAR {
 	}
 
 	public function load() {
-		$output = @file_get_contents(SAR_CACHE);
+		$output = @file_get_contents($this->cache);
 
 		return $output ? $output : $this->generate(false);
 	}
 
 	public function generate($require_cache = true) {
-		if ( !$fh = @fopen(SAR_CACHE, 'w') ) {
-			trigger_error("Can't open cache file: ".SAR_CACHE, E_USER_WARNING);
+		if ( !$fh = @fopen($this->cache, 'w') ) {
+			trigger_error("Can't open cache file: ".$this->cache, E_USER_WARNING);
 		
 			if ( $require_cache )
 				return false; // exit if we can't write to file
@@ -60,7 +61,7 @@ class displaySAR {
 			$exclude_cats_sql = sprintf("
 				AND ID NOT IN (
 					SELECT r.object_id
-					FROM wp_term_relationships r NATURAL JOIN wp_term_taxonomy t
+					FROM {$wpdb->term_relationships} r NATURAL JOIN {$wpdb->term_taxonomy} t
 					WHERE t.taxonomy = 'category'
 					AND t.term_id IN (%s)
 				)

@@ -33,7 +33,7 @@ class settingsSAR extends scbOptionsPage {
 		if ( function_exists('plugins_url') )
 			return plugins_url(plugin_basename(dirname(__FILE__)));
 		else
-			// Pre-2.6 compatibility
+			// < WP 2.6
 			return get_option('siteurl') . '/wp-content/plugins/' . plugin_basename(dirname(__FILE__));
 	}
 
@@ -147,3 +147,7 @@ class adminSAR {
 	}
 }
 
+// < WP 2.7
+if ( !function_exists('register_uninstall_hook') ) :
+function register_uninstall_hook() {}
+endif;
