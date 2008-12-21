@@ -1,7 +1,7 @@
 === Smart Archives Reloaded ===
 Contributors: scribu
 Donate link: http://scribu.net/projects
-Tags: custom-fields, images, thumbs
+Tags: archive
 Requires at least: 2.3
 Tested up to: 2.7
 Stable tag: trunk
