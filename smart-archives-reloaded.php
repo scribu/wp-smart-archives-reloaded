@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.3.1
+Version: 1.4
 Description: An elegant and easy way to present your archives.
 Author: scribu
 Author URI: http://scribu.net
@@ -24,38 +24,40 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 class displaySAR {
-	private $options;
 	private $cache;
 
-	public function __construct(scbOptions $options) {
+	public function __construct() {
 		$this->cache = dirname(__FILE__) . '/cache.txt';
 
-		$this->options = $options;
+		// Set up cron hook
+		define('SAR_HOOK', 'smart_archives_update');
+		add_action(SAR_HOOK, array($this, 'generate'));
 
-		add_shortcode('smart_archives', array($this, 'load'));			// shortcode for displaying the archives
-		add_action('smart_archives_update', array($this, 'generate'));	// hook for wp_cron
+		// Set up shortcode
+		add_shortcode('smart_archives', array($this, 'load'));
 	}
 
 	public function load() {
-		$output = @file_get_contents($this->cache);
+		$cache = @file_get_contents($this->cache);
 
-		return $output ? $output : $this->generate(false);
+		// Use cache if available
+		return $cache ? $cache : $this->generate(false);
 	}
 
 	public function generate($require_cache = true) {
+		global $SAR_options, $wpdb;
+
 		if ( !$fh = @fopen($this->cache, 'w') ) {
-			trigger_error("Can't open cache file: ".$this->cache, E_USER_WARNING);
-		
+			trigger_error("Can't open cache file: {$this->cache}", E_USER_WARNING);
+
 			if ( $require_cache )
 				return false; // exit if we can't write to file
 		}
 
-		global $wpdb;
+		setlocale(LC_TIME, WPLANG);
 
-		setlocale(LC_ALL, WPLANG);	// set localization language; please see instructions
-		$bogusDate = "/01/2001";	// used for the strtotime() function below
-
-		extract($this->options->get());
+		// Extract options
+		extract($SAR_options->get());
 
 		if ( $catID )
 			$exclude_cats_sql = sprintf("
@@ -67,7 +69,7 @@ class displaySAR {
 				)
 			", str_replace(' ', ',', $catID));
 
-		// Get years with posts		
+		// Get years with posts
 		$query = $wpdb->prepare("
 			SELECT DISTINCT year(post_date) AS year
 			FROM {$wpdb->posts}
@@ -78,8 +80,7 @@ class displaySAR {
 			HAVING count(ID) > 0
 			ORDER BY post_date DESC
 		");
-
-		$yearsWithPosts = $wpdb->get_results($query);
+		$yearsWithPosts = $wpdb->get_col($query);
 
 		if ( !$yearsWithPosts )
 			return false;
@@ -92,31 +93,32 @@ class displaySAR {
 					FROM {$wpdb->posts}
 					WHERE post_type = 'post'
 					AND post_status = 'publish'
-					AND year(post_date) = {$current->year}
+					AND year(post_date) = {$current}
 					AND month(post_date) = {$i}
 					AND post_date < CURRENT_TIMESTAMP
 					{$exclude_cats_sql}
 					ORDER BY post_date DESC
 				");
 
-				$monthsWithPosts[$current->year][$i] = $wpdb->get_results($query);
+				if ( $posts = $wpdb->get_results($query) ) {
+					$monthsWithPosts[$current][$i]['posts'] = $posts;
+					$monthsWithPosts[$current][$i]['link'] = get_month_link($current, $i);
+				}
 			}
 
 		// The block
 		if ( $format != 'list' ) {
-			// get the shortened month name; strftime() should localize
-			for($i = 1; $i <= 12; $i++)
-				$shortMonths[$i] = ucfirst(strftime("%b", strtotime($i.$bogusDate)));
+			$months_short = $this->get_months("%b");
 
 			foreach ( $yearsWithPosts as $current ) {
-				$block .= sprintf("\t<li><strong><a href='%s'>%s</a>:</strong> ", get_year_link($current->year), $current->year);
+				$block .= sprintf("\t<li><strong><a href='%s'>%s</a>:</strong> ", get_year_link($current), $current);
 
 				for ( $i = 1; $i <= 12; $i++ )
-					if ( $monthsWithPosts[$current->year][$i] ) {
-						$url = $anchors ? "#{$current->year}{$i}" : get_month_link($current->year, $i);
-						$block .= sprintf("<a href='%s'>%s</a> ", $url, $shortMonths[$i]);
+					if ( $monthsWithPosts[$current][$i]['posts'] ) {
+						$url = $anchors ? "#{$current}{$i}" : $monthsWithPosts[$current][$i]['link'];
+						$block .= sprintf("\n\t\t<a href='%s'>%s</a>", $url, $months_short[$i]);
 					} else
-						$block .= sprintf("\n\t\t<span class='emptymonth'>%s</span> ", $shortMonths[$i]);
+						$block .= sprintf("\n\t\t<span class='emptymonth'>%s</span>", $months_short[$i]);
 
 				$block .= "\n</li>\n";
 			}
@@ -127,54 +129,66 @@ class displaySAR {
 
 		// The list
 		if ( $format != 'block' ) {
-			// get the month name; strftime() should localize
-			for ( $i = 1; $i <= 12; $i++ )
-				$monthNames[$i] = ucfirst(strftime("%B", strtotime($i.$bogusDate)));
+			$months_long = $this->get_months("%B");
 
 			foreach ( $yearsWithPosts as $current )
 				for ( $i = 12; $i >= 1; $i-- ) {
-					if ( !$monthsWithPosts[$current->year][$i] )
+					if ( !$monthsWithPosts[$current][$i] )
 						continue;
 
-					$month_list = '';
+					// Get post links for current month
+					$post_list = '';
+					foreach ( $monthsWithPosts[$current][$i]['posts'] as $post )
+						$post_list .= sprintf("\t<li><a href='%s'>%s</a></li>\n", get_permalink($post->ID), $post->post_title);
 
-					foreach ( $monthsWithPosts[$current->year][$i] as $post )
-						$month_list .= sprintf("\t<li><a href='%s'>%s</a></li>\n", get_permalink($post->ID), $post->post_title);
+					// Set title format
+					if ( $anchors ) {
+						$anchor = "{$current}{$i}";
+						$titlef = "\n<h2 id='{$anchor}'><a href='%s'>%s</a></h2>\n";
+					} else
+						$titlef = "\n<h2><a href='%s'>%s</a></h2>\n";
 
-					if ( $month_list ) {
-						if ( $anchors ) {
-							$anchor = "{$current->year}{$i}";
-							$titlef = "\n<h2 id='{$anchor}'><a href='%s'>%s</a></h2>\n";
-						} else
-							$titlef = "\n<h2><a href='%s'>%s</a></h2>\n";
-
-						$list .= sprintf($titlef, get_month_link($current->year, $i), $monthNames[$i].' '.$current->year);
-						$list .= sprintf("<ul>\n%s</ul>\n", $month_list);
-					}
+					// Append to list
+					$list .= sprintf($titlef, $monthsWithPosts[$current][$i]['link'], $months_long[$i].' '.$current);
+					$list .= sprintf("<ul>\n%s</ul>\n", $post_list);
 				}
 
 			// Wrap it up
 			$list = "\n<div id='smart-archives-list'>\n{$list}</div>\n";
 		}
+
+		// Update cache
 		@fwrite($fh, $block.$list);
 		@fclose($fh);
 
 		return $block.$list;
+	}
+
+	private function get_months($format) {
+		$months = array();
+
+		for($i = 1; $i <= 12; $i++)
+			$months[$i] = htmlentities(strftime($format, mktime(0,0,0, $i)));
+
+		return $months;
 	}
 }
 
 // Init
 global $SAR_options, $SAR_display;
 
+// Load options class if needed
 if ( !class_exists('scbOptions') )
 	require_once('inc/scbOptions.php');
 
+// Create an instance of each class
 $SAR_options = new scbOptions('smart-archives');
-$SAR_display = new displaySAR($SAR_options);
+$SAR_display = new displaySAR();
 
+// Load admin code
 if ( is_admin() ) {
 	require_once(dirname(__FILE__).'/admin.php');
-	new adminSAR(__FILE__);
+	new settingsSAR(__FILE__);
 }
 
 // Template tag
@@ -183,3 +197,4 @@ function smart_archives() {
 	echo $SAR_display->load();
 }
 
+# add_action('wp_head', create_function('', 'echo "<pre>"; print_r(get_option("cron")); echo "</pre>";'));

@@ -3,11 +3,10 @@ if ( !class_exists('scbOptionsPage') )
 	require_once('inc/scbOptionsPage.php');
 
 class settingsSAR extends scbOptionsPage {
-	var $display;
+	public function __construct($file) {
+		global $SAR_options;
 
-	public function __construct(scbOptions $options, displaySAR $display) {
-		$this->options = $options;
-		$this->display = $display;
+		$this->options = $SAR_options;
 
 		$this->args = array(
 			'page_title' => 'Smart Archives Settings',
@@ -18,9 +17,37 @@ class settingsSAR extends scbOptionsPage {
 		$this->nonce = 'sar-settings';
 		$this->init();
 
+		register_activation_hook($file, array($this, 'activate'));
+		register_uninstall_hook($file, array($this, 'uninstall'));
+
+		add_action('publish_post', array($this, 'update_cache'));
+		add_action('private_to_published', array($this, 'update_cache'));
+		add_action('delete_post', array($this, 'update_cache'));
+
 		add_action('admin_print_scripts', array($this, 'add_js'));
 	}
 
+	public function activate() {
+		$defaults = array(
+			'format' => 'both',
+			'catID' => '',
+			'anchors' => ''
+		);
+
+		$this->options->update($defaults, false);
+		$this->update_cache();
+	}
+
+	public function uninstall() {
+		$this->options->delete();
+	}
+
+	public function update_cache() {
+		wp_clear_scheduled_hook(SAR_HOOK);
+		wp_schedule_single_event(time()+5, SAR_HOOK);
+	}
+
+	// Page methods
 	public function add_js() {
 		if ( $_GET['page'] != $this->args['page_slug'] )
 			return;
@@ -60,15 +87,9 @@ class settingsSAR extends scbOptionsPage {
 
 		$this->options->update($new_options);
 
-		$diff = array_diff_assoc($new_options, $old_options);
-
-		if ( isset($diff['interval'])) {
-			wp_clear_scheduled_hook('smart_archives_update');
-			wp_schedule_event(time(), $new_options['interval'], 'smart_archives_update');
-		}
-
-		if ( count($diff) > 1 || (count($diff) > 0 && !isset($diff['interval'])) )
-			$this->display->generate(); // rebuild the cache with the new settings
+		// Rebuild the cache with the new settings
+		if ( $new_options != $old_options )
+			$this->update_cache();
 
 		echo '<div class="updated fade"><p>Settings <strong>saved</strong>.</p></div>';
 	}
@@ -96,54 +117,10 @@ class settingsSAR extends scbOptionsPage {
 				'desc' => '(space separated)',
 				'type' => 'text',
 				'names' => 'catID'
-			),
-
-			array(
-				'title' => 'Cache Update',
-				'type' => 'radio',
-				'names' => 'interval',
-				'values' => array('hourly', 'twicedaily', 'daily')
 			)
 		);
-		echo str_replace('twicedaily</label>', 'twice daily</label>', $this->form_table($rows));
+		echo $this->form_table($rows);
 		echo $this->page_footer();
-	}
-}
-
-class adminSAR {
-	var $options;
-
-	public function __construct($file) {
-		global $SAR_options, $SAR_display;
-
-		$this->options = $SAR_options;
-
-		new settingsSAR($SAR_options, $SAR_display);
-
-		register_activation_hook($file, array($this, 'activate'));
-		register_deactivation_hook($file, array($this, 'deactivate'));
-		register_uninstall_hook($file, array($this, 'uninstall'));
-	}
-
-	public function activate() {
-		$defaults = array(
-			'format' => 'both',
-			'catID' => '',
-			'interval' => 'daily',
-			'anchors' => ''
-		);
-
-		$this->options->update($defaults, false);
-
-		wp_schedule_event(time(), $this->options->get('interval'), 'smart_archives_update');
-	}
-
-	public function deactivate() {
-		wp_clear_scheduled_hook('smart_archives_update');
-	}
-
-	public function uninstall() {
-		$this->options->delete();
 	}
 }
 
