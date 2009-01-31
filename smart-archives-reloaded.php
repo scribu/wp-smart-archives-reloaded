@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.4
+Version: 1.4.1
 Description: An elegant and easy way to present your archives.
 Author: scribu
 Author URI: http://scribu.net
@@ -175,19 +175,17 @@ class displaySAR {
 }
 
 // Init
-global $SAR_options, $SAR_display;
-
 // Load options class if needed
-if ( !class_exists('scbOptions') )
-	require_once('inc/scbOptions.php');
+if ( !class_exists('scbOptions_05') )
+	require_once(dirname(__FILE__) . '/inc/scbOptions.php');
 
 // Create an instance of each class
-$SAR_options = new scbOptions('smart-archives');
-$SAR_display = new displaySAR();
+$GLOBALS['SAR_options'] = new scbOptions_05('smart-archives');
+$GLOBALS['SAR_display'] = new displaySAR();
 
 // Load admin code
 if ( is_admin() ) {
-	require_once(dirname(__FILE__).'/admin.php');
+	require_once(dirname(__FILE__) . '/admin.php');
 	new settingsSAR(__FILE__);
 }
 
@@ -196,5 +194,3 @@ function smart_archives() {
 	global $SAR_display;
 	echo $SAR_display->load();
 }
-
-# add_action('wp_head', create_function('', 'echo "<pre>"; print_r(get_option("cron")); echo "</pre>";'));

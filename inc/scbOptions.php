@@ -1,20 +1,25 @@
 <?php
 
-// Version 1.0
+// Version 0.5b
+// TODO: return the same instance if $key has been used before
 
-class scbOptions {
-	var $key;
-	var $data;
+class scbOptions_05 {
+	public $key;
+	public $defaults;
+	private $data;
 
-	public function __construct($key, $data = '') {
+	public function __construct($key) {
 		$this->key = $key;
-
-		if ( $data )
-			$this->data = $data;
-		else
-			$this->data = get_option($this->key);
+		$this->data = get_option($this->key);
 	}
 
+	public function setup($file, $defaults) {
+		$this->defaults = $defaults;
+		register_activation_hook($file, array($this, 'reset'), false);
+		register_uninstall_hook($file, array($this, 'delete'));
+	}
+
+	// Get all data or a certain field
 	public function get($field = '') {
 		if ( empty($field) === true )
 			return $this->data;
@@ -22,21 +27,34 @@ class scbOptions {
 		return @$this->data[$field];
 	}
 
-	public function update($data, $override = true) {
-		if ( is_array($this->data) && is_array($data) && !$override )
-			$newdata = array_merge($data, $this->data);
-		else
-			$newdata = $data;
+	// Update option
+	public function update($newdata) {
+		if ( $this->data === $newdata )
+			return;
 
-		if ( $this->data !== $newdata ) {
-			$this->data = $newdata;
+		$this->data = $newdata;
 
-			   add_option($this->key, $this->data) or
-			update_option($this->key, $this->data);
-		}
+		   add_option($this->key, $this->data) or
+		update_option($this->key, $this->data);
 	}
 
+	// Reset option to defaults
+	public function reset($override = true) {
+		if ( !$override && is_array($this->defaults) && is_array($this->data) )
+			$newdata = array_merge($this->defaults, $this->data);
+		else
+			$newdata = $this->defaults;
+
+		$this->update($newdata);
+	}
+
+	// Delete option
 	public function delete() {
 		delete_option($this->key);
 	}
 }
+
+// < WP 2.7
+if ( !function_exists('register_uninstall_hook') ) :
+function register_uninstall_hook() {}
+endif;

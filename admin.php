@@ -1,12 +1,16 @@
 <?php
-if ( !class_exists('scbOptionsPage') )
+if ( !class_exists('scbOptionsPage_05') )
 	require_once('inc/scbOptionsPage.php');
 
-class settingsSAR extends scbOptionsPage {
-	public function __construct($file) {
-		global $SAR_options;
+class settingsSAR extends scbOptionsPage_05 {
+	protected function setup() {
+		$this->options = $GLOBALS['SAR_options'];
 
-		$this->options = $SAR_options;
+		$this->defaults = array(
+			'format' => 'both',
+			'catID' => '',
+			'anchors' => ''
+		);
 
 		$this->args = array(
 			'page_title' => 'Smart Archives Settings',
@@ -15,31 +19,12 @@ class settingsSAR extends scbOptionsPage {
 		);
 
 		$this->nonce = 'sar-settings';
-		$this->init();
-
-		register_activation_hook($file, array($this, 'activate'));
-		register_uninstall_hook($file, array($this, 'uninstall'));
 
 		add_action('publish_post', array($this, 'update_cache'));
 		add_action('private_to_published', array($this, 'update_cache'));
 		add_action('delete_post', array($this, 'update_cache'));
 
 		add_action('admin_print_scripts', array($this, 'add_js'));
-	}
-
-	public function activate() {
-		$defaults = array(
-			'format' => 'both',
-			'catID' => '',
-			'anchors' => ''
-		);
-
-		$this->options->update($defaults, false);
-		$this->update_cache();
-	}
-
-	public function uninstall() {
-		$this->options->delete();
 	}
 
 	public function update_cache() {
@@ -124,7 +109,3 @@ class settingsSAR extends scbOptionsPage {
 	}
 }
 
-// < WP 2.7
-if ( !function_exists('register_uninstall_hook') ) :
-function register_uninstall_hook() {}
-endif;

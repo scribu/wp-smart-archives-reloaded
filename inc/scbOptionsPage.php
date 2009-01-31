@@ -1,27 +1,117 @@
 <?php
 
-// Version 1.0
+// Version 0.5b
 
-abstract class scbOptionsPage {
-	var $args = array();
-	var $options = array();
-	var $actions = array();
-	var $nonce = 'update_settings';
+if ( ! class_exists('scbForms_05') )
+	require_once('scbForms.php');
 
-	protected function init() {
-		add_action('admin_menu', array(&$this, 'page_init'));
+abstract class scbOptionsPage_05 extends scbForms_05 {
+	// Page args
+	protected $args = array(
+		'page_title' => '',
+		'short_title' => '',
+		'page_slug' => ''
+	);
+
+	// scbOptions object holder
+	protected $options = NULL;
+
+	// Form actions
+	protected $actions = array();
+
+	// Nonce string
+	protected $nonce = 'update_settings';
+
+
+//_____MAIN METHODS_____
+
+
+	// Main constructor
+	public function __construct($file = '') {
+		$this->setup();
+
+		if ( isset($this->options) )
+			$this->options->setup($file, $this->defaults);
+
+		add_action('admin_menu', array($this, 'page_init'));
 	}
 
+	// This is where all the page args goes
+	abstract protected function setup();
+
+	// This is where the page content goes
+	abstract public function page_content();
+
+	// Generates a standard page head
+	protected function page_header() {
+		$this->form_handler();
+
+		$output .= "<div class='wrap'>\n";
+		$output .= "<h2>".$this->args['page_title']."</h2>\n";
+
+		return $output;
+	}
+
+	// Generates a standard page footer
+	protected function page_footer() {
+		$output = "</div>\n";
+
+		return $output;
+	}
+
+	// Wrap a field in a table row
+	public function form_row($args, $options, $check = true) {
+		$args['check'] = $check;
+		return "\n<tr>\n\t<th scope='row'>{$args['title']}</th>\n\t<td>\n\t\t". parent::input($args, $options, $check) ."</td>\n\n</tr>";
+	}
+
+	// Generates multiple rows and wraps them in a form table
+	protected function form_table($rows, $action = 'Save Changes') {
+		$output .= "<table class='form-table'>\n";
+
+		$options = $this->options->get();
+		foreach ( $rows as $row )
+			$output .= $this->form_row($row, $options);
+
+		$output .= "</table>\n";
+		$output .= $this->submit_button($action);
+
+		return parent::form_wrap($output, $this->nonce);
+	}
+
+	// Generates a submit form button
+	protected function submit_button($action = 'Save Changes') {
+		if ( in_array($action, $this->actions) )
+			trigger_error("Duplicate action for submit button: {$action}", E_USER_WARNING);
+
+		$this->actions[] = $action;
+		$output .= "<p class='submit'>\n";
+		$output .= parent::input(array(
+			'type' => 'submit',
+			'names' => 'action',
+			'values' => $action,
+			'extra' => 'class="button-primary"',
+			'desc_pos' => 'none'
+		));
+		$output .= "</p>\n";
+
+		return $output;
+	}
+
+
+//_____HELPER METHODS (SHOULD NOT BE CALLED DIRECTLY)_____
+
+
+	// Registers a page
 	public function page_init() {
 		if ( !current_user_can('manage_options') )
 			return false;
 
 		extract($this->args);
-		add_options_page($short_title, $short_title, 8, $page_slug, array(&$this, 'page_content'));
+		add_options_page($short_title, $short_title, 8, $page_slug, array($this, 'page_content'));
 	}
 
-	abstract public function page_content();
-
+	// Update options
 	protected function form_handler() {
 		if ( 'Save Changes' != $_POST['action'] )
 			return false;
@@ -35,125 +125,4 @@ abstract class scbOptionsPage {
 
 		echo '<div class="updated fade"><p>Settings <strong>saved</strong>.</p></div>';
 	}
-
-	protected function page_header() {
-		$this->form_handler();
-
-		$output .= "<div class='wrap'>\n";
-		$output .= "<h2>".$this->args['page_title']."</h2>\n";
-
-		return $output;
-	}
-
-	protected function page_footer() {
-		$output .= "</div>\n";
-
-		return $output;
-	}
-
-	protected function submit_button($action = 'Save Changes') {
-		if ( in_array($action, $this->actions) )
-			trigger_error('Duplicate action for submit button: '.$action, E_USER_WARNING);
-
-		$this->actions[] = $action;
-		$output .= "<p class='submit'>\n";
-		$output .= "<input name='action' type='submit' class='button-primary' value='{$action}' />\n";
-		$output .= "</p>\n";
-
-		return $output;
-	}
-
-	protected function form_wrap($content) {
-		$output .= "<form method='post' action=''>\n";
-		$output .= wp_nonce_field($action = $this->nonce, $name = "_wpnonce", $referer = true , $echo = false );
-		$output .= $content;
-		$output .= "</form>\n";
-
-		return $output;
-	}
-
-	protected function form_table($rows, $action = 'Save Changes') {
-		$output .= "<table class='form-table'>\n";
-
-		$options = $this->options->get();
-		foreach ( $rows as $row )
-			$output .= $this->form_row($row, $options);
-
-		$output .= "</table>\n";
-		$output .= $this->submit_button($action);
-
-		return $this->form_wrap($output);
-	}
-
-	public function form_row($args, $options, $check=true) {
-		extract($args);
-
-		$f1 = is_array($names);
-		$f2 = is_array($values);
-
-		if ( $check )
-			self::check_names($names, $options);
-
-		if ( $type == 'text' && !$f1 && !$f2 )
-			$values = htmlentities(stripslashes($options[$names]));
-
-		if ( $f1 || $f2 ) {
-			if ( $f1 && $f2 )
-				$a = array_combine($names, $values);
-			elseif ( $f1 && !$f2 )
-				$a = array_fill_keys($names, $values);
-			elseif ( !$f1 && $f2)
-				$a = array_fill_keys($values, $names);
-
-			if ( $f1 ) {
-				$i1 = 'name';
-				$i2 = 'val';
-			}
-
-			if ( $f2 ) {	
-				$i1 = 'val';
-				$i2 = 'name';
-			}
-	
-			$l1 = 'name';
-
-		} else {
-			$a = array($names => $values);
-
-			$i1 = 'name';
-			$i2 = 'val';
-
-			$l1 = 'desc';
-		}
-
-		foreach ( $a as $name => $val ) {
-			if ( in_array($type, array('checkbox', 'radio')) )
-				$extra = ($options[$$i1] == $$i2) ? "checked='checked' " : '';
-
-			$inputs[] = sprintf('<input name="%1$s" value="%2$s" type="%3$s" %4$s/> ', $$i1, $$i2, $type, $extra );
-			$inputs[] = sprintf("<label for='%1\$s'>%2\$s</label> ", $$i1, $$l1);
-		}
-
-		return "\n<tr>\n\t<th scope='row'>$title</th>\n\t<td>\n\t\t". implode($inputs, "\n") ."</td>\n\n</tr>";
-	}
-
-	public function check_names($names, $options) {
-		if ( !is_array($names) )
-			$names = array($names);
-
-		foreach ( array_diff($names, array_keys($options)) as $key )
-			trigger_error('Option not defined: '.$key, E_USER_WARNING);
-	}
 }
-
-// < PHP 5.2
-if ( !function_exists('array_fill_keys') ) :
-function array_fill_keys($keys, $value) {
-	$r = array();
-
-	foreach($keys as $key)
-		$r[$key] = $value;
-
-	return $r;
-}
-endif;
