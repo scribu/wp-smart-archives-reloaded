@@ -1,6 +1,6 @@
 === Smart Archives Reloaded ===
 Contributors: scribu
-Donate link: http://scribu.net/projects
+Donate link: http://scribu.net/wordpress
 Tags: archive
 Requires at least: 2.3
 Tested up to: 2.7

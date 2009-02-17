@@ -5,7 +5,7 @@ Version: 1.4.1
 Description: An elegant and easy way to present your archives.
 Author: scribu
 Author URI: http://scribu.net
-Plugin URI: http://scribu.net/projects/smart-archives-reloaded
+Plugin URI: http://scribu.net/wordpress/smart-archives-reloaded
 
 Copyright (C) 2008 scribu.net (scribu AT gmail DOT com)
 
@@ -192,5 +192,7 @@ if ( is_admin() ) {
 // Template tag
 function smart_archives() {
 	global $SAR_display;
+
 	echo $SAR_display->load();
 }
+
