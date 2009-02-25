@@ -1,7 +1,6 @@
 <?php
 
-// Version 0.5b
-// TODO: return the same instance if $key has been used before
+// Version 0.5
 
 class scbOptions_05 {
 	public $key;

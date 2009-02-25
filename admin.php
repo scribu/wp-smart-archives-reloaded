@@ -1,8 +1,9 @@
 <?php
-if ( !class_exists('scbOptionsPage_05') )
+
+if ( !class_exists('scbOptionsPage_07') )
 	require_once('inc/scbOptionsPage.php');
 
-class settingsSAR extends scbOptionsPage_05 {
+class settingsSAR extends scbOptionsPage_07 {
 	protected function setup() {
 		$this->options = $GLOBALS['SAR_options'];
 
@@ -20,16 +21,23 @@ class settingsSAR extends scbOptionsPage_05 {
 
 		$this->nonce = 'sar-settings';
 
-		add_action('publish_post', array($this, 'update_cache'));
-		add_action('private_to_published', array($this, 'update_cache'));
-		add_action('delete_post', array($this, 'update_cache'));
+		add_action('transition_post_status', array($this, 'update_cache'), 10, 2);
+		add_action('deleted_post', array($this, 'update_cache'), 10, 0);
 
 		add_action('admin_print_scripts', array($this, 'add_js'));
 	}
 
-	public function update_cache() {
-		wp_clear_scheduled_hook(SAR_HOOK);
-		wp_schedule_single_event(time()+5, SAR_HOOK);
+	public function update_cache($new_status = '', $old_status = '') {
+		$cond =
+			( 'publish' == $new_status || 'publish' == $old_status ) ||		// publish or unpublish
+			( empty($new_status) && empty($old_status) );					// delete
+
+		if ( !$cond )
+			return;
+
+		wp_clear_scheduled_hook('smart_archives_update');
+		wp_schedule_single_event(time() + 5, 'smart_archives_update');
+#		do_action('smart_archives_update');
 	}
 
 	// Page methods
@@ -43,6 +51,7 @@ class settingsSAR extends scbOptionsPage_05 {
 
 	private function get_plugin_url() {
 		if ( function_exists('plugins_url') )
+
 			return plugins_url(plugin_basename(dirname(__FILE__)));
 		else
 			// < WP 2.6

@@ -1,26 +1,30 @@
 <?php
 
-// Version 0.5b
+// Version 0.7.0.2
 
-if ( ! class_exists('scbForms_05') )
-	require_once('scbForms.php');
+if ( ! class_exists('scbForms_06') )
+	require_once(dirname(__FILE__) . '/scbForms.php');
 
-abstract class scbOptionsPage_05 extends scbForms_05 {
+abstract class scbOptionsPage_07 extends scbForms_06 {
 	// Page args
 	protected $args = array(
 		'page_title' => '',
 		'short_title' => '',
-		'page_slug' => ''
+		'page_slug' => '',
+		'type' => 'settings'
 	);
-
-	// scbOptions object holder
-	protected $options = NULL;
-
-	// Form actions
-	protected $actions = array();
 
 	// Nonce string
 	protected $nonce = 'update_settings';
+
+	// Plugin dir url
+	protected $plugin_url;
+
+	// scbOptions object holder
+	protected $options;
+
+	// Form actions
+	protected $actions = array();
 
 
 //_____MAIN METHODS_____
@@ -28,7 +32,10 @@ abstract class scbOptionsPage_05 extends scbForms_05 {
 
 	// Main constructor
 	public function __construct($file = '') {
+		$this->set_url($file);
+
 		$this->setup();
+		$this->check_args();
 
 		if ( isset($this->options) )
 			$this->options->setup($file, $this->defaults);
@@ -39,8 +46,21 @@ abstract class scbOptionsPage_05 extends scbForms_05 {
 	// This is where all the page args goes
 	abstract protected function setup();
 
+	// This is where the css and js go
+	public function page_head() {}
+
 	// This is where the page content goes
 	abstract public function page_content();
+
+	// Wraps a string in a <script> tag
+	public function wrap_js($string) {
+		return "\n<script language='text/javascript'>\n" . $string . "\n</script>\n";
+	}
+
+	// Wraps a string in a <style> tag
+	public function wrap_css($string) {
+		return "\n<style type='text/css'>\n" . $string . "\n</style>\n";
+	}
 
 	// Generates a standard page head
 	protected function page_header() {
@@ -60,20 +80,19 @@ abstract class scbOptionsPage_05 extends scbForms_05 {
 	}
 
 	// Wrap a field in a table row
-	public function form_row($args, $options, $check = true) {
-		$args['check'] = $check;
-		return "\n<tr>\n\t<th scope='row'>{$args['title']}</th>\n\t<td>\n\t\t". parent::input($args, $options, $check) ."</td>\n\n</tr>";
+	public function form_row($args, $options) {
+		return "\n<tr>\n\t<th scope='row'>{$args['title']}</th>\n\t<td>\n\t\t". parent::input($args, $options) ."\n\t</td>\n\n</tr>";
 	}
 
 	// Generates multiple rows and wraps them in a form table
 	protected function form_table($rows, $action = 'Save Changes') {
-		$output .= "<table class='form-table'>\n";
+		$output .= "\n<table class='form-table'>";
 
 		$options = $this->options->get();
 		foreach ( $rows as $row )
 			$output .= $this->form_row($row, $options);
 
-		$output .= "</table>\n";
+		$output .= "\n</table>\n";
 		$output .= $this->submit_button($action);
 
 		return parent::form_wrap($output, $this->nonce);
@@ -102,13 +121,36 @@ abstract class scbOptionsPage_05 extends scbForms_05 {
 //_____HELPER METHODS (SHOULD NOT BE CALLED DIRECTLY)_____
 
 
+	// Checks and sets default args
+	protected function check_args() {
+		if ( empty($this->args['page_title']) )
+			trigger_error('Page title cannot be empty', E_USER_ERROR);
+
+		if ( empty($this->args['type']) )
+			$this->args['type'] = 'settings';
+
+		if ( empty($this->args['short_title']) )
+			$this->args['short_title'] = $this->args['page_title'];
+
+		if ( empty($this->args['page_slug']) )
+			$this->args['page_slug'] = sanitize_title_with_dashes($this->args['short_title']);
+	}
+
 	// Registers a page
 	public function page_init() {
 		if ( !current_user_can('manage_options') )
 			return false;
 
 		extract($this->args);
-		add_options_page($short_title, $short_title, 8, $page_slug, array($this, 'page_content'));
+
+		if ( 'settings' == $type )
+			$page = add_options_page($short_title, $short_title, 8, $page_slug, array($this, 'page_content'));
+		elseif ( 'tools' == $type )
+			$page = add_management_page($short_title, $short_title, 8, $page_slug, array($this, 'page_content'));
+		else
+			trigger_error("Unknown page type: $page", E_USER_WARNING);
+
+		add_action("admin_print_styles-$page", array($this, 'page_head'));
 	}
 
 	// Update options
@@ -124,5 +166,14 @@ abstract class scbOptionsPage_05 extends scbForms_05 {
 		$this->options->update($new_options);
 
 		echo '<div class="updated fade"><p>Settings <strong>saved</strong>.</p></div>';
+	}
+
+	// Set plugin_dir
+	protected function set_url($file) {
+		if ( function_exists('plugins_url') )
+			$this->plugin_url = plugins_url(plugin_basename(dirname($file)));
+		else
+			// < WP 2.6
+			$this->plugin_url = get_option('siteurl') . '/wp-content/plugins/' . plugin_basename(dirname($file));
 	}
 }

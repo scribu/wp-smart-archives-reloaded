@@ -3,7 +3,7 @@ Contributors: scribu
 Donate link: http://scribu.net/wordpress
 Tags: archive
 Requires at least: 2.3
-Tested up to: 2.7
+Tested up to: 2.7.1
 Stable tag: trunk
 
 An elegant and easy way to present your archives.
