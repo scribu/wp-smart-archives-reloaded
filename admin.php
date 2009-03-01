@@ -10,7 +10,8 @@ class settingsSAR extends scbOptionsPage_07 {
 		$this->defaults = array(
 			'format' => 'both',
 			'catID' => '',
-			'anchors' => ''
+			'anchors' => '',
+			'cron' => true
 		);
 
 		$this->args = array(
@@ -35,9 +36,12 @@ class settingsSAR extends scbOptionsPage_07 {
 		if ( !$cond )
 			return;
 
-		wp_clear_scheduled_hook('smart_archives_update');
-		wp_schedule_single_event(time() + 5, 'smart_archives_update');
-#		do_action('smart_archives_update');
+
+		if ( $this->options->get('cron') ) {
+			wp_clear_scheduled_hook('smart_archives_update');
+			wp_schedule_single_event(time() + 5, 'smart_archives_update');
+		} else
+			do_action('smart_archives_update');
 	}
 
 	// Page methods
@@ -111,6 +115,13 @@ class settingsSAR extends scbOptionsPage_07 {
 				'desc' => '(space separated)',
 				'type' => 'text',
 				'names' => 'catID'
+			),
+
+			array(
+				'title' => 'Use wp-cron',
+				'desc' => '(Uncheck this if your archive isn\'t being updated)',
+				'type' => 'checkbox',
+				'names' => 'cron'
 			)
 		);
 		echo $this->form_table($rows);

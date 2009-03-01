@@ -1,6 +1,6 @@
 <?php
 
-// Version 0.7.0.2
+// Version 0.7.0.3
 
 if ( ! class_exists('scbForms_06') )
 	require_once(dirname(__FILE__) . '/scbForms.php');
@@ -99,19 +99,24 @@ abstract class scbOptionsPage_07 extends scbForms_06 {
 	}
 
 	// Generates a submit form button
-	protected function submit_button($action = 'Save Changes') {
+	protected function submit_button($action = 'Save Changes', $class = "button") {
 		if ( in_array($action, $this->actions) )
 			trigger_error("Duplicate action for submit button: {$action}", E_USER_WARNING);
 
-		$this->actions[] = $action;
-		$output .= "<p class='submit'>\n";
-		$output .= parent::input(array(
+		$args = array(
 			'type' => 'submit',
 			'names' => 'action',
 			'values' => $action,
-			'extra' => 'class="button-primary"',
+			'extra' => '',
 			'desc_pos' => 'none'
-		));
+		);
+
+		if ( ! empty($class) )
+			$args['extra'] = "class={$class}'";
+
+		$this->actions[] = $action;
+		$output .= "<p class='submit'>\n";
+		$output .= parent::input($args);
 		$output .= "</p>\n";
 
 		return $output;

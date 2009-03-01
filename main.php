@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.4.2.1
+Version: 1.4.3
 Description: An elegant and easy way to present your archives.
 Author: scribu
 Author URI: http://scribu.net
@@ -22,6 +22,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+
+define('SAR_DISABLE_CRON', true);
 
 class displaySAR {
 	private $cache;
@@ -76,7 +78,7 @@ class displaySAR {
 			AND post_status = 'publish'
 			{$exclude_cats_sql}
 			GROUP BY year(post_date)
-			HAVING count(ID) > 0
+			HAVING count(year(post_date)) > 0
 			ORDER BY post_date DESC
 		");
 		$yearsWithPosts = $wpdb->get_col($query);
@@ -94,7 +96,6 @@ class displaySAR {
 					AND post_status = 'publish'
 					AND year(post_date) = {$current}
 					AND month(post_date) = {$i}
-					AND post_date < CURRENT_TIMESTAMP
 					{$exclude_cats_sql}
 					ORDER BY post_date DESC
 				");
