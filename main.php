@@ -1,13 +1,13 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.4.3
+Version: 1.4.3.1b
 Description: An elegant and easy way to present your archives.
 Author: scribu
 Author URI: http://scribu.net
 Plugin URI: http://scribu.net/wordpress/smart-archives-reloaded
 
-Copyright (C) 2008 scribu.net (scribu AT gmail DOT com)
+Copyright (C) 2009 scribu.net (scribu AT gmail DOT com)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -22,8 +22,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-
-define('SAR_DISABLE_CRON', true);
 
 class displaySAR {
 	private $cache;
@@ -176,11 +174,11 @@ class displaySAR {
 
 // Init
 // Load options class if needed
-if ( !class_exists('scbOptions_05') )
+if ( !class_exists('scbOptions_06') )
 	require_once(dirname(__FILE__) . '/inc/scbOptions.php');
 
 // Create an instance of each class
-$GLOBALS['SAR_options'] = new scbOptions_05('smart-archives');
+$GLOBALS['SAR_options'] = new scbOptions_06('smart-archives');
 $GLOBALS['SAR_display'] = new displaySAR();
 
 if ( is_admin() ) {

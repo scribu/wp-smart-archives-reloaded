@@ -1,8 +1,8 @@
 <?php
 
-// Version 0.5
+// Version 0.6
 
-class scbOptions_05 {
+class scbOptions_06 {
 	public $key;
 	public $defaults;
 	private $data;
@@ -24,6 +24,14 @@ class scbOptions_05 {
 			return $this->data;
 
 		return @$this->data[$field];
+	}
+
+	// Update a portion of the data
+	public function update_part($newdata) {
+		if ( !is_array($this->data) || !is_array($newdata) )
+			return false;
+
+		$this->update(array_merge($this->data, $newdata));
 	}
 
 	// Update option
