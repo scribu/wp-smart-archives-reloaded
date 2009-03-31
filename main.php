@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.4.3.1
+Version: 1.4.4
 Description: An elegant and easy way to present your archives.
 Author: scribu
 Author URI: http://scribu.net
@@ -52,8 +52,6 @@ class displaySAR {
 			if ( $require_cache )
 				return false; // exit if we can't write to file
 		}
-
-		setlocale(LC_TIME, WPLANG);
 
 		// Extract options
 		extract($SAR_options->get());
@@ -106,7 +104,7 @@ class displaySAR {
 
 		// The block
 		if ( $format != 'list' ) {
-			$months_short = $this->get_months("%b");
+			$months_short = $this->get_months(true);
 
 			foreach ( $yearsWithPosts as $current ) {
 				$block .= sprintf("\t<li><strong><a href='%s'>%s</a>:</strong> ", get_year_link($current), $current);
@@ -127,7 +125,7 @@ class displaySAR {
 
 		// The list
 		if ( $format != 'block' ) {
-			$months_long = $this->get_months("%B");
+			$months_long = $this->get_months();
 
 			foreach ( $yearsWithPosts as $current )
 				for ( $i = 12; $i >= 1; $i-- ) {
@@ -162,11 +160,17 @@ class displaySAR {
 		return $block.$list;
 	}
 
-	private function get_months($format) {
-		$months = array();
+	private function get_months($abrev = false) {
+		global $wp_locale;
+	
+		for($i = 1; $i <= 12; $i++) {
+			$month = $wp_locale->get_month($i);
 
-		for($i = 1; $i <= 12; $i++)
-			$months[$i] = htmlentities(strftime($format, mktime(0,0,0, $i)));
+			if ( $abrev )
+				$month = $wp_locale->get_month_abbrev($month);
+
+			$months[$i] = htmlentities($month);
+		}
 
 		return $months;
 	}
