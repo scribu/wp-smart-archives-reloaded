@@ -37,7 +37,7 @@ abstract class displaySAR
 
 		// Set cache path
 		$wud = wp_upload_dir();
-		self::$cache = $wud['basedir'] . '/cache.txt';
+		self::$cache = $wud['basedir'] . '/sar_cache.txt';
 
 		// Set up cron hook
 		add_action('smart_archives_update', array(__CLASS__, 'generate'));
