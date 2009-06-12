@@ -33,7 +33,7 @@ Alternatively, you can add `<?php smart_archives(); ?>` anywhere in your theme, 
 == Frequently Asked Questions ==
 
 = "Can't open cache file!" =
-Go to your plugin directory, create an empty file called "cache.txt" and change it's permissions (chmod) to 757.
+Go to your wp-content/uploads directory, create an empty file called "sar_cache.txt" and set it's permissions (chmod) to 757.
 
 == Screenshots ==
 
