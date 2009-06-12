@@ -34,3 +34,8 @@ Alternatively, you can add `<?php smart_archives(); ?>` anywhere in your theme, 
 
 = "Can't open cache file!" =
 Go to your plugin directory, create an empty file called "cache.txt" and change it's permissions (chmod) to 757.
+
+== Screenshots ==
+
+1. The Settings Page
+

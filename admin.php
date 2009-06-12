@@ -1,69 +1,53 @@
 <?php
 
-if ( !class_exists('scbOptionsPage_07') )
-	require_once('inc/scbOptionsPage.php');
-
-class settingsSAR extends scbOptionsPage_07 {
-	protected function setup() {
-		$this->options = $GLOBALS['SAR_options'];
-
-		$this->defaults = array(
-			'format' => 'both',
-			'catID' => '',
-			'anchors' => '',
-			'cron' => true
-		);
+class settingsSAR extends scbAdminPage 
+{
+	function __construct($file, $options) 
+	{
+		// Load translations
+		$plugin_dir = basename(dirname($file));
+		load_plugin_textdomain('smart-archives-reloaded', "wp-content/plugins/$plugin_dir/lang", "$plugin_dir/lang");
 
 		$this->args = array(
-			'page_title' => 'Smart Archives Settings',
-			'short_title' => 'Smart Archives',
+			'page_title' => __('Smart Archives Settings', 'smart-archives-reloaded'),
+			'menu_title' => __('Smart Archives', 'smart-archives-reloaded'),
 			'page_slug' => 'smart-archives'
 		);
-
-		$this->nonce = 'sar-settings';
 
 		add_action('transition_post_status', array($this, 'update_cache'), 10, 2);
 		add_action('deleted_post', array($this, 'update_cache'), 10, 0);
 
-		add_action('admin_print_scripts', array($this, 'add_js'));
+		parent::__construct($file, $options);
 	}
 
-	public function update_cache($new_status = '', $old_status = '') {
+	function update_cache($new_status = '', $old_status = '')
+	{
 		$cond =
 			( 'publish' == $new_status || 'publish' == $old_status ) ||		// publish or unpublish
-			( empty($new_status) && empty($old_status) );					// delete
+			( empty($new_status) && empty($old_status) );					// delete post or update options
 
 		if ( !$cond )
 			return;
 
-
-		if ( $this->options->get('cron') ) {
+		if ( $this->options->cron )
+		{
 			wp_clear_scheduled_hook('smart_archives_update');
-			wp_schedule_single_event(time() + 5, 'smart_archives_update');
-		} else
+			wp_schedule_single_event(time(), 'smart_archives_update');
+		}
+		else
 			do_action('smart_archives_update');
 	}
 
 	// Page methods
-	public function add_js() {
-		if ( $_GET['page'] != $this->args['page_slug'] )
-			return;
-
-		$src = $this->get_plugin_url() . '/inc/admin.js';
-		wp_enqueue_script('sar-admin', $src, array('jquery'));
+	function page_head()
+	{
+		$src = $this->plugin_url . '/inc/admin.js';
+		wp_enqueue_script('sar-admin', $src, array('jquery'), '1.5');
 	}
 
-	private function get_plugin_url() {
-		if ( function_exists('plugins_url') )
-
-			return plugins_url(plugin_basename(dirname(__FILE__)));
-		else
-			// < WP 2.6
-			return get_option('siteurl') . '/wp-content/plugins/' . plugin_basename(dirname(__FILE__));
-	}
-
-	protected function form_handler() {
-		if ( 'Save Changes' !== $_POST['action'] )
+	function form_handler()
+	{
+		if ( __('Save Changes', 'smart-archives-reloaded') !== $_POST['action'] )
 			return false;
 
 		check_admin_referer($this->nonce);
@@ -72,6 +56,10 @@ class settingsSAR extends scbOptionsPage_07 {
 
 		foreach ( $old_options as $name => $value )
 			$new_options[$name] = $_POST[$name];
+
+		// Validate numeric
+		if ( $new_options['format'] == 'list' )
+			$new_options['block_numeric'] = false;
 
 		// Validate anchors
 		if ( $new_options['format'] != 'both' )
@@ -85,47 +73,60 @@ class settingsSAR extends scbOptionsPage_07 {
 
 		$this->options->update($new_options);
 
+		$this->formdata = $new_options;
+
 		// Rebuild the cache with the new settings
 		if ( $new_options != $old_options )
 			$this->update_cache();
 
-		echo '<div class="updated fade"><p>Settings <strong>saved</strong>.</p></div>';
+		$this->admin_msg(__('Settings <strong>saved</strong>.'));
 	}
 
-	public function page_content() {
-		echo $this->page_header();
+	function page_content()
+	{
 		$rows = array(
 			array(
-				'title' => 'Format',
+				'title' => __('Format'),
 				'type' => 'radio',
-				'names' => 'format',
-				'values' => array('block', 'list', 'both')
+				'name' => 'format',
+				'value' => array( 'list', 'block', 'both'),
+				'desc' => array(
+					__('list', 'smart-archives-reloaded'),
+					__('block', 'smart-archives-reloaded'),
+					__('both', 'smart-archives-reloaded'),
+				)
 			),
 
 			array(
-				'title' => 'Use anchor links in block',
-				'desc' => 'The month links in the block will point to the month links in the list',
+				'title' => __('Numeric months in block', 'smart-archives-reloaded'),
+				'desc' => __('The month links in the block will be shown as numbers', 'smart-archives-reloaded'),
 				'type' => 'checkbox',
-				'names' => 'anchors',
-				'values' => true
+				'name' => 'block_numeric',
 			),
 
 			array(
-				'title' => 'Exclude Categories by ID',
-				'desc' => '(space separated)',
+				'title' => __('Use anchor links in block', 'smart-archives-reloaded'),
+				'desc' => __('The month links in the block will point to the month links in the list', 'smart-archives-reloaded'),
+				'type' => 'checkbox',
+				'name' => 'anchors',
+			),
+
+			array(
+				'title' => __('Exclude Categories by ID', 'smart-archives-reloaded'),
+				'desc' => __('(space separated)', 'smart-archives-reloaded'),
 				'type' => 'text',
-				'names' => 'catID'
+				'name' => 'catID'
 			),
 
 			array(
-				'title' => 'Use wp-cron',
-				'desc' => '(Uncheck this if your archive isn\'t being updated)',
+				'title' => __('Use wp-cron', 'smart-archives-reloaded'),
+				'desc' => __("(Uncheck this if your archive isn't being updated)", 'smart-archives-reloaded'),
 				'type' => 'checkbox',
-				'names' => 'cron'
+				'name' => 'cron'
 			)
 		);
-		echo $this->form_table($rows);
-		echo $this->page_footer();
+
+		echo $this->form_table($rows, NULL, $this->submit_button('action', __('Save Changes', 'smart-archives-reloaded')));
 	}
 }
 
