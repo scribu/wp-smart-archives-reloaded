@@ -1,0 +1,103 @@
+"Project-Id-Version: Smart Archives Reloaded\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/smart-archives-reloaded\n"
+"POT-Creation-Date: 2009-06-12 17:25+0300\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Fat Cow <zhr@tut.by>\n"
+"Language-Team: Fat Cower <zhr@tut.by>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Russian\n"
+"X-Poedit-Country: RUSSIAN FEDERATION\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: admin.php:12
+msgid "Smart Archives Settings"
+msgstr "Настройки Smart Archives"
+
+#: admin.php:13
+msgid "Smart Archives"
+msgstr "Smart Archives"
+
+#: admin.php:50
+#: admin.php:129
+msgid "Save Changes"
+msgstr "Сохранить настройки"
+
+#: admin.php:82
+#: inc/scb/AdminPage.php:103
+msgid "Settings <strong>saved</strong>."
+msgstr "Настройки <strong>сохранены</strong>."
+
+#: admin.php:89
+msgid "Format"
+msgstr "Формат"
+
+#: admin.php:94
+msgid "list"
+msgstr "список"
+
+#: admin.php:95
+msgid "block"
+msgstr "блок"
+
+#: admin.php:96
+msgid "both"
+msgstr "оба"
+
+#: admin.php:101
+msgid "Numeric months in block"
+msgstr "Нумерация месяцев в блоке"
+
+#: admin.php:102
+msgid "The month links in the block will be shown as numbers"
+msgstr "Месяц ссылки в блоке будет показан как номер"
+
+#: admin.php:108
+msgid "Use anchor links in block"
+msgstr "Использовать якорь ссылки в блоке"
+
+#: admin.php:109
+msgid "The month links in the block will point to the month links in the list"
+msgstr "Ссылки месяцев в блоке будут указывать на ссылки месяца в списке"
+
+#: admin.php:115
+msgid "Exclude Categories by ID"
+msgstr "Исключить категории по ID"
+
+#: admin.php:116
+msgid "(space separated)"
+msgstr "(разделение пробелом)"
+
+#: admin.php:122
+msgid "Use wp-cron"
+msgstr "Использовать wp-cron"
+
+#: admin.php:123
+msgid "(Uncheck this if your archive isn't being updated)"
+msgstr "(Снимите это, если ваш архив не обновляется)"
+
+#: inc/scb/AdminPage.php:246
+msgid "Settings"
+msgstr "Настройки"
+
+#. Plugin Name of an extension
+msgid "Smart Archives Reloaded"
+msgstr ""
+
+#. Plugin URI of an extension
+msgid "http://scribu.net/wordpress/smart-archives-reloaded"
+msgstr ""
+
+#. Description of an extension
+msgid "An elegant and easy way to present your archives."
+msgstr ""
+
+#. Author of an extension
+msgid "scribu"
+msgstr ""
+
+#. Author URI of an extension
+msgid "http://scribu.net"
+msgstr ""
+

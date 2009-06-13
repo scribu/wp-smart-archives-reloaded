@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.5
+Version: 1.5.0.1
 Description: An elegant and easy way to present your archives.
 Author: scribu
 Author URI: http://scribu.net
@@ -243,7 +243,7 @@ function _sar_init()
 
 	if ( is_admin() )
 	{
-		require_once(dirname(__FILE__) . '/admin.php');
+		require_once dirname(__FILE__) . '/admin.php';
 		new settingsSAR(__FILE__, $options);
 	}
 }
