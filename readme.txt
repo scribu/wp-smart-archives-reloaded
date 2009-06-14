@@ -26,7 +26,7 @@ The plugin can be installed in 3 easy steps:
 
 1. Unzip "Smart Archives Reloaded" archive and put the folder into your plugins folder (/wp-content/plugins/).
 1. Activate the plugin from the Plugins menu.
-1. Create a new page or post with `[smart_archives]` in it.
+1. Create a new page or post and add `[smart_archives]` to the content.
 
 Alternatively, you can add `<?php smart_archives(); ?>` anywhere in your theme, where you want the archives displayed.
 
