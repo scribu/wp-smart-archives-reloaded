@@ -1,0 +1,107 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR scribu
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+"Project-Id-Version: Smart Archives Reloaded in italiano\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/smart-archives-reloaded\n"
+"POT-Creation-Date: 2009-06-12 17:25+0300\n"
+"PO-Revision-Date: 2009-06-14 22:17+0100\n"
+"Last-Translator: Gianni Diurno (aka gidibao) <gidibao@gmail.com>\n"
+"Language-Team: Gianni Diurno | http://gidibao.net/ <gidibao@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Italian\n"
+"X-Poedit-Country: ITALY\n"
+
+#: admin.php:12
+msgid "Smart Archives Settings"
+msgstr "Impostazioni Smart Archives"
+
+#: admin.php:13
+msgid "Smart Archives"
+msgstr "Smart Archives"
+
+#: admin.php:50
+#: admin.php:129
+msgid "Save Changes"
+msgstr "Salva le modifiche"
+
+#: admin.php:82
+#: inc/scb/AdminPage.php:103
+msgid "Settings <strong>saved</strong>."
+msgstr "Le impostazioni sono state <strong>salvate</strong>."
+
+#: admin.php:89
+msgid "Format"
+msgstr "Formato"
+
+#: admin.php:94
+msgid "list"
+msgstr "lista"
+
+#: admin.php:95
+msgid "block"
+msgstr "compresso"
+
+#: admin.php:96
+msgid "both"
+msgstr "entrambi"
+
+#: admin.php:101
+msgid "Numeric months in block"
+msgstr "Visualizzazione mesi"
+
+#: admin.php:102
+msgid "The month links in the block will be shown as numbers"
+msgstr "I link del mese presenti nella versione compressa verranno mostrati in forma numerica"
+
+#: admin.php:108
+msgid "Use anchor links in block"
+msgstr "Usa i link interni"
+
+#: admin.php:109
+msgid "The month links in the block will point to the month links in the list"
+msgstr "I link ai mesi nella versione compressa punteranno ai link del mese presente nella lista"
+
+#: admin.php:115
+msgid "Exclude Categories by ID"
+msgstr "Escludi le categorie via ID"
+
+#: admin.php:116
+msgid "(space separated)"
+msgstr "(separate da uno spazio)"
+
+#: admin.php:122
+msgid "Use wp-cron"
+msgstr "Utilizza wp-cron"
+
+#: admin.php:123
+msgid "(Uncheck this if your archive isn't being updated)"
+msgstr "(non attivare se il tuo archivio non fosse stato aggiornato)"
+
+#: inc/scb/AdminPage.php:246
+msgid "Settings"
+msgstr "Impostazioni"
+
+#. Plugin Name of an extension
+msgid "Smart Archives Reloaded"
+msgstr "Smart Archives Reloaded"
+
+#. Plugin URI of an extension
+msgid "http://scribu.net/wordpress/smart-archives-reloaded"
+msgstr "http://scribu.net/wordpress/smart-archives-reloaded"
+
+#. Description of an extension
+msgid "An elegant and easy way to present your archives."
+msgstr "Un modo semplice ed elegante per mostrare i tuoi archivi."
+
+#. Author of an extension
+msgid "scribu"
+msgstr "scribu"
+
+#. Author URI of an extension
+msgid "http://scribu.net"
+msgstr "http://scribu.net"
+
