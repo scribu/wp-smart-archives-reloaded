@@ -39,3 +39,34 @@ Go to your wp-content/uploads directory, create an empty file called "sar_cache.
 
 1. The Settings Page
 
+== Changelog ==
+
+= 1.5.0.2 =
+* italian translation
+
+= 1.5.0.1 =
+* russian translation
+
+= 1.5 =
+* numeric month links
+* l10n
+* [more info](http://scribu.net/wordpress/smart-archives-reloaded/sar-1-5.html)
+
+= 1.4 =
+* more optimization
+* [more info](http://scribu.net/wordpress/smart-archives-reloaded/sar-1-4.html)
+
+= 1.3 =
+* optimization & bugfixes
+* [more info](http://scribu.net/wordpress/smart-archives-reloaded/sar-1-3.html)
+
+= 1.2 =
+* better HTML output
+* [more info](http://scribu.net/wordpress/smart-archives-reloaded/sar-1-2.html)
+
+= 1.1 =
+* uses wp-cron
+
+= 1.0 =
+* initial release
+
