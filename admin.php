@@ -126,7 +126,7 @@ class settingsSAR extends scbAdminPage
 			)
 		);
 
-		echo $this->form_table($rows, NULL, $this->submit_button('action', __('Save Changes', 'smart-archives-reloaded')));
+		echo $this->form_table($rows, NULL, __('Save Changes', 'smart-archives-reloaded'));
 	}
 }
 

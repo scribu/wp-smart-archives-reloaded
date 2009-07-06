@@ -41,11 +41,9 @@ Go to your wp-content/uploads directory, create an empty file called "sar_cache.
 
 == Changelog ==
 
-= 1.5.0.2 =
-* italian translation
-
-= 1.5.0.1 =
-* russian translation
+= 1.5.1 =
+* fixed "Save Changes" button
+* l10n: danish, italian, russian
 
 = 1.5 =
 * numeric month links

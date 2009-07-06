@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.5.0.3
+Version: 1.5.1
 Description: An elegant and easy way to present your archives.
 Author: scribu
 Author URI: http://scribu.net
@@ -22,6 +22,31 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+
+// Init
+_sar_init();
+function _sar_init()
+{
+	// Load scbFramework
+	require_once dirname(__FILE__) . '/inc/scb/load.php';
+
+	// Create an instance of each class
+	$options = new scbOptions('smart-archives', __FILE__, array(
+		'format' => 'both',
+		'catID' => '',
+		'anchors' => '',
+		'block_numeric' => '',
+		'cron' => true
+	));
+
+	displaySAR::init($options);
+
+	if ( is_admin() )
+	{
+		require_once dirname(__FILE__) . '/admin.php';
+		new settingsSAR(__FILE__, $options);
+	}
+}
 
 abstract class displaySAR
 {
@@ -220,31 +245,6 @@ abstract class displaySAR
 		}
 
 		return $months;
-	}
-}
-
-// Init
-_sar_init();
-function _sar_init()
-{
-	// Load scbFramework
-	require_once dirname(__FILE__) . '/inc/scb/load.php';
-
-	// Create an instance of each class
-	$options = new scbOptions('smart-archives', __FILE__, array(
-		'format' => 'both',
-		'catID' => '',
-		'anchors' => '',
-		'block_numeric' => '',
-		'cron' => true
-	));
-
-	displaySAR::init($options);
-
-	if ( is_admin() )
-	{
-		require_once dirname(__FILE__) . '/admin.php';
-		new settingsSAR(__FILE__, $options);
 	}
 }
 
