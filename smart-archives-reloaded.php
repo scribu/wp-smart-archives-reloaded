@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.5.2
+Version: 1.5.2.1
 Description: An elegant and easy way to present your archives.
 Author: scribu
 Author URI: http://scribu.net
@@ -96,7 +96,12 @@ abstract class displaySAR
 		// Extract options
 		extract(self::$options->get());
 
-		$catID = apply_filters('smart_archives_exclude_categories', explode(' ', $catID));
+		if ( ! empty($catID) )
+			$catID = explode(' ', trim($catID));
+
+		$catID = apply_filters('smart_archives_exclude_categories', $catID);
+
+		$catID = implode(',', $catID);
 
 		if ( ! empty($catID) )
 			$exclude_cats_sql = sprintf("
@@ -106,7 +111,7 @@ abstract class displaySAR
 					WHERE t.taxonomy = 'category'
 					AND t.term_id IN (%s)
 				)
-			", implode(',', $catID));
+			", $catID);
 
 		// Get years with posts
 		$query = $wpdb->prepare("
