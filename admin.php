@@ -41,8 +41,7 @@ class settingsSAR extends scbAdminPage
 	// Page methods
 	function page_head()
 	{
-		$src = $this->plugin_url . '/inc/admin.js';
-		wp_enqueue_script('sar-admin', $src, array('jquery'), '1.5');
+		wp_enqueue_script('sar-admin', $this->plugin_url . 'inc/admin.js', array('jquery'), '1.5');
 	}
 
 	function form_handler()

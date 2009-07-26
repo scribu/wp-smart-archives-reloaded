@@ -41,6 +41,9 @@ Go to your wp-content/uploads directory, create an empty file called "sar_cache.
 
 == Changelog ==
 
+= 1.5.2 =
+* added two filters: smart_archives_title, smart_archives_exclude_categories
+
 = 1.5.1 =
 * fixed "Save Changes" button
 * l10n: danish, italian, russian
