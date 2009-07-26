@@ -6,6 +6,8 @@ Description: An elegant and easy way to present your archives.
 Author: scribu
 Author URI: http://scribu.net
 Plugin URI: http://scribu.net/wordpress/smart-archives-reloaded
+Text Domain: smart-archives-reloaded
+Domain Path: /lang
 
 Copyright (C) 2009 scribu.net (scribu AT gmail DOT com)
 
