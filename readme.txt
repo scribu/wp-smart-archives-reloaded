@@ -4,7 +4,7 @@ Donate link: http://scribu.net/wordpress
 Tags: archive
 Requires at least: 2.3
 Tested up to: 2.8.2
-Stable tag: trunk
+Stable tag: 1.5.2.1
 
 An elegant and easy way to present your archives.
 
