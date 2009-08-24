@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.5.2.1
+Version: 1.6b
 Description: An elegant and easy way to present your archives.
 Author: scribu
 Author URI: http://scribu.net
@@ -38,6 +38,7 @@ function _sar_init()
 		'catID' => '',
 		'anchors' => '',
 		'block_numeric' => '',
+		'list_format' => '%post_link%',
 		'cron' => true
 	));
 
@@ -101,9 +102,9 @@ abstract class displaySAR
 
 		$catID = apply_filters('smart_archives_exclude_categories', $catID);
 
-		$catID = implode(',', $catID);
-
 		if ( ! empty($catID) )
+		{
+			$catID = @implode(',', $catID);
 			$exclude_cats_sql = sprintf("
 				AND ID NOT IN (
 					SELECT r.object_id
@@ -112,6 +113,7 @@ abstract class displaySAR
 					AND t.term_id IN (%s)
 				)
 			", $catID);
+		}
 
 		// Get years with posts
 		$query = $wpdb->prepare("
@@ -157,7 +159,11 @@ abstract class displaySAR
 			$output .= self::generate_block();
 
 		if ( $format != 'block' )
+		{
+#			$timer = new Timer();
 			$output .= self::generate_list();
+#			$timer->stop();
+		}
 
 		// Update cache
 		@fwrite($fh, $output);
@@ -204,24 +210,56 @@ abstract class displaySAR
 		return $block;
 	}
 
+	// Substitution tags
+	function substitute_post_link($post)
+	{
+		return sprintf("<a href='%s'>%s</a>", 
+			get_permalink($post->ID),
+			apply_filters('smart_archives_title', $post->post_title, $post->ID)
+		);
+	}
+
+	function substitute_author_link($post)
+	{
+		return sprintf("<a href='%s'>%s</a>", 
+			get_author_posts_url($post->post_author), 
+			get_user_option('display_name', $post->post_author)
+		);	
+	}
+
+	function substitute_author($post)
+	{
+		return get_user_option('display_name', $post->post_author);
+	}
+
 	// The list
 	function generate_list()
 	{
+		$available_tags = array('%post_link%', '%author_link%', '%author%');
+
+		foreach ( $available_tags as $i => $tag )
+			if ( FALSE === strpos(self::$options->list_format, $tag) )
+				unset($available_tags[$i]);
+
 		$months_long = self::get_months();
 
 		foreach ( self::$yearsWithPosts as $current )
 			for ( $i = 12; $i >= 1; $i-- )
 			{
-				if ( !self::$monthsWithPosts[$current][$i] )
+				if ( ! self::$monthsWithPosts[$current][$i] )
 					continue;
 
 				// Get post links for current month
 				$post_list = '';
 				foreach ( self::$monthsWithPosts[$current][$i]['posts'] as $post )
-					$post_list .= sprintf("\t<li><a href='%s'>%s</a></li>\n", 
-						get_permalink($post->ID), 
-						apply_filters('smart_archives_title', $post->post_title, $post->ID)
-					);
+				{
+					$list_item = self::$options->list_format;
+
+					foreach ( $available_tags as $tag )
+						$list_item = str_replace($tag, call_user_func(array(__CLASS__, 'substitute_' . substr($tag, 1, -1)), $post), $list_item);
+
+					$post_list .= "\t<li>" . $list_item . "</li>\n";
+				}
 
 				// Set title format
 				if ( self::$options->anchors )

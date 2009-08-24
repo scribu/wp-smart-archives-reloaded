@@ -2,7 +2,7 @@
 
 class settingsSAR extends scbAdminPage 
 {
-	function __construct($file, $options) 
+	function __construct($file, $options)
 	{
 		// Load translations
 		$plugin_dir = basename(dirname($file));
@@ -41,21 +41,12 @@ class settingsSAR extends scbAdminPage
 	// Page methods
 	function page_head()
 	{
-		wp_enqueue_script('sar-admin', $this->plugin_url . 'inc/admin.js', array('jquery'), '1.5');
+		wp_enqueue_script('sar-admin', $this->plugin_url . 'inc/admin.js', array('jquery'), '1.6', true);
+		echo $this->css_wrap('h3 {margin-bottom: 0 !important}');
 	}
 
-	function form_handler()
+	function validate($new_options)
 	{
-		if ( __('Save Changes', 'smart-archives-reloaded') !== $_POST['action'] )
-			return false;
-
-		check_admin_referer($this->nonce);
-
-		$old_options = $this->options->get();
-
-		foreach ( $old_options as $name => $value )
-			$new_options[$name] = $_POST[$name];
-
 		// Validate numeric
 		if ( $new_options['format'] == 'list' )
 			$new_options['block_numeric'] = false;
@@ -65,27 +56,50 @@ class settingsSAR extends scbAdminPage
 			$new_options['anchors'] = false;
 
 		// Validate catIDs
-		foreach ( explode(' ', $new_options['catID']) as $id )
+		foreach ( @explode(' ', $new_options['catID']) as $id )
 			if ( is_numeric($id) )
 				$ids[] = intval($id);
 		$new_options['catID'] = @implode(' ', array_unique($ids));
 
-		$this->options->update($new_options);
-
-		$this->formdata = $new_options;
+		// List format
+		$new_options['list_format'] = trim($new_options['list_format']);
+		if ( empty($new_options['list_format']) )
+			$new_options['list_format'] = $this->options->defaults['list_format'];
 
 		// Rebuild the cache with the new settings
-		if ( $new_options != $old_options )
+		if ( $new_options != $this->options->get() )
+		{
+			$this->options->update($new_options);
 			$this->update_cache();
+		}
 
-		$this->admin_msg(__('Settings <strong>saved</strong>.'));
+		return $new_options;
+	}
+
+	function _subsection($title, $id, $rows)
+	{
+		return "<div id='$id'>\n" . "<h3>$title</h3>\n" . $this->table($rows) . "</div>\n";
 	}
 
 	function page_content()
 	{
-		$rows = array(
+		$output = $this->_subsection(__('General settings', 'smart-archives-reloaded'), 'general', array(
 			array(
-				'title' => __('Format'),
+				'title' => __('Exclude Categories by ID', 'smart-archives-reloaded'),
+				'desc' => __('(space separated)', 'smart-archives-reloaded'),
+				'type' => 'text',
+				'name' => 'catID'
+			),
+
+			array(
+				'title' => __('Use wp-cron', 'smart-archives-reloaded'),
+				'desc' => __("Uncheck this if your archive isn't being updated", 'smart-archives-reloaded'),
+				'type' => 'checkbox',
+				'name' => 'cron'
+			),
+
+			array(
+				'title' => __('Format', 'smart-archives-reloaded'),
 				'type' => 'radio',
 				'name' => 'format',
 				'value' => array( 'list', 'block', 'both'),
@@ -94,6 +108,20 @@ class settingsSAR extends scbAdminPage
 					__('block', 'smart-archives-reloaded'),
 					__('both', 'smart-archives-reloaded'),
 				)
+			),
+		))
+
+		. $this->_subsection(__('Specific settings', 'smart-archives-reloaded'), 'specific', array(
+			array(
+				'title' => __('List format', 'smart-archives-reloaded'),
+				'desc' => '<p>' . __('Available substitution tags', 'smart-archives-reloaded') . ':</p>
+					<ul>
+						<li><em>%post_link%</em></li>
+						<li><em>%author_link%</em></li>
+						<li><em>%author%</em></li>
+					</ul>',
+				'type' => 'text',
+				'name' => 'list_format',
 			),
 
 			array(
@@ -109,23 +137,9 @@ class settingsSAR extends scbAdminPage
 				'type' => 'checkbox',
 				'name' => 'anchors',
 			),
+		));
 
-			array(
-				'title' => __('Exclude Categories by ID', 'smart-archives-reloaded'),
-				'desc' => __('(space separated)', 'smart-archives-reloaded'),
-				'type' => 'text',
-				'name' => 'catID'
-			),
-
-			array(
-				'title' => __('Use wp-cron', 'smart-archives-reloaded'),
-				'desc' => __("(Uncheck this if your archive isn't being updated)", 'smart-archives-reloaded'),
-				'type' => 'checkbox',
-				'name' => 'cron'
-			)
-		);
-
-		echo $this->form_table($rows, NULL, __('Save Changes', 'smart-archives-reloaded'));
+		echo $this->form_wrap($output, __('Save Changes', 'smart-archives-reloaded'));
 	}
 }
 

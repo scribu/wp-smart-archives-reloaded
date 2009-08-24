@@ -1,8 +1,13 @@
 jQuery(document).ready(function($) {
-	var $type = $('td:first');
-	var $numeric = $('tr:eq(1)');
-	var $anchor = $('tr:eq(2)');
+	var $type = $('#general td:last');
 	var cur_val = $type.find(':checked').val();
+
+	var $list_format = $('#specific tr:first');
+	var $numeric = $list_format.find('+ tr');
+	var $anchor = $numeric.find('+ tr');
+
+	if ( cur_val == 'block' )
+		$list_format.hide();
 
 	if ( cur_val == 'list' )
 		$numeric.hide();
@@ -11,14 +16,10 @@ jQuery(document).ready(function($) {
 		$anchor.hide();
 
 	$type.find(':radio').click(function() {
-		if ( $(this).val() == 'list' )
-			$numeric.fadeOut();
-		else
-			$numeric.fadeIn();
+		( $(this).val() == 'list' ) ? $numeric.fadeOut() : $numeric.fadeIn();
 
-		if ( $(this).val() != 'both' )
-			$anchor.fadeOut();
-		else
-			$anchor.fadeIn();
+		( $(this).val() == 'block' ) ? $list_format.fadeOut() : $list_format.fadeIn();
+
+		( $(this).val() != 'both' ) ? $anchor.fadeOut() : $anchor.fadeIn();
 	});
 });

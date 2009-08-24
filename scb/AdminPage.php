@@ -40,7 +40,7 @@ abstract class scbAdminPage extends scbForms
 		$this->_check_args();
 
 		$this->file = $file;
-		$this->plugin_url = plugins_dir_url($file);
+		$this->plugin_url = plugin_dir_url($file);
 
 		if ( $options !== NULL )
 		{
@@ -64,8 +64,6 @@ abstract class scbAdminPage extends scbForms
 	// A generic page header
 	function page_header()
 	{
-		$this->form_handler();
-
 		echo "<div class='wrap'>\n";
 		echo "<h2>" . $this->args['page_title'] . "</h2>\n";
 	}
@@ -83,9 +81,9 @@ abstract class scbAdminPage extends scbForms
 
 
 	// This is where the form data is validated
-	function validate($formdata)
+	function validate($new_data, $old_data)
 	{
-		return $formdata;
+		return $new_data;
 	}
 
 	// A generic form handler
@@ -99,7 +97,7 @@ abstract class scbAdminPage extends scbForms
 		foreach ( $this->formdata as $name => $value )
 			$new_data[$name] = $_POST[$name];
 
-		$this->formdata = $this->validate($new_data);
+		$this->formdata = $this->validate($new_data, $this->formdata);
 
 		if ( isset($this->options) )
 			$this->options->update($this->formdata);
@@ -244,13 +242,78 @@ abstract class scbAdminPage extends scbForms
 	function page_init()
 	{
 		extract($this->args);
+
 		$this->pagehook = add_submenu_page($parent, $page_title, $menu_title, $capability, $page_slug, array($this, '_page_content_hook'));
 
+		if ( ! $this->pagehook )
+			return;
+
+		$this->ajax_response();
+
+		add_action('admin_footer', array($this, 'ajax_submit'), 20);
 		add_action('admin_print_styles-' . $this->pagehook, array($this, 'page_head'));
+	}
+
+	function ajax_response()
+	{
+		if ( $_POST['_ajax_submit'] != $this->pagehook )
+			return;
+
+		$this->form_handler();
+		die;
+	}
+
+	function ajax_submit()
+	{
+		global $page_hook;
+
+		if ( $page_hook != $this->pagehook )
+			return;
+?>
+<script type="text/javascript">
+jQuery(document).ready(function($){
+	var $spinner = $(new Image()).attr('src', '<?php echo admin_url("images/wpspin_light.gif"); ?>');
+
+	$('form').submit(function(e){
+		var $this_spinner = $spinner.clone();
+
+		var $form = $(this);
+		var $submit = $form.find(":submit");
+
+		if ( $submit.length > 1 )
+			return;
+
+		$submit.before($this_spinner).hide();
+
+		var data = $(this).serializeArray();
+		data.push({name: $submit.attr('name'), value: $submit.val()});
+		data.push({name: '_ajax_submit', value: '<?php echo $this->pagehook; ?>'});
+
+		$.post(location.href, data, function(response){
+			var $prev = $('.wrap > .updated, .wrap > .error');
+			var $msg = $(response).hide().insertAfter($('.wrap h2'));
+			if ( $prev.length > 0 )
+				$prev.fadeOut('slow', function(){ $msg.fadeIn('slow'); });
+			else
+				$msg.fadeIn('slow');
+				
+			$this_spinner.hide();
+			$submit.show();
+		});
+
+		e.stopPropagation();
+		e.preventDefault();
+	});
+});
+</script>
+<?php
+		$this->page_head();
 	}
 
 	function _page_content_hook()
 	{
+		$this->form_handler();
+
 		$this->page_header();
 		$this->page_content();
 		$this->page_footer();
@@ -287,8 +350,8 @@ abstract class scbAdminPage extends scbForms
 }
 
 // WP < 2.8
-if ( !function_exists('plugins_dir_url') ) :
-function plugins_dir_url($file) 
+if ( !function_exists('plugin_dir_url') ) :
+function plugin_dir_url($file) 
 {
 	// WP < 2.6
 	if ( !function_exists('plugins_url') )

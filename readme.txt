@@ -1,7 +1,7 @@
 === Smart Archives Reloaded ===
 Contributors: scribu
 Donate link: http://scribu.net/wordpress
-Tags: archive
+Tags: archive, post list
 Requires at least: 2.3
 Tested up to: 2.8.2
 Stable tag: 1.5.2.1
@@ -40,6 +40,15 @@ Go to your wp-content/uploads directory, create an empty file called "sar_cache.
 1. The Settings Page
 
 == Changelog ==
+
+= 1.6 =
+* added list format option with these tags:
+	<ul>
+		<li>%post_link%</li>
+		<li>%author_link%</li>
+		<li>%author%</li>
+	</ul>
+* [more info](http://scribu.net/wordpress/smart-archives-reloaded/sar-1-6.html)
 
 = 1.5.2 =
 * added two filters: smart_archives_title, smart_archives_exclude_categories
