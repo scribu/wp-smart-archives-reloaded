@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Smart Archives Reloaded\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/smart-archives-reloaded\n"
-"POT-Creation-Date: 2009-06-12 17:25+0300\n"
+"POT-Creation-Date: 2009-08-25 00:26+0300\n"
 "PO-Revision-Date: \n"
 "Last-Translator: scribu <scribu@gmail.com>\n"
 "Language-Team: \n"
@@ -10,73 +10,87 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: admin.php:12
+#: admin.php:14
 msgid "Smart Archives Settings"
 msgstr "Setări Smart Archives"
 
-#: admin.php:13
+#: admin.php:15
 msgid "Smart Archives"
 msgstr "Smart Archives"
 
-#: admin.php:50
-#: admin.php:129
-msgid "Save Changes"
-msgstr "Salvează schimbările"
+#: admin.php:88
+msgid "General settings"
+msgstr "Setări generale"
 
-#: admin.php:82
-#: inc/scb/AdminPage.php:103
-msgid "Settings <strong>saved</strong>."
-msgstr "Setările au fost <strong>salvate</strong>."
-
-#: admin.php:89
-msgid "Format"
-msgstr "Format"
-
-#: admin.php:94
-msgid "list"
-msgstr "listă"
-
-#: admin.php:95
-msgid "block"
-msgstr "bloc"
-
-#: admin.php:96
-msgid "both"
-msgstr "ambele"
-
-#: admin.php:101
-msgid "Numeric months in block"
-msgstr "Luni sub formă numerică în bloc"
-
-#: admin.php:102
-msgid "The month links in the block will be shown as numbers"
-msgstr "Lunile din bloc vor fi afișate numeric"
-
-#: admin.php:108
-msgid "Use anchor links in block"
-msgstr "Folosește ancore în bloc"
-
-#: admin.php:109
-msgid "The month links in the block will point to the month links in the list"
-msgstr "Lunile din bloc vor trimite la lunile din listă"
-
-#: admin.php:115
+#: admin.php:90
 msgid "Exclude Categories by ID"
 msgstr "Exclude categorii prin ID"
 
-#: admin.php:116
+#: admin.php:91
 msgid "(space separated)"
 msgstr "(separate prin spațiu)"
 
-#: admin.php:122
+#: admin.php:97
 msgid "Use wp-cron"
 msgstr "Folosește wp-cron"
 
-#: admin.php:123
-msgid "(Uncheck this if your archive isn't being updated)"
-msgstr "(Deselectează asta dacă arhiva nu este actualizată)"
+#: admin.php:98
+msgid "Uncheck this if your archive isn't being updated"
+msgstr "Deselectează asta dacă arhiva nu este actualizată"
 
-#: inc/scb/AdminPage.php:246
+#: admin.php:104
+msgid "Format"
+msgstr "Format"
+
+#: admin.php:109
+msgid "list"
+msgstr "listă"
+
+#: admin.php:110
+msgid "block"
+msgstr "bloc"
+
+#: admin.php:111
+msgid "both"
+msgstr "ambele"
+
+#: admin.php:116
+msgid "Specific settings"
+msgstr "Setări specifice"
+
+#: admin.php:118
+msgid "List format"
+msgstr "Format listă"
+
+#: admin.php:119
+msgid "Available substitution tags"
+msgstr "Tag-uri de substituție valabile"
+
+#: admin.php:130
+msgid "Numeric months in block"
+msgstr "Luni sub formă numerică în bloc"
+
+#: admin.php:131
+msgid "The month links in the block will be shown as numbers"
+msgstr "Lunile din bloc vor fi afișate numeric"
+
+#: admin.php:137
+msgid "Use anchor links in block"
+msgstr "Folosește ancore în bloc"
+
+#: admin.php:138
+msgid "The month links in the block will point to the month links in the list"
+msgstr "Lunile din bloc vor trimite la lunile din listă"
+
+#: scb/AdminPage.php:105
+msgid "Settings <strong>saved</strong>."
+msgstr "Setările au fost <strong>salvate</strong>."
+
+#: scb/AdminPage.php:163
+msgid "Save Changes"
+msgstr "Salvează schimbările"
+
+#: scb/AdminPage.php:338
 msgid "Settings"
 msgstr "Setări"
 

@@ -30,7 +30,7 @@ _sar_init();
 function _sar_init()
 {
 	// Load scbFramework
-	require_once dirname(__FILE__) . '/inc/scb/load.php';
+	require_once dirname(__FILE__) . '/scb/load.php';
 
 	// Create an instance of each class
 	$options = new scbOptions('smart-archives', __FILE__, array(
@@ -159,11 +159,7 @@ abstract class displaySAR
 			$output .= self::generate_block();
 
 		if ( $format != 'block' )
-		{
-#			$timer = new Timer();
 			$output .= self::generate_list();
-#			$timer->stop();
-		}
 
 		// Update cache
 		@fwrite($fh, $output);

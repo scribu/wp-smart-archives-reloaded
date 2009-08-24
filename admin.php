@@ -4,13 +4,15 @@ class settingsSAR extends scbAdminPage
 {
 	function __construct($file, $options)
 	{
+		$this->textdomain = 'smart-archives-reloaded';
+
 		// Load translations
 		$plugin_dir = basename(dirname($file));
-		load_plugin_textdomain('smart-archives-reloaded', "wp-content/plugins/$plugin_dir/lang", "$plugin_dir/lang");
+		load_plugin_textdomain($this->textdomain, "wp-content/plugins/$plugin_dir/lang", "$plugin_dir/lang");
 
 		$this->args = array(
-			'page_title' => __('Smart Archives Settings', 'smart-archives-reloaded'),
-			'menu_title' => __('Smart Archives', 'smart-archives-reloaded'),
+			'page_title' => __('Smart Archives Settings', $this->textdomain),
+			'menu_title' => __('Smart Archives', $this->textdomain),
 			'page_slug' => 'smart-archives'
 		);
 
@@ -83,38 +85,38 @@ class settingsSAR extends scbAdminPage
 
 	function page_content()
 	{
-		$output = $this->_subsection(__('General settings', 'smart-archives-reloaded'), 'general', array(
+		$output = $this->_subsection(__('General settings', $this->textdomain), 'general', array(
 			array(
-				'title' => __('Exclude Categories by ID', 'smart-archives-reloaded'),
-				'desc' => __('(space separated)', 'smart-archives-reloaded'),
+				'title' => __('Exclude Categories by ID', $this->textdomain),
+				'desc' => __('(space separated)', $this->textdomain),
 				'type' => 'text',
 				'name' => 'catID'
 			),
 
 			array(
-				'title' => __('Use wp-cron', 'smart-archives-reloaded'),
-				'desc' => __("Uncheck this if your archive isn't being updated", 'smart-archives-reloaded'),
+				'title' => __('Use wp-cron', $this->textdomain),
+				'desc' => __("Uncheck this if your archive isn't being updated", $this->textdomain),
 				'type' => 'checkbox',
 				'name' => 'cron'
 			),
 
 			array(
-				'title' => __('Format', 'smart-archives-reloaded'),
+				'title' => __('Format', $this->textdomain),
 				'type' => 'radio',
 				'name' => 'format',
 				'value' => array( 'list', 'block', 'both'),
 				'desc' => array(
-					__('list', 'smart-archives-reloaded'),
-					__('block', 'smart-archives-reloaded'),
-					__('both', 'smart-archives-reloaded'),
+					__('list', $this->textdomain),
+					__('block', $this->textdomain),
+					__('both', $this->textdomain),
 				)
 			),
 		))
 
-		. $this->_subsection(__('Specific settings', 'smart-archives-reloaded'), 'specific', array(
+		. $this->_subsection(__('Specific settings', $this->textdomain), 'specific', array(
 			array(
-				'title' => __('List format', 'smart-archives-reloaded'),
-				'desc' => '<p>' . __('Available substitution tags', 'smart-archives-reloaded') . ':</p>
+				'title' => __('List format', $this->textdomain),
+				'desc' => '<p>' . __('Available substitution tags', $this->textdomain) . ':</p>
 					<ul>
 						<li><em>%post_link%</em></li>
 						<li><em>%author_link%</em></li>
@@ -125,21 +127,21 @@ class settingsSAR extends scbAdminPage
 			),
 
 			array(
-				'title' => __('Numeric months in block', 'smart-archives-reloaded'),
-				'desc' => __('The month links in the block will be shown as numbers', 'smart-archives-reloaded'),
+				'title' => __('Numeric months in block', $this->textdomain),
+				'desc' => __('The month links in the block will be shown as numbers', $this->textdomain),
 				'type' => 'checkbox',
 				'name' => 'block_numeric',
 			),
 
 			array(
-				'title' => __('Use anchor links in block', 'smart-archives-reloaded'),
-				'desc' => __('The month links in the block will point to the month links in the list', 'smart-archives-reloaded'),
+				'title' => __('Use anchor links in block', $this->textdomain),
+				'desc' => __('The month links in the block will point to the month links in the list', $this->textdomain),
 				'type' => 'checkbox',
 				'name' => 'anchors',
 			),
 		));
 
-		echo $this->form_wrap($output, __('Save Changes', 'smart-archives-reloaded'));
+		echo $this->form_wrap($output);
 	}
 }
 
