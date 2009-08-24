@@ -4,7 +4,7 @@ Donate link: http://scribu.net/wordpress
 Tags: archive, post list
 Requires at least: 2.3
 Tested up to: 2.8.2
-Stable tag: 1.5.2.1
+Stable tag: trunk
 
 An elegant and easy way to present your archives.
 

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.6b
+Version: 1.6
 Description: An elegant and easy way to present your archives.
 Author: scribu
 Author URI: http://scribu.net
