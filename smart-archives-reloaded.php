@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.6
+Version: 1.6.1
 Description: An elegant and easy way to present your archives.
 Author: scribu
 Author URI: http://scribu.net
@@ -115,7 +115,7 @@ abstract class displaySAR
 			", $catID);
 		}
 
-		// Get years with posts
+		// Get non-empty years
 		$query = $wpdb->prepare("
 			SELECT DISTINCT year(post_date) AS year
 			FROM {$wpdb->posts}
@@ -131,12 +131,17 @@ abstract class displaySAR
 		if ( !self::$yearsWithPosts )
 			return false;
 
+		$columns = 'ID, post_title';
+
+		if ( FALSE !== strpos(self::$options->list_format, '%author') )
+			$columns .= ', post_author';
+			
 		// Get months with posts
 		foreach ( self::$yearsWithPosts as $current )
 			for ( $i = 1; $i <= 12; $i++ )
 			{
 				$query = $wpdb->prepare("
-					SELECT ID, post_title
+					SELECT {$columns}
 					FROM {$wpdb->posts}
 					WHERE post_type = 'post'
 					AND post_status = 'publish'

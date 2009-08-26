@@ -3,7 +3,7 @@ Contributors: scribu
 Donate link: http://scribu.net/wordpress
 Tags: archive, post list
 Requires at least: 2.3
-Tested up to: 2.8
+Tested up to: 2.9-rare
 Stable tag: trunk
 
 An elegant and easy way to present your archives.
@@ -40,6 +40,9 @@ Go to your wp-content/uploads directory, create an empty file called "sar_cache.
 1. The Settings Page
 
 == Changelog ==
+
+= 1.6.1 =
+* bugfix
 
 = 1.6 =
 * added list format option with these tags:
