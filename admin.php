@@ -33,11 +33,11 @@ class settingsSAR extends scbAdminPage
 
 		if ( $this->options->cron )
 		{
-			wp_clear_scheduled_hook('smart_archives_update');
-			wp_schedule_single_event(time(), 'smart_archives_update');
+			wp_clear_scheduled_hook(displaySAR::hook);
+			wp_schedule_single_event(time(), displaySAR::hook);
 		}
 		else
-			do_action('smart_archives_update');
+			do_action(displaySAR::hook);
 	}
 
 	// Page methods
@@ -47,7 +47,7 @@ class settingsSAR extends scbAdminPage
 		echo $this->css_wrap('h3 {margin-bottom: 0 !important}');
 	}
 
-	function validate($new_options)
+	function validate($new_options, $old_options)
 	{
 		// Validate numeric
 		if ( $new_options['format'] == 'list' )
@@ -69,7 +69,7 @@ class settingsSAR extends scbAdminPage
 			$new_options['list_format'] = $this->options->defaults['list_format'];
 
 		// Rebuild the cache with the new settings
-		if ( $new_options != $this->options->get() )
+		if ( $new_options != $old_options )
 		{
 			$this->options->update($new_options);
 			$this->update_cache();
@@ -85,6 +85,9 @@ class settingsSAR extends scbAdminPage
 
 	function page_content()
 	{
+		foreach ( displaySAR::get_available_tags() as $tag )
+			$tags .= "<li><em>$tag</em></li>\n";
+
 		$output = $this->_subsection(__('General settings', $this->textdomain), 'general', array(
 			array(
 				'title' => __('Exclude Categories by ID', $this->textdomain),
@@ -118,12 +121,11 @@ class settingsSAR extends scbAdminPage
 				'title' => __('List format', $this->textdomain),
 				'desc' => '<p>' . __('Available substitution tags', $this->textdomain) . ':</p>
 					<ul>
-						<li><em>%post_link%</em></li>
-						<li><em>%author_link%</em></li>
-						<li><em>%author%</em></li>
+						' . $tags . '
 					</ul>',
 				'type' => 'text',
 				'name' => 'list_format',
+//				'extra' => 'style="width:400px"'
 			),
 
 			array(

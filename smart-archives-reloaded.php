@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.6.1
+Version: 1.6.2a
 Description: An elegant and easy way to present your archives.
 Author: scribu
 Author URI: http://scribu.net
@@ -53,11 +53,13 @@ function _sar_init()
 
 abstract class displaySAR
 {
-	static $cache;
-	static $options;
+	const hook = 'smart_archives_update';
 
-	static $yearsWithPosts;
-	static $monthsWithPosts;
+	private static $options;
+
+	private static $yearsWithPosts;
+	private static $monthsWithPosts;
+	private static $cache;
 
 	static function init($options)
 	{
@@ -68,7 +70,7 @@ abstract class displaySAR
 		self::$cache = $wud['basedir'] . '/sar_cache.txt';
 
 		// Set up cron hook
-		add_action('smart_archives_update', array(__CLASS__, 'generate'));
+		add_action(self::hook, array(__CLASS__, 'generate'));
 
 		// Set up shortcode
 		add_shortcode('smart_archives', array(__CLASS__, 'load'));
@@ -78,45 +80,39 @@ abstract class displaySAR
 	{
 		$cache = @file_get_contents(self::$cache);
 
-		// Use cache if available
-		return $cache ? $cache : self::generate(false);
+		return $cache ? $cache : self::generate(true);
 	}
 
-	static function generate($require_cache = true)
+	static function generate($display_anyway = false)
 	{
-		global $wpdb;
-
-		if ( !$fh = @fopen(self::$cache, 'w') )
+		if ( ! $display_anyway && !$fh = @fopen(self::$cache, 'w') )
 		{
-			trigger_error("Can't open cache file: {self::$cache}", E_USER_WARNING);
+			trigger_error("Can't open cache file: " . self::$cache, E_USER_WARNING);
 
-			if ( $require_cache )
-				return false; // exit if we can't write to file
+			return false;
 		}
 
-		// Extract options
+		global $wpdb;
+
 		extract(self::$options->get());
 
-		if ( ! empty($catID) )
-			$catID = explode(' ', trim($catID));
+		$catID = @explode(' ', trim($catID));
+		$catID = (array) apply_filters('smart_archives_exclude_categories', $catID);
+		array_map('esc_sql', $catID);
+		$catID = @implode(',', $catID);
 
-		$catID = apply_filters('smart_archives_exclude_categories', $catID);
-
 		if ( ! empty($catID) )
-		{
-			$catID = @implode(',', $catID);
-			$exclude_cats_sql = sprintf("
+			$exclude_cats_sql = "
 				AND ID NOT IN (
 					SELECT r.object_id
 					FROM {$wpdb->term_relationships} r NATURAL JOIN {$wpdb->term_taxonomy} t
 					WHERE t.taxonomy = 'category'
-					AND t.term_id IN (%s)
+					AND t.term_id IN ($catID)
 				)
-			", $catID);
-		}
+			";
 
 		// Get non-empty years
-		$query = $wpdb->prepare("
+		$query = "
 			SELECT DISTINCT year(post_date) AS year
 			FROM {$wpdb->posts}
 			WHERE post_type = 'post'
@@ -125,17 +121,15 @@ abstract class displaySAR
 			GROUP BY year(post_date)
 			HAVING count(year(post_date)) > 0
 			ORDER BY post_date DESC
-		");
+		";
+
 		self::$yearsWithPosts = $wpdb->get_col($query);
 
-		if ( !self::$yearsWithPosts )
+		if ( ! self::$yearsWithPosts )
 			return false;
 
-		$columns = 'ID, post_title';
+		$columns = self::get_columns();
 
-		if ( FALSE !== strpos(self::$options->list_format, '%author') )
-			$columns .= ', post_author';
-			
 		// Get months with posts
 		foreach ( self::$yearsWithPosts as $current )
 			for ( $i = 1; $i <= 12; $i++ )
@@ -173,8 +167,24 @@ abstract class displaySAR
 		return $output;
 	}
 
+	private function get_columns()
+	{
+		$columns = array('ID', 'post_title');
+
+		if ( 'block' == self::$options->format )
+			return implode(',', $columns);
+
+		if ( FALSE !== strpos(self::$options->list_format, '%author') )
+			$columns[] = 'post_author';
+
+		if ( FALSE !== strpos(self::$options->list_format, '%comment') )
+			$columns[] = 'comment_count';
+
+		return implode(',', $columns);
+	}
+
 	// The block
-	function generate_block()
+	private function generate_block()
 	{
 		$months_short = self::get_months(true);
 
@@ -212,7 +222,7 @@ abstract class displaySAR
 	}
 
 	// Substitution tags
-	function substitute_post_link($post)
+	private function substitute_post_link($post)
 	{
 		return sprintf("<a href='%s'>%s</a>", 
 			get_permalink($post->ID),
@@ -220,23 +230,33 @@ abstract class displaySAR
 		);
 	}
 
-	function substitute_author_link($post)
+	private function substitute_author_link($post)
 	{
 		return sprintf("<a href='%s'>%s</a>", 
 			get_author_posts_url($post->post_author), 
 			get_user_option('display_name', $post->post_author)
-		);	
+		);
 	}
 
-	function substitute_author($post)
+	private function substitute_author($post)
 	{
 		return get_user_option('display_name', $post->post_author);
 	}
 
-	// The list
-	function generate_list()
+	private function substitute_comment_count($post)
 	{
-		$available_tags = array('%post_link%', '%author_link%', '%author%');
+		return $post->comment_count;
+	}
+
+	function get_available_tags()
+	{
+		return array('%post_link%', '%author_link%', '%author%', '%comment_count%');
+	}
+
+	// The list
+	private function generate_list()
+	{
+		$available_tags = self::get_available_tags();
 
 		foreach ( $available_tags as $i => $tag )
 			if ( FALSE === strpos(self::$options->list_format, $tag) )
@@ -257,7 +277,10 @@ abstract class displaySAR
 					$list_item = self::$options->list_format;
 
 					foreach ( $available_tags as $tag )
-						$list_item = str_replace($tag, call_user_func(array(__CLASS__, 'substitute_' . substr($tag, 1, -1)), $post), $list_item);
+					{
+						$method = 'substitute_' . substr($tag, 1, -1);
+						$list_item = str_replace($tag, self::$method($post), $list_item);
+					}
 
 					$post_list .= "\t<li>" . $list_item . "</li>\n";
 				}
@@ -310,6 +333,14 @@ if ( !function_exists('esc_html') ) :
 function esc_html($text)
 {
 	return wp_specialchars($text, ENT_QUOTES);
+}
+endif;
+
+// WP < 2.8
+if ( !function_exists('esc_sql') ) :
+function esc_sql($text)
+{
+	return $GLOBALS['wpdb']->escape($text);
 }
 endif;
 
