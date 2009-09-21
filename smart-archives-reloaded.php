@@ -328,19 +328,3 @@ function smart_archives()
 	echo displaySAR::load();
 }
 
-// WP < 2.8
-if ( !function_exists('esc_html') ) :
-function esc_html($text)
-{
-	return wp_specialchars($text, ENT_QUOTES);
-}
-endif;
-
-// WP < 2.8
-if ( !function_exists('esc_sql') ) :
-function esc_sql($text)
-{
-	return $GLOBALS['wpdb']->escape($text);
-}
-endif;
-

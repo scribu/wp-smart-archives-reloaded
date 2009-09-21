@@ -53,7 +53,7 @@ class scbOptions
 	// Update one or more fields, leaving the others intact
 	function update_part($newdata)
 	{
-		if ( !is_array($newdata) )
+		if ( ! is_array($newdata) )
 			return trigger_error("Wrong data_type", E_USER_WARNING);
 
 		$this->update(array_merge($this->data, $newdata));
@@ -89,9 +89,4 @@ class scbOptions
 		delete_option($this->key);
 	}
 }
-
-// WP < 2.7
-if ( !function_exists('register_uninstall_hook') ) :
-	function register_uninstall_hook(){}
-endif;
 

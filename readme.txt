@@ -2,7 +2,7 @@
 Contributors: scribu
 Donate link: http://scribu.net/wordpress
 Tags: archive, post list
-Requires at least: 2.3
+Requires at least: 2.8
 Tested up to: 2.9-rare
 Stable tag: 1.6.1
 

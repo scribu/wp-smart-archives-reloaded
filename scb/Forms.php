@@ -451,14 +451,6 @@ class scbForms
 	}
 }
 
-// WP < 2.8
-if ( !function_exists('esc_html') ) :
-function esc_html($text)
-{
-	return wp_specialchars($text, ENT_QUOTES);
-}
-endif;
-
 // PHP < 5.2
 if ( !function_exists('array_fill_keys') ) :
 function array_fill_keys($keys, $value)

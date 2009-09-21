@@ -274,18 +274,18 @@ abstract class scbAdminPage extends scbForms
 jQuery(document).ready(function($){
 	var $spinner = $(new Image()).attr('src', '<?php echo admin_url("images/wpspin_light.gif"); ?>');
 
-	$('form').submit(function(e){
+	$(':submit').click(function(ev){
+		var $submit = $(this);
+		var $form = $submit.parents('form');
+
+		if ( $submit.hasClass('no-ajax') || $form.attr('method').toLowerCase() != 'post' )
+			return true;
+
 		var $this_spinner = $spinner.clone();
-
-		var $form = $(this);
-		var $submit = $form.find(":submit");
-
-		if ( $submit.length > 1 )
-			return;
 
 		$submit.before($this_spinner).hide();
 
-		var data = $(this).serializeArray();
+		var data = $form.serializeArray();
 		data.push({name: $submit.attr('name'), value: $submit.val()});
 		data.push({name: '_ajax_submit', value: '<?php echo $this->pagehook; ?>'});
 
@@ -301,8 +301,8 @@ jQuery(document).ready(function($){
 			$submit.show();
 		});
 
-		e.stopPropagation();
-		e.preventDefault();
+		ev.stopPropagation();
+		ev.preventDefault();
 	});
 });
 </script>
@@ -349,14 +349,3 @@ jQuery(document).ready(function($){
 	}
 }
 
-// WP < 2.8
-if ( !function_exists('plugin_dir_url') ) :
-function plugin_dir_url($file) 
-{
-	// WP < 2.6
-	if ( !function_exists('plugins_url') )
-		return trailingslashit(get_option('siteurl') . '/wp-content/plugins/' . plugin_basename($file));
-
-	return trailingslashit(plugins_url(plugin_basename(dirname($file))));
-}
-endif;
