@@ -4,7 +4,7 @@ Donate link: http://scribu.net/wordpress
 Tags: archive, post list
 Requires at least: 2.8
 Tested up to: 2.9-rare
-Stable tag: 1.6.1
+Stable tag: trunk
 
 An elegant and easy way to present your archives.
 
@@ -40,6 +40,11 @@ Go to your wp-content/uploads directory, create an empty file called "sar_cache.
 1. The Settings Page
 
 == Changelog ==
+
+= 1.6.2 =
+* added %comment_count% tag
+* added Belarusian translation
+* dropped support for WordPress older than 2.8
 
 = 1.6.1 =
 * bugfix

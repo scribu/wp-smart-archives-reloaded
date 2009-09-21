@@ -125,7 +125,6 @@ class settingsSAR extends scbAdminPage
 					</ul>',
 				'type' => 'text',
 				'name' => 'list_format',
-//				'extra' => 'style="width:400px"'
 			),
 
 			array(
