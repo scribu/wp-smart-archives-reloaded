@@ -1,8 +1,8 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.6.2
-Description: An elegant and easy way to present your archives.
+Version: 1.7a
+Description: An elegant and easy way to present your archives. (With help from <a href="http://www.conceptfusion.co.nz/">Simon Pritchard</a>)
 Author: scribu
 Author URI: http://scribu.net
 Plugin URI: http://scribu.net/wordpress/smart-archives-reloaded
