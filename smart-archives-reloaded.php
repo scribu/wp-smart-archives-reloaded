@@ -85,6 +85,11 @@ abstract class displaySAR
 		if ( ! is_page() )
 			return;
 
+		global $posts;
+
+		if ( FALSE === strpos($posts[0]->post_content, '[smart_archives]') )
+			return;
+
 		$plugin_url = plugin_dir_url(__FILE__);
 
 		wp_enqueue_script('tools-tabs', $plugin_url . 'inc/jquery.tools-tabs.min.js', array('jquery'), '1.3', true);
