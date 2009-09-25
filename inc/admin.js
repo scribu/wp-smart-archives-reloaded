@@ -13,15 +13,17 @@ jQuery(document).ready(function($) {
 	if ( cur_val == 'list' )
 		$numeric.hide();
 
-	if ( cur_val != 'both'  )
+	if ( cur_val != 'both' )
 		$anchor.hide();
 
 	$type.find(':radio').click(function() {
-		( $(this).val() == 'list' ) ? $numeric.fadeOut() : $numeric.fadeIn();
+		var radio_val = $(this).val();
 
-		( $(this).val() == 'block' ) ? $list_format.fadeOut() : $list_format.fadeIn();
-		( $(this).val() == 'block' ) ? $date_format.fadeOut() : $date_format.fadeIn();
+		( radio_val == 'list' ) ? $numeric.fadeOut() : $numeric.fadeIn();
 
-		( $(this).val() != 'both' ) ? $anchor.fadeOut() : $anchor.fadeIn();
+		( radio_val == 'block' ) ? $list_format.fadeOut() : $list_format.fadeIn();
+		( radio_val == 'block' ) ? $date_format.fadeOut() : $date_format.fadeIn();
+
+		( radio_val != 'both' ) ? $anchor.fadeOut() : $anchor.fadeIn();
 	});
 });

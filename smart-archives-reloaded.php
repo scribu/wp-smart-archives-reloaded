@@ -82,11 +82,24 @@ abstract class displaySAR
 
 	static function add_scripts()
 	{
+		if ( ! is_page() )
+			return;
+	
 		// Add the fancy archives default styles and script to to the page.
 		wp_enqueue_script('tools-tabs', WP_PLUGIN_URL . '/super-smart-archives/inc/jquery.tools-tabs.min.js',array('jquery'), '1.3', true);
 
 		wp_enqueue_style('fancy-archives-css', WP_PLUGIN_URL . '/super-smart-archives/inc/fancy-archives.css', array(), '0.1');
-		wp_enqueue_script('fancy-archives', WP_PLUGIN_URL . '/super-smart-archives/inc/fancy-archives.js', array('tools-tabs'), '1.3', true);
+		
+		add_action('wp_footer', array(__CLASS__, 'init_fancy'), 20);
+	}
+
+	static function init_fancy()
+	{
+?>
+<script type="text/javascript">
+jQuery(document).ready(function($) { $("ul.tabs").tabs("> .pane"); });
+</script>
+<?php
 	}
 
 	static function load()
