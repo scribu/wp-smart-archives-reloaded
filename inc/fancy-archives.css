@@ -2,46 +2,57 @@
 	float: left;
 	width: 100%;
 }
-ul.tabs {
+.tabs {
 	width: 100%;
 	float: left;
 	background:  url(img/archive-year-background.png) repeat-x center bottom;
 	margin: 0 !important;
 }
-ul.tabs li {
+.tabs li:before {
+	content: '' !important;
+}
+.tabs li {
 	float: left;
 	list-style: none !important;
-	line-height: 1;
+	line-height: 1 !important;
+	margin: 0 !important;
+	padding: 0 !important;
 }
-ul.tabs li a {
+.tabs li + li {
+	margin-left: 1em !important
+}
+.tabs a {
 	float:left;
-	font-size:28px;
-	padding:5px 7px 10px;
+	font-size: 28px;
+	padding: 5px 7px 10px;
 }
-ul.tabs li a.current {
-	background:  url(img/archive-year-pointer.png) no-repeat center bottom;
+.tabs a.current {
+	background: url(img/archive-year-pointer.png) no-repeat center bottom;
 	color: #000;
 }
-ul.month-list {
+.tabs a:active {
+	outline:0 !important;
+}
+.month-list {
 	width: 100%;
 	float: left;
-	padding-bottom: 10px;
+	padding-bottom: 10px !important;
 	margin: 10px 0 !important;
 	border-bottom: 2px solid #E8EDEE;	
 }
-ul.month-list li {
+.month-list li {
 	list-style: none !important;
 	float: left;
 	clear: none !important;
 	font-size: 14px;
 	color: #BDC0C3;
 } 
-ul.month-list li a, ul.month-list li span {
+.month-list li a, .month-list li span {
 	padding: 3px 7px 3px 7px;
 	font-size: 14px;
 	float:left;
 }
-ul.month-list li a.current {
+.month-list li a.current {
 	background: none;
 	color: #000;
 } 

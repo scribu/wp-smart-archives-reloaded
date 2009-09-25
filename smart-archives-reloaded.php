@@ -84,12 +84,13 @@ abstract class displaySAR
 	{
 		if ( ! is_page() )
 			return;
-	
-		// Add the fancy archives default styles and script to to the page.
-		wp_enqueue_script('tools-tabs', WP_PLUGIN_URL . '/super-smart-archives/inc/jquery.tools-tabs.min.js',array('jquery'), '1.3', true);
 
-		wp_enqueue_style('fancy-archives-css', WP_PLUGIN_URL . '/super-smart-archives/inc/fancy-archives.css', array(), '0.1');
-		
+		$plugin_url = plugin_dir_url(__FILE__);
+
+		wp_enqueue_script('tools-tabs', $plugin_url . 'inc/jquery.tools-tabs.min.js', array('jquery'), '1.3', true);
+
+		wp_enqueue_style('fancy-archives-css', $plugin_url . 'inc/fancy-archives.css', array(), '0.1');
+
 		add_action('wp_footer', array(__CLASS__, 'init_fancy'), 20);
 	}
 
@@ -271,13 +272,9 @@ jQuery(document).ready(function($) { $("ul.tabs").tabs("> .pane"); });
 					$post_list .= "\t<li>" . $list_item . "</li>\n";
 				}
 
-				// Set title format
-				if ( self::$options->anchors )
-				{
-					$anchor = "{$current}{$i}";
-					$titlef = "\n<h2 class='month-heading'>%s <span class='month-archive-link'>(<a href='%s'>View complete archive page for %s</a>)</span></h2>\n";
-				} else
-					$titlef = "\n<h2 class='month-heading'>%s <span class='month-archive-link'>(<a href='%s'>View complete archive page for %s</a>)</span></h2>\n";
+				$titlef = "\n<h2 class='month-heading'>%s <span class='month-archive-link'>(<a href='%s'>" . 
+					__('View complete archive page for %s', 'smart-archives-reloaded') . 
+					"</a>)</span></h2>\n";
 
 				// Append to list
 				$list .= "<div id='{$anchor}' class='pane'>";
