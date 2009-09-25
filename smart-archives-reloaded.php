@@ -409,7 +409,7 @@ jQuery(document).ready(function($) { $("ul.tabs").tabs("> .pane"); });
 	// Substitution tags
 	function get_available_tags()
 	{
-		return array('%post_link%', '%author_link%', '%author%', '%comment_count%', '%post_category%', '%post_date%');
+		return array('%post_link%', '%author_link%', '%author%', '%comment_count%', '%category_link%', '%date%');
 	}
 
 	private function substitute_post_link($post)
@@ -438,12 +438,12 @@ jQuery(document).ready(function($) { $("ul.tabs").tabs("> .pane"); });
 		return $post->comment_count;
 	}
 
-	private function substitute_post_date($post)
+	private function substitute_date($post)
 	{
 		return sprintf("<span class='post_date'>%s</span>", date(self::$options->date_format, strtotime($post->post_date)));	
 	}
 
-	function substitute_post_category($post)
+	function substitute_category_link($post)
 	{
 		$categorylist = array();
 		foreach ( get_the_category($post->ID) as $category )
