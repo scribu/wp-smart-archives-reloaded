@@ -25,13 +25,11 @@
 	float:left;
 	font-size: 28px;
 	padding: 5px 7px 10px;
+	outline: none !important;
 }
 .tabs a.current {
 	background: url(img/archive-year-pointer.png) no-repeat center bottom;
 	color: #000;
-}
-.tabs a:active {
-	outline:0 !important;
 }
 .month-list {
 	width: 100%;

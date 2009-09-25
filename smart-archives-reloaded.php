@@ -199,25 +199,6 @@ jQuery(document).ready(function($) { $("ul.tabs").tabs("> .pane"); });
 		return $output;
 	}
 
-	private function get_columns()
-	{
-		$columns = array('ID', 'post_title');
-
-		if ( 'block' == self::$options->format )
-			return implode(',', $columns);
-
-		if ( FALSE !== strpos(self::$options->list_format, '%author') )
-			$columns[] = 'post_author';
-
-		if ( FALSE !== strpos(self::$options->list_format, '%comment') )
-			$columns[] = 'comment_count';
-
-		if ( FALSE !== strpos(self::$options->list_format, '%post_date') )
-			$columns[] = 'post_date';
-
-		return implode(',', $columns);
-	}
-
 	// The "fancy" archive
 	function generate_fancy()
 	{
@@ -410,6 +391,25 @@ jQuery(document).ready(function($) { $("ul.tabs").tabs("> .pane"); });
 	function get_available_tags()
 	{
 		return array('%post_link%', '%author_link%', '%author%', '%comment_count%', '%category_link%', '%date%');
+	}
+
+	private function get_columns()
+	{
+		$columns = array('ID', 'post_title');
+
+		if ( 'block' == self::$options->format )
+			return implode(',', $columns);
+
+		if ( FALSE !== strpos(self::$options->list_format, '%author') )
+			$columns[] = 'post_author';
+
+		if ( FALSE !== strpos(self::$options->list_format, '%comment') )
+			$columns[] = 'comment_count';
+
+		if ( FALSE !== strpos(self::$options->list_format, '%date') )
+			$columns[] = 'post_date';
+
+		return implode(',', $columns);
 	}
 
 	private function substitute_post_link($post)
