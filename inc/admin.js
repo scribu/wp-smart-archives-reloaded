@@ -3,7 +3,8 @@ jQuery(document).ready(function($) {
 	var cur_val = $type.find(':checked').val();
 
 	var $list_format = $('#specific tr:first');
-	var $numeric = $list_format.find('+ tr');
+	var $date_format = $list_format.find('+ tr');
+	var $numeric = $date_format.find('+ tr');
 	var $anchor = $numeric.find('+ tr');
 
 	if ( cur_val == 'block' )
@@ -12,13 +13,14 @@ jQuery(document).ready(function($) {
 	if ( cur_val == 'list' )
 		$numeric.hide();
 
-	if ( cur_val != 'both' )
+	if ( cur_val != 'both'  )
 		$anchor.hide();
 
 	$type.find(':radio').click(function() {
 		( $(this).val() == 'list' ) ? $numeric.fadeOut() : $numeric.fadeIn();
 
 		( $(this).val() == 'block' ) ? $list_format.fadeOut() : $list_format.fadeIn();
+		( $(this).val() == 'block' ) ? $date_format.fadeOut() : $date_format.fadeIn();
 
 		( $(this).val() != 'both' ) ? $anchor.fadeOut() : $anchor.fadeIn();
 	});

@@ -39,6 +39,7 @@ function _sar_init()
 		'anchors' => '',
 		'block_numeric' => '',
 		'list_format' => '%post_link%',
+		'date_format' => 'F j, Y',
 		'cron' => true
 	));
 
@@ -74,6 +75,18 @@ abstract class displaySAR
 
 		// Set up shortcode
 		add_shortcode('smart_archives', array(__CLASS__, 'load'));
+
+		if ( self::$options->format == 'fancy' )
+			add_action('template_redirect', array(__CLASS__, 'add_scripts'));
+	}
+
+	static function add_scripts()
+	{
+		// Add the fancy archives default styles and script to to the page.
+		wp_enqueue_script('tools-tabs', WP_PLUGIN_URL . '/super-smart-archives/inc/jquery.tools-tabs.min.js',array('jquery'), '1.3', true);
+
+		wp_enqueue_style('fancy-archives-css', WP_PLUGIN_URL . '/super-smart-archives/inc/fancy-archives.css', array(), '0.1');
+		wp_enqueue_script('fancy-archives', WP_PLUGIN_URL . '/super-smart-archives/inc/fancy-archives.js', array('tools-tabs'), '1.3', true);
 	}
 
 	static function load()
@@ -152,13 +165,13 @@ abstract class displaySAR
 				}
 			}
 
-		$output = '';
-
-		if ( $format != 'list' )
-			$output .= self::generate_block();
-
-		if ( $format != 'block' )
-			$output .= self::generate_list();
+		switch ( $format )
+		{
+			case 'block': $output = self::generate_block(); break;
+			case 'list': $output = self::generate_list(); break;
+			case 'both': $output = self::generate_block() . self::generate_list(); break;
+			case 'fancy': $output = self::generate_fancy(); break;
+		}
 
 		// Update cache
 		@fwrite($fh, $output);
@@ -180,18 +193,31 @@ abstract class displaySAR
 		if ( FALSE !== strpos(self::$options->list_format, '%comment') )
 			$columns[] = 'comment_count';
 
+		if ( FALSE !== strpos(self::$options->list_format, '%post_date') )
+			$columns[] = 'post_date';
+
 		return implode(',', $columns);
 	}
 
-	// The block
-	private function generate_block()
+	// The "fancy" archive
+	function generate_fancy()
 	{
-		$months_short = self::get_months(true);
+		$available_tags = self::get_available_tags();
 
+		foreach ( $available_tags as $i => $tag )
+			if ( FALSE === strpos(self::$options->list_format, $tag) )
+				unset($available_tags[$i]);
+		
+		$months_long = self::get_months();
+		$months_short = self::get_months(true);
+		foreach ( self::$yearsWithPosts as $current )
+			$years .= sprintf("\t<li class='list-%s'><a href='%s'%s>%s</a></li>", $current, get_year_link($current), $firstyear, $current);
+
+		$years = "<ul class='tabs'>" . $years . "</ul>";
+		
 		foreach ( self::$yearsWithPosts as $current )
 		{
-			$block .= sprintf("\t<li><strong><a href='%s'>%s</a>:</strong> ", get_year_link($current), $current);
-
+			$months .= sprintf("\n\t\t<div class='pane'>\n\t\t\t<ul id='month-list-%s' class='tabs month-list'>", $current);
 			for ( $i = 1; $i <= 12; $i++ )
 			{
 				if ( self::$options->block_numeric )
@@ -204,53 +230,59 @@ abstract class displaySAR
 					if ( self::$options->anchors )
 						$url = "#{$current}{$i}";
 					else
-					 	$url = self::$monthsWithPosts[$current][$i]['link'];
+						$url = self::$monthsWithPosts[$current][$i]['link'];
 
-					$block .= sprintf("\n\t\t<a href='%s'>%s</a>", $url, $month);
+					$months .= sprintf("\n\t\t<li><a href='%s'>%s</a></li>", $url, $month);
 				}
 				else
-					$block .= sprintf("\n\t\t<span class='emptymonth'>%s</span>", $month);
+					$months .= sprintf("\n\t\t<li><span class='emptymonth'>%s</span></li>", $month);
+			}
+			$months .= "\n\t\t\t</ul>";
+
+			for ( $i = 1; $i <= 12; $i++ )
+			{
+				if ( ! self::$monthsWithPosts[$current][$i] )
+					continue;
+
+				// Get post links for current month
+				$post_list = '';
+				foreach ( self::$monthsWithPosts[$current][$i]['posts'] as $post )
+				{
+					// $post = self::$monthsWithPosts[$current][$i]['posts'];
+					
+					$list_item = self::$options->list_format;
+							
+					foreach ( $available_tags as $tag )
+						$list_item = str_replace($tag, call_user_func(array(__CLASS__, 'substitute_' . substr($tag, 1, -1)), $post), $list_item);
+
+					$post_list .= "\t<li>" . $list_item . "</li>\n";
+				}
+
+				// Set title format
+				if ( self::$options->anchors )
+				{
+					$anchor = "{$current}{$i}";
+					$titlef = "\n<h2 class='month-heading'>%s <span class='month-archive-link'>(<a href='%s'>View complete archive page for %s</a>)</span></h2>\n";
+				} else
+					$titlef = "\n<h2 class='month-heading'>%s <span class='month-archive-link'>(<a href='%s'>View complete archive page for %s</a>)</span></h2>\n";
+
+				// Append to list
+				$list .= "<div id='{$anchor}' class='pane'>";
+				$list .= sprintf($titlef, $months_long[$i] . ' ' . $current, self::$monthsWithPosts[$current][$i]['link'], $months_long[$i] . ' ' . $current);
+				$list .= sprintf("<ul class='archive-list'>\n%s</ul>\n", $post_list);
+				$list .= "</div>";
 			}
 
-			$block .= "\n</li>\n";
+			$block .= $months . $list;
+			$block .= "\n\t\t</div>";
+			$list = "";
+			$months = "";
 		}
 
 		// Wrap it up
-		$block = "<ul id='smart-archives-block'>\n{$block}</ul>\n";
+		$block = $years . $block;
 
 		return $block;
-	}
-
-	// Substitution tags
-	private function substitute_post_link($post)
-	{
-		return sprintf("<a href='%s'>%s</a>", 
-			get_permalink($post->ID),
-			apply_filters('smart_archives_title', $post->post_title, $post->ID)
-		);
-	}
-
-	private function substitute_author_link($post)
-	{
-		return sprintf("<a href='%s'>%s</a>", 
-			get_author_posts_url($post->post_author), 
-			get_user_option('display_name', $post->post_author)
-		);
-	}
-
-	private function substitute_author($post)
-	{
-		return get_user_option('display_name', $post->post_author);
-	}
-
-	private function substitute_comment_count($post)
-	{
-		return $post->comment_count;
-	}
-
-	function get_available_tags()
-	{
-		return array('%post_link%', '%author_link%', '%author%', '%comment_count%');
 	}
 
 	// The list
@@ -304,6 +336,44 @@ abstract class displaySAR
 		return $list;
 	}
 
+	// The block
+	private function generate_block()
+	{
+		$months_short = self::get_months(true);
+
+		foreach ( self::$yearsWithPosts as $current )
+		{
+			$block .= sprintf("\t<li><strong><a href='%s'>%s</a>:</strong> ", get_year_link($current), $current);
+
+			for ( $i = 1; $i <= 12; $i++ )
+			{
+				if ( self::$options->block_numeric )
+					$month = sprintf('%02d', $i);
+				else
+					$month = $months_short[$i];
+
+				if ( self::$monthsWithPosts[$current][$i]['posts'] )
+				{
+					if ( self::$options->anchors )
+						$url = "#{$current}{$i}";
+					else
+					 	$url = self::$monthsWithPosts[$current][$i]['link'];
+
+					$block .= sprintf("\n\t\t<a href='%s'>%s</a>", $url, $month);
+				}
+				else
+					$block .= sprintf("\n\t\t<span class='emptymonth'>%s</span>", $month);
+			}
+
+			$block .= "\n</li>\n";
+		}
+
+		// Wrap it up
+		$block = "<ul id='smart-archives-block'>\n{$block}</ul>\n";
+
+		return $block;
+	}
+
 	private function get_months($abrev = false)
 	{
 		global $wp_locale;
@@ -319,6 +389,52 @@ abstract class displaySAR
 		}
 
 		return $months;
+	}
+
+	// Substitution tags
+	function get_available_tags()
+	{
+		return array('%post_link%', '%author_link%', '%author%', '%comment_count%', '%post_category%', '%post_date%');
+	}
+
+	private function substitute_post_link($post)
+	{
+		return sprintf("<a href='%s'>%s</a>", 
+			get_permalink($post->ID),
+			apply_filters('smart_archives_title', $post->post_title, $post->ID)
+		);
+	}
+
+	private function substitute_author_link($post)
+	{
+		return sprintf("<a href='%s'>%s</a>", 
+			get_author_posts_url($post->post_author), 
+			get_user_option('display_name', $post->post_author)
+		);
+	}
+
+	private function substitute_author($post)
+	{
+		return get_user_option('display_name', $post->post_author);
+	}
+
+	private function substitute_comment_count($post)
+	{
+		return $post->comment_count;
+	}
+
+	private function substitute_post_date($post)
+	{
+		return sprintf("<span class='post_date'>%s</span>", date(self::$options->date_format, strtotime($post->post_date)));	
+	}
+
+	function substitute_post_category($post)
+	{
+		$categorylist = array();
+		foreach ( get_the_category($post->ID) as $category )
+			$categorylist[] = sprintf("<a href='%s'>%s</a>", get_category_link($category->cat_ID), $category->cat_name);
+
+		return implode(', ', $categorylist);
 	}
 }
 

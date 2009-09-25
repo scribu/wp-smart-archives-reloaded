@@ -43,7 +43,7 @@ class settingsSAR extends scbAdminPage
 	// Page methods
 	function page_head()
 	{
-		wp_enqueue_script('sar-admin', $this->plugin_url . 'inc/admin.js', array('jquery'), '1.6', true);
+		wp_enqueue_script('sar-admin', $this->plugin_url . 'inc/admin.js', array('jquery'), '1.7', true);
 		echo $this->css_wrap('h3 {margin-bottom: 0 !important}');
 	}
 
@@ -98,7 +98,7 @@ class settingsSAR extends scbAdminPage
 
 			array(
 				'title' => __('Use wp-cron', $this->textdomain),
-				'desc' => __("Uncheck this if your archive isn't being updated", $this->textdomain),
+				'desc' => __('Updates the archives in the background', $this->textdomain),
 				'type' => 'checkbox',
 				'name' => 'cron'
 			),
@@ -107,11 +107,12 @@ class settingsSAR extends scbAdminPage
 				'title' => __('Format', $this->textdomain),
 				'type' => 'radio',
 				'name' => 'format',
-				'value' => array( 'list', 'block', 'both'),
+				'value' => array( 'list', 'block', 'both', 'fancy'),
 				'desc' => array(
 					__('list', $this->textdomain),
 					__('block', $this->textdomain),
 					__('both', $this->textdomain),
+					__('fancy', $this->textdomain),
 				)
 			),
 		))
@@ -125,6 +126,13 @@ class settingsSAR extends scbAdminPage
 					</ul>',
 				'type' => 'text',
 				'name' => 'list_format',
+			),
+
+			array(
+				'title' => __('%post_date% format', $this->textdomain),
+				'desc' => '<p>' . __('Default: F j, Y (' . date("F j, Y") . ')', $this->textdomain) . '</p><p><em>For info on available PHP date formatting characters see <a href="http://www.php.net/manual/en/function.date.php" target="_blank">here</a>.</em></p>',
+				'type' => 'text',
+				'name' => 'date_format',
 			),
 
 			array(
