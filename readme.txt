@@ -4,7 +4,7 @@ Donate link: http://scribu.net/wordpress
 Tags: archive, post list
 Requires at least: 2.8
 Tested up to: 2.9-rare
-Stable tag: 1.6.2
+Stable tag: trunk
 
 An elegant and easy way to present your archives.
 
@@ -18,7 +18,7 @@ Why is this plugin better?
 * **Better caching** - no need to wait when publishing a new post
 * **Settings page** - elegantly choose how you want the archives displayed
 
-See a live [example](http://scribu.net/arhiva) on my site.
+Examples: [block & list](http://scribu.net/arhiva) | [fancy](http://www.conceptfusion.co.nz/archive)
 
 == Installation ==
 
@@ -37,9 +37,16 @@ Go to your wp-content/uploads directory, create an empty file called "sar_cache.
 
 == Screenshots ==
 
-1. The Settings Page
+1. A fancy archive
+2. The Settings Page
 
 == Changelog ==
+
+= 1.7 =
+* added "fancy" option
+* added %category_link%, %category% and %date%
+* added Uzbek translation
+* [more info](http://scribu.net/wordpress/smart-archives-reloaded/sar-1-7.html)
 
 = 1.6.2 =
 * added %comment_count% tag
@@ -78,7 +85,7 @@ Go to your wp-content/uploads directory, create an empty file called "sar_cache.
 * optimization & bugfixes
 * [more info](http://scribu.net/wordpress/smart-archives-reloaded/sar-1-3.html)
 
-= 1.2 =
+= 1.2 =[block & list](http://scribu.net/arhiva)
 * better HTML output
 * [more info](http://scribu.net/wordpress/smart-archives-reloaded/sar-1-2.html)
 
