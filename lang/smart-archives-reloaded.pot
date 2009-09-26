@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Smart Archives Reloaded 1.6b\n"
+"Project-Id-Version: Smart Archives Reloaded 1.7a\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/smart-archives-reloaded\n"
-"POT-Creation-Date: 2009-08-25 00:26+0300\n"
+"POT-Creation-Date: 2009-09-26 03:54+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,67 +24,86 @@ msgstr ""
 msgid "Smart Archives"
 msgstr ""
 
-#: admin.php:88
+#: admin.php:91
+msgid "Default"
+msgstr ""
+
+#: admin.php:93
 msgid "General settings"
 msgstr ""
 
-#: admin.php:90
+#: admin.php:95
 msgid "Exclude Categories by ID"
 msgstr ""
 
-#: admin.php:91
+#: admin.php:96
 msgid "(space separated)"
 msgstr ""
 
-#: admin.php:97
+#: admin.php:102
 msgid "Use wp-cron"
 msgstr ""
 
-#: admin.php:98
-msgid "Uncheck this if your archive isn't being updated"
-msgstr ""
-
-#: admin.php:104
-msgid "Format"
+#: admin.php:103
+msgid "Updates the archives in the background"
 msgstr ""
 
 #: admin.php:109
+msgid "Format"
+msgstr ""
+
+#: admin.php:114
 msgid "list"
 msgstr ""
 
-#: admin.php:110
+#: admin.php:115
 msgid "block"
 msgstr ""
 
-#: admin.php:111
+#: admin.php:116
 msgid "both"
 msgstr ""
 
-#: admin.php:116
+#: admin.php:117
+msgid "fancy"
+msgstr ""
+
+#: admin.php:122
 msgid "Specific settings"
 msgstr ""
 
-#: admin.php:118
+#: admin.php:124
 msgid "List format"
 msgstr ""
 
-#: admin.php:119
+#: admin.php:125
 msgid "Available substitution tags"
 msgstr ""
 
-#: admin.php:130
+#: admin.php:134
+#, php-format
+msgid "%s format"
+msgstr ""
+
+#: admin.php:135
+msgid ""
+"See available date formatting characters <a href=\"http://php.net/date\" "
+"target=\"_blank\">here</a>."
+msgstr ""
+
+#: admin.php:141
 msgid "Numeric months in block"
 msgstr ""
 
-#: admin.php:131
+#: admin.php:142
 msgid "The month links in the block will be shown as numbers"
 msgstr ""
 
-#: admin.php:137
+#: admin.php:148
 msgid "Use anchor links in block"
 msgstr ""
 
-#: admin.php:138
+#: admin.php:149
 msgid "The month links in the block will point to the month links in the list"
 msgstr ""
 
@@ -100,6 +119,15 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
+#: scb/Dependency.php:46
+msgid "Install now"
+msgstr ""
+
+#: smart-archives-reloaded.php:262
+#, php-format
+msgid "View complete archive page for %s"
+msgstr ""
+
 #. Plugin Name of an extension
 msgid "Smart Archives Reloaded"
 msgstr ""
@@ -109,7 +137,9 @@ msgid "http://scribu.net/wordpress/smart-archives-reloaded"
 msgstr ""
 
 #. Description of an extension
-msgid "An elegant and easy way to present your archives."
+msgid ""
+"An elegant and easy way to present your archives. (With help from <a href="
+"\"http://www.conceptfusion.co.nz/\">Simon Pritchard</a>)"
 msgstr ""
 
 #. Author of an extension

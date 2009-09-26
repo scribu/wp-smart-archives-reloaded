@@ -88,6 +88,8 @@ class settingsSAR extends scbAdminPage
 		foreach ( displaySAR::get_available_tags() as $tag )
 			$tags .= "<li><em>$tag</em></li>\n";
 
+		$default_date = __('Default', $this->textdomain) . ': F j, Y (' . date_i18n("F j, Y") . ')';
+
 		$output = $this->_subsection(__('General settings', $this->textdomain), 'general', array(
 			array(
 				'title' => __('Exclude Categories by ID', $this->textdomain),
@@ -129,8 +131,8 @@ class settingsSAR extends scbAdminPage
 			),
 
 			array(
-				'title' => __('%post_date% format', $this->textdomain),
-				'desc' => '<p>' . __('Default: F j, Y (' . date("F j, Y") . ')', $this->textdomain) . '</p><p><em>For info on available PHP date formatting characters see <a href="http://www.php.net/manual/en/function.date.php" target="_blank">here</a>.</em></p>',
+				'title' => sprintf(__('%s format', $this->textdomain), '%date%'),
+				'desc' => '<p>' . $default_date . '</p><p><em>' . __('See available date formatting characters <a href="http://php.net/date" target="_blank">here</a>.', $this->textdomain) . '</em></p>',
 				'type' => 'text',
 				'name' => 'date_format',
 			),

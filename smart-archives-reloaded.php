@@ -390,7 +390,7 @@ jQuery(document).ready(function($) { $("ul.tabs").tabs("> .pane"); });
 	// Substitution tags
 	function get_available_tags()
 	{
-		return array('%post_link%', '%author_link%', '%author%', '%comment_count%', '%category_link%', '%date%');
+		return array('%post_link%', '%author_link%', '%author%', '%comment_count%', '%category_link%', '%category%', '%date%');
 	}
 
 	private function get_columns()
@@ -440,14 +440,23 @@ jQuery(document).ready(function($) { $("ul.tabs").tabs("> .pane"); });
 
 	private function substitute_date($post)
 	{
-		return sprintf("<span class='post_date'>%s</span>", date(self::$options->date_format, strtotime($post->post_date)));	
+		return sprintf("<span class='post_date'>%s</span>", mysql2date(self::$options->date_format, $post->post_date));
 	}
 
-	function substitute_category_link($post)
+	private function substitute_category_link($post)
 	{
 		$categorylist = array();
 		foreach ( get_the_category($post->ID) as $category )
 			$categorylist[] = sprintf("<a href='%s'>%s</a>", get_category_link($category->cat_ID), $category->cat_name);
+
+		return implode(', ', $categorylist);
+	}
+
+	private function substitute_category($post)
+	{
+		$categorylist = array();
+		foreach ( get_the_category($post->ID) as $category )
+			$categorylist[] = $category->cat_name;
 
 		return implode(', ', $categorylist);
 	}
