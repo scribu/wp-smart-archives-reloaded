@@ -32,6 +32,12 @@ Alternatively, you can add `<?php smart_archives(); ?>` anywhere in your theme, 
 
 == Frequently Asked Questions ==
 
+= "Parse error: syntax error, unexpected T_CLASS..." Help! =
+
+Make sure your new host is running PHP 5. Add this line to wp-config.php:
+
+`var_dump(PHP_VERSION);`
+
 = "Can't open cache file!" =
 Go to your wp-content/uploads directory, create an empty file called "sar_cache.txt" and set it's permissions (chmod) to 757.
 

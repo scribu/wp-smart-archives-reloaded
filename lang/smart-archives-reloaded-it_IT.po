@@ -1,6 +1,8 @@
+msgid ""
+msgstr ""
 "Project-Id-Version: Smart Archives Reloaded in italiano\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/smart-archives-reloaded\n"
-"POT-Creation-Date: 2009-08-25 00:26+0300\n"
+"POT-Creation-Date: 2009-09-26 03:54+0300\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Gianni Diurno (aka gidibao) <gidibao@gmail.com>\n"
 "Language-Team: Gianni Diurno | http://gidibao.net/ <gidibao@gmail.com>\n"
@@ -23,69 +25,86 @@ msgstr "Impostazioni Smart Archives"
 msgid "Smart Archives"
 msgstr "Smart Archives"
 
-#: admin.php:88
+#: admin.php:91
+msgid "Default"
+msgstr "predefinito"
+
+#: admin.php:93
 msgid "General settings"
 msgstr "Impostazioni generali"
 
-#: admin.php:90
+#: admin.php:95
 msgid "Exclude Categories by ID"
 msgstr "Escludi le categorie via ID"
 
-#: admin.php:91
+#: admin.php:96
 msgid "(space separated)"
 msgstr "(separate da uno spazio)"
 
-#: admin.php:97
+#: admin.php:102
 msgid "Use wp-cron"
 msgstr "Utilizza wp-cron"
 
-#: admin.php:98
-msgid "Uncheck this if your archive isn't being updated"
-msgstr "non attivare se il tuo archivio non fosse stato aggiornato"
+#: admin.php:103
+msgid "Updates the archives in the background"
+msgstr "aggiorna in background gli archivi"
 
-#: admin.php:104
+#: admin.php:109
 msgid "Format"
 msgstr "Formato"
 
-#: admin.php:109
+#: admin.php:114
 msgid "list"
 msgstr "lista"
 
-#: admin.php:110
+#: admin.php:115
 msgid "block"
-msgstr "compresso"
+msgstr "blocco"
 
-#: admin.php:111
+#: admin.php:116
 msgid "both"
 msgstr "entrambi"
 
-#: admin.php:116
+#: admin.php:117
+msgid "fancy"
+msgstr "personalizzato"
+
+#: admin.php:122
 msgid "Specific settings"
 msgstr "Impostazioni specifiche"
 
-#: admin.php:118
+#: admin.php:124
 msgid "List format"
 msgstr "Formato elenco"
 
-#: admin.php:119
+#: admin.php:125
 msgid "Available substitution tags"
-msgstr "Tag disponibili per sostituzione"
+msgstr "Tag disponibili"
 
-#: admin.php:130
+#: admin.php:134
+#, php-format
+msgid "%s format"
+msgstr "%s formato"
+
+#: admin.php:135
+msgid "See available date formatting characters <a href=\"http://php.net/date\" target=\"_blank\">here</a>."
+msgstr "Vedi <a href=\"http://php.net/date\" target=\"_blank\">qui</a> i formati disponibili."
+
+#: admin.php:141
 msgid "Numeric months in block"
 msgstr "Visualizzazione mesi"
 
-#: admin.php:131
+#: admin.php:142
 msgid "The month links in the block will be shown as numbers"
-msgstr "I link del mese presenti nella versione compressa verranno mostrati in forma numerica"
+msgstr "i link del mese presenti nella versione compressa verranno mostrati in forma numerica"
 
-#: admin.php:137
+#: admin.php:148
 msgid "Use anchor links in block"
 msgstr "Usa i link interni"
 
-#: admin.php:138
+#: admin.php:149
 msgid "The month links in the block will point to the month links in the list"
-msgstr "I link ai mesi nella versione compressa punteranno ai link del mese presente nella lista"
+msgstr "nella versione compressa il collegamento ai mesi punterà ai link del mese presente nella lista"
 
 #: scb/AdminPage.php:105
 msgid "Settings <strong>saved</strong>."
@@ -99,6 +118,15 @@ msgstr "Salva le modifiche"
 msgid "Settings"
 msgstr "Impostazioni"
 
+#: scb/Dependency.php:46
+msgid "Install now"
+msgstr "Installa adesso"
+
+#: smart-archives-reloaded.php:262
+#, php-format
+msgid "View complete archive page for %s"
+msgstr "Visualizza la pagina dell'archivio completo per %s"
+
 #. Plugin Name of an extension
 msgid "Smart Archives Reloaded"
 msgstr "Smart Archives Reloaded"
@@ -108,8 +136,8 @@ msgid "http://scribu.net/wordpress/smart-archives-reloaded"
 msgstr "http://scribu.net/wordpress/smart-archives-reloaded"
 
 #. Description of an extension
-msgid "An elegant and easy way to present your archives."
-msgstr "Un modo semplice ed elegante per mostrare i tuoi archivi."
+msgid "An elegant and easy way to present your archives. (With help from <a href=\"http://www.conceptfusion.co.nz/\">Simon Pritchard</a>)"
+msgstr "Un modo semplice ed elegante per presentare i tuoi archivi. (con il supporto di <a href=\"http://www.conceptfusion.co.nz/\">Simon Pritchard</a>)"
 
 #. Author of an extension
 msgid "scribu"
@@ -118,4 +146,9 @@ msgstr "scribu"
 #. Author URI of an extension
 msgid "http://scribu.net"
 msgstr "http://scribu.net"
+
+#~ msgid "Uncheck this if your archive isn't being updated"
+#~ msgstr "non attivare se il tuo archivio non fosse stato aggiornato"
+#~ msgid "An elegant and easy way to present your archives."
+#~ msgstr "Un modo semplice ed elegante per mostrare i tuoi archivi."
 
