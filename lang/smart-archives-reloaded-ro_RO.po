@@ -40,7 +40,7 @@ msgstr "Folosește wp-cron"
 
 #: admin.php:103
 msgid "Updates the archives in the background"
-msgstr ""
+msgstr "Actualizează arhivele în fundal"
 
 #: admin.php:109
 msgid "Format"
