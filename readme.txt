@@ -53,6 +53,9 @@ Go to your wp-content/uploads directory, create an empty file called "sar_cache.
 
 == Changelog ==
 
+= 1.7.1 =
+* fancy archive improvements
+
 = 1.7 =
 * added "fancy" option
 * added %category_link%, %category% and %date%

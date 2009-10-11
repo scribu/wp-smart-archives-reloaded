@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.7
+Version: 1.7.1
 Description: An elegant and easy way to present your archives. (With help from <a href="http://www.conceptfusion.co.nz/">Simon Pritchard</a>)
 Author: scribu
 Author URI: http://scribu.net
@@ -92,7 +92,7 @@ abstract class displaySAR
 
 		$plugin_url = plugin_dir_url(__FILE__);
 
-		wp_enqueue_script('tools-tabs', $plugin_url . 'inc/jquery.tools-tabs.min.js', array('jquery'), '1.3', true);
+		wp_enqueue_script('tools-tabs', $plugin_url . 'inc/tools.tabs.min.js', array('jquery'), '1.0.4', true);
 
 		wp_enqueue_style('fancy-archives-css', $plugin_url . 'inc/fancy-archives.css', array(), '0.1');
 
@@ -103,7 +103,14 @@ abstract class displaySAR
 	{
 ?>
 <script type="text/javascript">
-jQuery(document).ready(function($) { $("ul.tabs").tabs("> .pane"); });
+jQuery(document).ready(function($) {
+	$('.tabs').tabs('> .pane');
+	$('#smart-archives')
+		.find('a').click(function(ev) {
+			$('.pane .tabs:visible a:last').click();
+		}).end()
+		.find('a:last').click();
+});
 </script>
 <?php
 	}
@@ -143,6 +150,8 @@ jQuery(document).ready(function($) { $("ul.tabs").tabs("> .pane"); });
 				)
 			";
 
+		$order = ( $format == 'fancy' ) ? 'ASC' : 'DESC';
+
 		// Get non-empty years
 		$query = "
 			SELECT DISTINCT year(post_date) AS year
@@ -152,7 +161,7 @@ jQuery(document).ready(function($) { $("ul.tabs").tabs("> .pane"); });
 			{$exclude_cats_sql}
 			GROUP BY year(post_date)
 			HAVING count(year(post_date)) > 0
-			ORDER BY post_date DESC
+			ORDER BY post_date $order
 		";
 
 		self::$yearsWithPosts = $wpdb->get_col($query);
@@ -179,8 +188,12 @@ jQuery(document).ready(function($) { $("ul.tabs").tabs("> .pane"); });
 
 				if ( $posts = $wpdb->get_results($query) )
 				{
-					self::$monthsWithPosts[$current][$i]['posts'] = $posts;
-					self::$monthsWithPosts[$current][$i]['link'] = get_month_link($current, $i);
+					$month = array(
+						'posts' => $posts,
+						'link' => get_month_link($current, $i)
+					);
+
+					self::$monthsWithPosts[$current][$i] = $month;
 				}
 			}
 
@@ -210,14 +223,16 @@ jQuery(document).ready(function($) { $("ul.tabs").tabs("> .pane"); });
 		
 		$months_long = self::get_months();
 		$months_short = self::get_months(true);
-		foreach ( self::$yearsWithPosts as $current )
-			$years .= sprintf("\t<li class='list-%s'><a href='%s'%s>%s</a></li>", $current, get_year_link($current), $firstyear, $current);
 
-		$years = "<ul class='tabs'>" . $years . "</ul>";
-		
+		foreach ( self::$yearsWithPosts as $current )
+			$years .= sprintf("\t<li class='list-%s'><a href='%s'>%s</a></li>", $current, get_year_link($current), $current);
+
+		$years = "<ul id='smart-archives' class='tabs'>\n" . $years . "</ul>\n";
+
 		foreach ( self::$yearsWithPosts as $current )
 		{
 			$months .= sprintf("\n\t\t<div class='pane'>\n\t\t\t<ul id='month-list-%s' class='tabs month-list'>", $current);
+
 			for ( $i = 1; $i <= 12; $i++ )
 			{
 				if ( self::$options->block_numeric )
@@ -227,10 +242,7 @@ jQuery(document).ready(function($) { $("ul.tabs").tabs("> .pane"); });
 
 				if ( self::$monthsWithPosts[$current][$i]['posts'] )
 				{
-					if ( self::$options->anchors )
-						$url = "#{$current}{$i}";
-					else
-						$url = self::$monthsWithPosts[$current][$i]['link'];
+					$url = self::$monthsWithPosts[$current][$i]['link'];
 
 					$months .= sprintf("\n\t\t<li><a href='%s'>%s</a></li>", $url, $month);
 				}
