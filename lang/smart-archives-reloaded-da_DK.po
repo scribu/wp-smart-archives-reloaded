@@ -1,116 +1,137 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: http://wordpress.org/tag/smart-archives-reloaded\n"
-"POT-Creation-Date: 2009-08-25 00:26+0300\n"
+"Project-Id-Version: Smart Archives Reloaded 1.7\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-09-26 22:43+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: jos <josenk@gvdnet.dk>\n"
-"Language-Team: \n"
+"Last-Translator: Team Blogos <wordpress@blogos.dk>\n"
+"Language-Team: jos\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Danish\n"
+"X-Poedit-Country: DENMARK\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_c;_e;_n:1,2;_nc:1,2;_n_noop:1,2;__ngettext:1,2;__ngettext_noop:1,2\n"
+"X-Poedit-Basepath: d:\\wordpress\\plugins\\smart-archives-reloaded\n"
+"X-Poedit-SearchPath-0: d:\\wordpress\\plugins\\smart-archives-reloaded\n"
 
-#: admin.php:14
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:14
 msgid "Smart Archives Settings"
 msgstr "Indstillinger for Smart Archives"
 
-#: admin.php:15
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:15
 msgid "Smart Archives"
 msgstr "Smart Archives"
 
-#: admin.php:88
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:91
+msgid "Default"
+msgstr "Standard"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:93
 msgid "General settings"
-msgstr "Overordnet indstillinger"
+msgstr "Generelle indstillinger"
 
-#: admin.php:90
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:95
 msgid "Exclude Categories by ID"
-msgstr "Ekskluder kategori via ID"
+msgstr "Ekskludér kategori via ID"
 
-#: admin.php:91
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:96
 msgid "(space separated)"
-msgstr "(mellemrums sepereret)"
+msgstr "(mellemrums separeret)"
 
-#: admin.php:97
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:102
 msgid "Use wp-cron"
 msgstr "Brug wp-cron"
 
-#: admin.php:98
-msgid "Uncheck this if your archive isn't being updated"
-msgstr "Fjern flueben hvis dit arkiv ikke opdateres"
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:103
+msgid "Updates the archives in the background"
+msgstr "Opdaterer arkiverne i baggrunden"
 
-#: admin.php:104
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:109
 msgid "Format"
 msgstr "Format"
 
-#: admin.php:109
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:114
 msgid "list"
 msgstr "liste"
 
-#: admin.php:110
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:115
 msgid "block"
 msgstr "blok"
 
-#: admin.php:111
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:116
 msgid "both"
 msgstr "begge"
 
-#: admin.php:116
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:117
+msgid "fancy"
+msgstr "smart"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:122
 msgid "Specific settings"
 msgstr "Specifikke indstillinger"
 
-#: admin.php:118
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:124
 msgid "List format"
-msgstr "List format"
+msgstr "Listeformat"
 
-#: admin.php:119
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:125
 msgid "Available substitution tags"
-msgstr "Tilgængelige udskiftningstags"
+msgstr "Variabler, du kan bruge"
 
-#: admin.php:130
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:134
+#, php-format
+msgid "%s format"
+msgstr "%s format"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:135
+msgid "See available date formatting characters <a href=\"http://php.net/date\" target=\"_blank\">here</a>."
+msgstr "Se de mulige tegn for tid- og datokodning <a href=\"http://php.net/date\" target=\"_blank\">her</a>."
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:141
 msgid "Numeric months in block"
-msgstr "Numeriske m&aring;neder i blok"
+msgstr "Numeriske måneder i blok"
 
-#: admin.php:131
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:142
 msgid "The month links in the block will be shown as numbers"
-msgstr "M&aring;nedslink i blokken vil blive vist med numre"
+msgstr "Månedslink i blokken vil blive vist med numre"
 
-#: admin.php:137
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:148
 msgid "Use anchor links in block"
 msgstr "Brug anker-links i blokken"
 
-#: admin.php:138
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:149
 msgid "The month links in the block will point to the month links in the list"
-msgstr "M&aring;nedslinks i blokken vil pege på m&aring;nedslinket i listen"
+msgstr "Månedslinks i blokken vil pege på månedslinket i listen"
 
-#: scb/AdminPage.php:105
+#: d:\wordpress\plugins\smart-archives-reloaded/smart-archives-reloaded.php:262
+#, php-format
+msgid "View complete archive page for %s"
+msgstr "Se komplet arkivside for %s"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/scb/AdminPage.php:105
 msgid "Settings <strong>saved</strong>."
 msgstr "Indstillinger <strong>gemt</strong>."
 
-#: scb/AdminPage.php:163
+#: d:\wordpress\plugins\smart-archives-reloaded/scb/AdminPage.php:163
 msgid "Save Changes"
-msgstr "Gem &aelig;ndringer"
+msgstr "Gem ændringer"
 
-#: scb/AdminPage.php:338
+#: d:\wordpress\plugins\smart-archives-reloaded/scb/AdminPage.php:338
 msgid "Settings"
 msgstr "Indstillinger"
 
-#. Plugin Name of an extension
-msgid "Smart Archives Reloaded"
-msgstr "Smart Archives Reloaded"
-
-#. Plugin URI of an extension
-msgid "http://scribu.net/wordpress/smart-archives-reloaded"
-msgstr "http://scribu.net/wordpress/smart-archives-reloaded"
-
-#. Description of an extension
-msgid "An elegant and easy way to present your archives."
-msgstr "En elegant og let m&aring;de at pr&aelig;sentere dit arkiv"
-
-#. Author of an extension
-msgid "scribu"
-msgstr "scribu"
-
-#. Author URI of an extension
-msgid "http://scribu.net"
-msgstr "http://scribu.net"
+#~ msgid "Uncheck this if your archive isn't being updated"
+#~ msgstr "Fjern flueben, hvis dit arkiv ikke opdateres"
+#~ msgid "Smart Archives Reloaded"
+#~ msgstr "Smart Archives Reloaded"
+#~ msgid "http://scribu.net/wordpress/smart-archives-reloaded"
+#~ msgstr "http://scribu.net/wordpress/smart-archives-reloaded"
+#~ msgid "An elegant and easy way to present your archives."
+#~ msgstr "En elegant og let måde at præsentere dit arkiv"
+#~ msgid "scribu"
+#~ msgstr "scribu"
+#~ msgid "http://scribu.net"
+#~ msgstr "http://scribu.net"
 

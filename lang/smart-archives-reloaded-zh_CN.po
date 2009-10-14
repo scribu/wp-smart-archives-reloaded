@@ -1,0 +1,147 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR scribu
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Smart Archives Reloaded 1.7a\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/smart-archives-reloaded\n"
+"POT-Creation-Date: 2009-09-26 03:54+0300\n"
+"PO-Revision-Date: 2009-10-11 22:18+0700\n"
+"Last-Translator: yorick <bunny.chen@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: admin.php:14
+msgid "Smart Archives Settings"
+msgstr "Smart Archives 设置"
+
+#: admin.php:15
+msgid "Smart Archives"
+msgstr "Smart Archives"
+
+#: admin.php:91
+msgid "Default"
+msgstr "默认"
+
+#: admin.php:93
+msgid "General settings"
+msgstr "一般设置"
+
+#: admin.php:95
+msgid "Exclude Categories by ID"
+msgstr "用ID排除类别"
+
+#: admin.php:96
+msgid "(space separated)"
+msgstr "(空格隔开)"
+
+#: admin.php:102
+msgid "Use wp-cron"
+msgstr "使用 wp-cron"
+
+#: admin.php:103
+msgid "Updates the archives in the background"
+msgstr "后台更新archives"
+
+#: admin.php:109
+msgid "Format"
+msgstr "格式"
+
+#: admin.php:114
+msgid "list"
+msgstr "列表"
+
+#: admin.php:115
+msgid "block"
+msgstr "区块"
+
+#: admin.php:116
+msgid "both"
+msgstr "两者"
+
+#: admin.php:117
+msgid "fancy"
+msgstr "花式"
+
+#: admin.php:122
+msgid "Specific settings"
+msgstr "特殊设置"
+
+#: admin.php:124
+msgid "List format"
+msgstr "列表格式"
+
+#: admin.php:125
+msgid "Available substitution tags"
+msgstr "可替换（增加）标记"
+
+#: admin.php:134
+#, php-format
+msgid "%s format"
+msgstr "%s 格式"
+
+#: admin.php:135
+msgid "See available date formatting characters <a href=\"http://php.net/date\" target=\"_blank\">here</a>."
+msgstr "查看可用的日期格式字符  <a href=\"http://php.net/date\" target=\"_blank\">这里</a>."
+
+#: admin.php:141
+msgid "Numeric months in block"
+msgstr "区块中月份显示方式"
+
+#: admin.php:142
+msgid "The month links in the block will be shown as numbers"
+msgstr "区块中月份以数字显示"
+
+#: admin.php:148
+msgid "Use anchor links in block"
+msgstr "区块锚链接"
+
+#: admin.php:149
+msgid "The month links in the block will point to the month links in the list"
+msgstr "区块中的月链接将指向列表中的月链接（锚）"
+
+#: scb/AdminPage.php:105
+msgid "Settings <strong>saved</strong>."
+msgstr "设置 <strong>保存</strong>."
+
+#: scb/AdminPage.php:163
+msgid "Save Changes"
+msgstr "保存设置"
+
+#: scb/AdminPage.php:338
+msgid "Settings"
+msgstr "设置"
+
+#: scb/Dependency.php:46
+msgid "Install now"
+msgstr "立即安装"
+
+#: smart-archives-reloaded.php:262
+#, php-format
+msgid "View complete archive page for %s"
+msgstr "查看完整archive页面"
+
+#. Plugin Name of an extension
+msgid "Smart Archives Reloaded"
+msgstr "Smart Archives 重载"
+
+#. Plugin URI of an extension
+msgid "http://scribu.net/wordpress/smart-archives-reloaded"
+msgstr "http://scribu.net/wordpress/smart-archives-reloaded"
+
+#. Description of an extension
+msgid "An elegant and easy way to present your archives. (With help from <a href=\"http://www.conceptfusion.co.nz/\">Simon Pritchard</a>)"
+msgstr "An elegant and easy way to present your archives. (With help from <a href=\"http://www.conceptfusion.co.nz/\">Simon Pritchard</a>)"
+
+#. Author of an extension
+msgid "scribu"
+msgstr "scribu"
+
+#. Author URI of an extension
+msgid "http://scribu.net"
+msgstr "http://scribu.net"
+

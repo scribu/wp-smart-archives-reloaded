@@ -53,6 +53,9 @@ Go to your wp-content/uploads directory, create an empty file called "sar_cache.
 
 == Changelog ==
 
+= 1.7.2 =
+* added Chinese l10n
+
 = 1.7.1 =
 * fancy archive improvements
 
