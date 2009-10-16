@@ -91,6 +91,15 @@ abstract class displaySAR
 	{
 		$wud = wp_upload_dir();
 		@unlink($wud['basedir'] . '/sar_cache.txt');
+		
+		$options = self::$options->get();
+
+		if ( isset($options['catID']) && empty($options['exclude_cat']) )
+			$options['exclude_cat'] = explode(' ', $options['catID']);
+
+		unset($options['catID']);
+
+		self::$options->update($options);
 	}
 
 	static function add_scripts()

@@ -57,23 +57,20 @@ class settingsSAR extends scbAdminPage
 		if ( $new_options['format'] != 'both' )
 			$new_options['anchors'] = false;
 
-		// Validate catIDs
-		foreach ( @explode(' ', $new_options['catID']) as $id )
-			if ( is_numeric($id) )
-				$ids[] = intval($id);
-		$new_options['catID'] = @implode(' ', array_unique($ids));
+		// Validate cat ids
+		$ids = array();
+		foreach ( explode(', ', $new_options['exclude_cat']) as $id )
+		{
+			$id = intval($id);
+			if ( $id > 0 )
+				$ids[] = $id;
+		}
+		$new_options['exclude_cat'] = array_unique($ids);
 
 		// List format
 		$new_options['list_format'] = trim($new_options['list_format']);
 		if ( empty($new_options['list_format']) )
 			$new_options['list_format'] = $this->options->defaults['list_format'];
-
-		// Rebuild the cache with the new settings
-		if ( $new_options != $old_options )
-		{
-			$this->options->update($new_options);
-			$this->update_cache();
-		}
 
 		return $new_options;
 	}
@@ -93,14 +90,14 @@ class settingsSAR extends scbAdminPage
 		$output = $this->_subsection(__('General settings', $this->textdomain), 'general', array(
 			array(
 				'title' => __('Exclude Categories by ID', $this->textdomain),
-				'desc' => __('(space separated)', $this->textdomain),
+				'desc' => __('(comma separated)', $this->textdomain),
 				'type' => 'text',
-				'name' => 'catID'
+				'name' => 'exclude_cat',
+				'value' => implode(', ', (array) $this->options->exclude_cat)
 			),
 
 			array(
 				'title' => __('Use wp-cron', $this->textdomain),
-				'desc' => __('Updates the archives in the background', $this->textdomain),
 				'type' => 'checkbox',
 				'name' => 'cron'
 			),
