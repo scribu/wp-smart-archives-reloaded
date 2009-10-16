@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.7.1
+Version: 1.8a
 Description: An elegant and easy way to present your archives. (With help from <a href="http://www.conceptfusion.co.nz/">Simon Pritchard</a>)
 Author: scribu
 Author URI: http://scribu.net
@@ -35,7 +35,7 @@ function _sar_init()
 	// Create an instance of each class
 	$options = new scbOptions('smart-archives', __FILE__, array(
 		'format' => 'both',
-		'catID' => '',
+		'exclude_cat' => '',
 		'anchors' => '',
 		'block_numeric' => '',
 		'list_format' => '%post_link%',
@@ -60,36 +60,41 @@ abstract class displaySAR
 
 	private static $yearsWithPosts;
 	private static $monthsWithPosts;
-	private static $cache;
+	private static $cache_dir;
 
 	static function init($options)
 	{
 		self::$options = $options;
 
-		// Set cache path
+		// Set cache dir
 		$wud = wp_upload_dir();
-		self::$cache = $wud['basedir'] . '/sar_cache.txt';
+		self::$cache_dir = $wud['basedir'] . '/sar_cache/';
+		if ( !is_dir(self::$cache_dir) )
+			@mkdir(self::$cache_dir);
 
-		// Set up cron hook
-		add_action(self::hook, array(__CLASS__, 'generate'));
+		// Set cron hook
+		add_action(self::hook, array(__CLASS__, 'clear_cache'));
 
-		// Set up shortcode
+		// Set shortcode
 		add_shortcode('smart_archives', array(__CLASS__, 'load'));
 
+		// Set fancy archive
 		if ( self::$options->format == 'fancy' )
 			add_action('template_redirect', array(__CLASS__, 'add_scripts'));
+			
+		// Install / uninstall
+		register_activation_hook(__FILE__, array(__CLASS__, 'upgrade'));
+		register_uninstall_hook(__FILE__, array(__CLASS__, 'clear_cache'));
+	}
+
+	static function upgrade()
+	{
+		$wud = wp_upload_dir();
+		@unlink($wud['basedir'] . '/sar_cache.txt');
 	}
 
 	static function add_scripts()
 	{
-		if ( ! is_page() )
-			return;
-
-		global $posts;
-
-		if ( FALSE === strpos($posts[0]->post_content, '[smart_archives]') )
-			return;
-
 		$plugin_url = plugin_dir_url(__FILE__);
 
 		wp_enqueue_script('tools-tabs', $plugin_url . 'inc/tools.tabs.min.js', array('jquery'), '1.0.4', true);
@@ -115,40 +120,90 @@ jQuery(document).ready(function($) {
 <?php
 	}
 
-	static function load()
+	static function clear_cache()
 	{
-		$cache = @file_get_contents(self::$cache);
+		$dir_handle = @opendir(self::$cache_dir);
 
-		return $cache ? $cache : self::generate(true);
+		if ( FALSE == $dir_handle )
+			return;
+
+		while ( $file = readdir($dir_handle) )
+			if ( $file != "." && $file != ".." )
+				unlink(self::$cache_dir . DIRECTORY_SEPARATOR . $file);
+
+		@closedir($dir_handle);
+		@rmdir(self::$cache_dir);
 	}
 
-	static function generate($display_anyway = false)
+	static function load($args = '')
 	{
-		if ( ! $display_anyway && !$fh = @fopen(self::$cache, 'w') )
-		{
-			trigger_error("Can't open cache file: " . self::$cache, E_USER_WARNING);
+		$args = self::validate_args($args);
 
-			return false;
-		}
+		$file = self::$cache_dir . md5(join('', $args));
 
+		$cache = @file_get_contents($file);
+
+		return $cache ? $cache : self::generate($args, $file);
+	}
+
+	private static function validate_args($args)
+	{
+		$args = wp_parse_args($args, self::$options->get());
+
+		if ( isset($args['include_cat']) )
+			unset($args['exclude_cat']);
+
+		$whitelist = array(
+			'format',
+			'include_cat',
+			'exclude_cat',
+			'anchors',
+			'block_numeric',
+			'list_format',
+			'date_format'
+		);
+
+		$final_args = array();
+		foreach ( $whitelist as $key )
+			if ( isset($args[$key]) )
+				$final_args[$key] = $args[$key];
+
+		ksort($args);
+
+		return $final_args;
+	}
+
+	private static function generate($args, $file)
+	{
 		global $wpdb;
 
-		extract(self::$options->get());
+		extract($args, EXTR_SKIP);
 
-		$catID = @explode(' ', trim($catID));
-		$catID = (array) apply_filters('smart_archives_exclude_categories', $catID);
-		array_map('esc_sql', $catID);
-		$catID = @implode(',', $catID);
+		if ( ! empty($exclude_cat) )
+		{
+			$where = "AND ID NOT IN (";
+			$ids = $exclude_cat;
+		}
 
-		if ( ! empty($catID) )
-			$exclude_cats_sql = "
-				AND ID NOT IN (
+		if ( ! empty($include_cat) )
+		{
+			$where = "AND ID IN (\n";
+			$ids = $include_cat;
+		}
+
+		if ( ! empty($ids) )
+		{
+			if ( ! is_array($ids) )
+				$ids = explode(',', $ids);
+			$ids = array_to_sql($ids);
+			$where .= "
 					SELECT r.object_id
 					FROM {$wpdb->term_relationships} r NATURAL JOIN {$wpdb->term_taxonomy} t
 					WHERE t.taxonomy = 'category'
-					AND t.term_id IN ($catID)
+					AND t.term_id IN ($ids)
 				)
 			";
+		}
 
 		$order = ( $format == 'fancy' ) ? 'ASC' : 'DESC';
 
@@ -158,7 +213,7 @@ jQuery(document).ready(function($) {
 			FROM {$wpdb->posts}
 			WHERE post_type = 'post'
 			AND post_status = 'publish'
-			{$exclude_cats_sql}
+			{$where}
 			GROUP BY year(post_date)
 			HAVING count(year(post_date)) > 0
 			ORDER BY post_date $order
@@ -182,7 +237,7 @@ jQuery(document).ready(function($) {
 					AND post_status = 'publish'
 					AND year(post_date) = {$current}
 					AND month(post_date) = {$i}
-					{$exclude_cats_sql}
+					{$where}
 					ORDER BY post_date DESC
 				");
 
@@ -206,14 +261,13 @@ jQuery(document).ready(function($) {
 		}
 
 		// Update cache
-		@fwrite($fh, $output);
-		@fclose($fh);
+		@file_put_contents($file, $output);
 
 		return $output;
 	}
 
 	// The "fancy" archive
-	function generate_fancy()
+	private static function generate_fancy()
 	{
 		$available_tags = self::get_available_tags();
 
@@ -294,7 +348,7 @@ jQuery(document).ready(function($) {
 	}
 
 	// The list
-	private function generate_list()
+	private static function generate_list()
 	{
 		$available_tags = self::get_available_tags();
 
@@ -345,7 +399,7 @@ jQuery(document).ready(function($) {
 	}
 
 	// The block
-	private function generate_block()
+	private static function generate_block()
 	{
 		$months_short = self::get_months(true);
 
@@ -382,7 +436,7 @@ jQuery(document).ready(function($) {
 		return $block;
 	}
 
-	private function get_months($abrev = false)
+	private static function get_months($abrev = false)
 	{
 		global $wp_locale;
 	
@@ -405,7 +459,7 @@ jQuery(document).ready(function($) {
 		return array('%post_link%', '%author_link%', '%author%', '%comment_count%', '%category_link%', '%category%', '%date%');
 	}
 
-	private function get_columns()
+	private static function get_columns()
 	{
 		$columns = array('ID', 'post_title');
 
@@ -424,7 +478,7 @@ jQuery(document).ready(function($) {
 		return implode(',', $columns);
 	}
 
-	private function substitute_post_link($post)
+	private static function substitute_post_link($post)
 	{
 		return sprintf("<a href='%s'>%s</a>", 
 			get_permalink($post->ID),
@@ -432,7 +486,7 @@ jQuery(document).ready(function($) {
 		);
 	}
 
-	private function substitute_author_link($post)
+	private static function substitute_author_link($post)
 	{
 		return sprintf("<a href='%s'>%s</a>", 
 			get_author_posts_url($post->post_author), 
@@ -440,22 +494,22 @@ jQuery(document).ready(function($) {
 		);
 	}
 
-	private function substitute_author($post)
+	private static function substitute_author($post)
 	{
 		return get_user_option('display_name', $post->post_author);
 	}
 
-	private function substitute_comment_count($post)
+	private static function substitute_comment_count($post)
 	{
 		return $post->comment_count;
 	}
 
-	private function substitute_date($post)
+	private static function substitute_date($post)
 	{
 		return sprintf("<span class='post_date'>%s</span>", mysql2date(self::$options->date_format, $post->post_date));
 	}
 
-	private function substitute_category_link($post)
+	private static function substitute_category_link($post)
 	{
 		$categorylist = array();
 		foreach ( get_the_category($post->ID) as $category )
@@ -464,7 +518,7 @@ jQuery(document).ready(function($) {
 		return implode(', ', $categorylist);
 	}
 
-	private function substitute_category($post)
+	private static function substitute_category($post)
 	{
 		$categorylist = array();
 		foreach ( get_the_category($post->ID) as $category )
@@ -475,8 +529,19 @@ jQuery(document).ready(function($) {
 }
 
 // Template tag
-function smart_archives()
+function smart_archives($args = '')
 {
-	echo displaySAR::load();
+	echo displaySAR::load($args);
 }
+
+// Utilities
+if ( ! function_exists('array_to_sql') ) :
+function array_to_sql($values)
+{
+	foreach ( $values as &$val )
+		$val = "'" . esc_sql(trim($val)) . "'";
+
+	return implode(',', $values);
+}
+endif;
 

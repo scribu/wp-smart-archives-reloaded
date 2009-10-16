@@ -2,6 +2,11 @@
 	float: left;
 	width: 100%;
 }
+#smart-archives a {
+	float:left;
+	font-size: 28px;
+	padding: 5px 7px 10px;
+}
 .tabs {
 	width: 100%;
 	float: left;
@@ -19,10 +24,7 @@
 	margin: 0 !important;
 	padding: 0 !important;
 }
-#smart-archives a {
-	float:left;
-	font-size: 28px;
-	padding: 5px 7px 10px;
+.tabs a {
 	outline: none !important;
 }
 .tabs a.current {

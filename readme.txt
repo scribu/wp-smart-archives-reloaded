@@ -4,7 +4,7 @@ Donate link: http://scribu.net/wordpress
 Tags: archive, post list
 Requires at least: 2.8
 Tested up to: 2.9-rare
-Stable tag: trunk
+Stable tag: 1.7.1
 
 An elegant and easy way to present your archives.
 
@@ -52,6 +52,11 @@ Go to your wp-content/uploads directory, create an empty file called "sar_cache.
 2. The Settings Page
 
 == Changelog ==
+
+= 1.8 =
+* multiple cache files
+* include_cat && exclude_cat
+* [more info](http://scribu.net/wordpress/smart-archives-reloaded/sar-1-8.html)
 
 = 1.7.2 =
 * added Chinese l10n
