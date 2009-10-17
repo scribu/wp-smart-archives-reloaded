@@ -50,6 +50,11 @@ function _sar_init()
 		require_once dirname(__FILE__) . '/admin.php';
 		new settingsSAR(__FILE__, $options);
 	}
+
+
+	// Load translations
+	$plugin_dir = basename(dirname(__FILE__));
+	load_plugin_textdomain('smart-archives-reloaded', "wp-content/plugins/$plugin_dir/lang", "$plugin_dir/lang");
 }
 
 abstract class displaySAR

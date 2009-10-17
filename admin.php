@@ -6,10 +6,6 @@ class settingsSAR extends scbAdminPage
 	{
 		$this->textdomain = 'smart-archives-reloaded';
 
-		// Load translations
-		$plugin_dir = basename(dirname($file));
-		load_plugin_textdomain($this->textdomain, "wp-content/plugins/$plugin_dir/lang", "$plugin_dir/lang");
-
 		$this->args = array(
 			'page_title' => __('Smart Archives Settings', $this->textdomain),
 			'menu_title' => __('Smart Archives', $this->textdomain),
