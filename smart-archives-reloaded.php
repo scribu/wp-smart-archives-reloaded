@@ -51,7 +51,6 @@ function _sar_init()
 		new settingsSAR(__FILE__, $options);
 	}
 
-
 	// Load translations
 	$plugin_dir = basename(dirname(__FILE__));
 	load_plugin_textdomain('smart-archives-reloaded', "wp-content/plugins/$plugin_dir/lang", "$plugin_dir/lang");
@@ -109,6 +108,8 @@ abstract class displaySAR
 
 	static function add_scripts()
 	{
+		// TODO: check static var in footer
+
 		$plugin_url = plugin_dir_url(__FILE__);
 
 		wp_enqueue_script('tools-tabs', $plugin_url . 'inc/tools.tabs.min.js', array('jquery'), '1.0.4', true);
