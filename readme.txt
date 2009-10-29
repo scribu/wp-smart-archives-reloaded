@@ -40,7 +40,9 @@ Make sure your new host is running PHP 5. Add this line to wp-config.php:
 
 = Fancy archive not working =
 
-Make sure you have wp_footer() in footer.php in your theme directory.
+In footer.php in your theme directory, make sure you have this code somewhere:
+
+`<?php wp_footer(); ?>`.
 
 = "Can't open cache file!" =
 
