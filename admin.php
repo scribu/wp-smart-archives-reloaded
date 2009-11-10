@@ -1,9 +1,7 @@
 <?php
 
-class settingsSAR extends scbAdminPage 
-{
-	function __construct($file, $options)
-	{
+class settingsSAR extends scbAdminPage  {
+	function __construct($file, $options) {
 		$this->textdomain = 'smart-archives-reloaded';
 
 		$this->args = array(
@@ -18,8 +16,7 @@ class settingsSAR extends scbAdminPage
 		parent::__construct($file, $options);
 	}
 
-	function update_cache($new_status = '', $old_status = '')
-	{
+	function update_cache($new_status = '', $old_status = '') {
 		$cond =
 			( 'publish' == $new_status || 'publish' == $old_status ) ||		// publish or unpublish
 			( empty($new_status) && empty($old_status) );					// delete post or update options
@@ -27,24 +24,21 @@ class settingsSAR extends scbAdminPage
 		if ( !$cond )
 			return;
 
-		if ( $this->options->cron )
-		{
+		if ( $this->options->cron ) {
 			wp_clear_scheduled_hook(displaySAR::hook);
 			wp_schedule_single_event(time(), displaySAR::hook);
-		}
-		else
+		} else {
 			do_action(displaySAR::hook);
+		}
 	}
 
 	// Page methods
-	function page_head()
-	{
+	function page_head() {
 		wp_enqueue_script('sar-admin', $this->plugin_url . 'inc/admin.js', array('jquery'), '1.7', true);
 		echo $this->css_wrap('h3 {margin-bottom: 0 !important}');
 	}
 
-	function validate($new_options, $old_options)
-	{
+	function validate($new_options, $old_options) {
 		// Validate numeric
 		if ( $new_options['format'] == 'list' )
 			$new_options['block_numeric'] = false;
@@ -55,8 +49,7 @@ class settingsSAR extends scbAdminPage
 
 		// Validate cat ids
 		$ids = array();
-		foreach ( explode(', ', $new_options['exclude_cat']) as $id )
-		{
+		foreach ( explode(', ', $new_options['exclude_cat']) as $id ) {
 			$id = intval($id);
 			if ( $id > 0 )
 				$ids[] = $id;
@@ -71,13 +64,11 @@ class settingsSAR extends scbAdminPage
 		return $new_options;
 	}
 
-	function _subsection($title, $id, $rows)
-	{
+	function _subsection($title, $id, $rows) {
 		return "<div id='$id'>\n" . "<h3>$title</h3>\n" . $this->table($rows) . "</div>\n";
 	}
 
-	function page_content()
-	{
+	function page_content() {
 		foreach ( displaySAR::get_available_tags() as $tag )
 			$tags .= "<li><em>$tag</em></li>\n";
 

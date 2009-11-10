@@ -38,15 +38,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
  * list_format: string
  * date_format: string
  */
-function smart_archives($args = '')
-{
+function smart_archives($args = '') {
 	echo displaySAR::load($args);
 }
 
 
 _sar_init();
-function _sar_init()
-{
+function _sar_init() {
 	// Load scbFramework
 	require_once dirname(__FILE__) . '/scb/load.php';
 
@@ -63,8 +61,7 @@ function _sar_init()
 
 	displaySAR::init($options);
 
-	if ( is_admin() )
-	{
+	if ( is_admin() ) {
 		require_once dirname(__FILE__) . '/admin.php';
 		new settingsSAR(__FILE__, $options);
 	}
@@ -74,8 +71,7 @@ function _sar_init()
 	load_plugin_textdomain('smart-archives-reloaded', "wp-content/plugins/$plugin_dir/lang", "$plugin_dir/lang");
 }
 
-abstract class displaySAR
-{
+abstract class displaySAR {
 	const hook = 'smart_archives_update';
 
 	private static $options;
@@ -84,8 +80,7 @@ abstract class displaySAR
 	private static $monthsWithPosts;
 	private static $cache_dir;
 
-	static function init($options)
-	{
+	static function init($options) {
 		self::$options = $options;
 
 		// Set cache dir
@@ -109,8 +104,7 @@ abstract class displaySAR
 		register_uninstall_hook(__FILE__, array(__CLASS__, 'clear_cache'));
 	}
 
-	static function upgrade()
-	{
+	static function upgrade() {
 		$wud = wp_upload_dir();
 		@unlink($wud['basedir'] . '/sar_cache.txt');
 		
@@ -124,8 +118,7 @@ abstract class displaySAR
 		self::$options->update($options);
 	}
 
-	static function add_scripts()
-	{
+	static function add_scripts() {
 		// TODO: check static var in footer
 
 		$plugin_url = plugin_dir_url(__FILE__);
@@ -137,8 +130,7 @@ abstract class displaySAR
 		add_action('wp_footer', array(__CLASS__, 'init_fancy'), 20);
 	}
 
-	static function init_fancy()
-	{
+	static function init_fancy() {
 ?>
 <script type="text/javascript">
 jQuery(document).ready(function($) {
@@ -153,8 +145,7 @@ jQuery(document).ready(function($) {
 <?php
 	}
 
-	static function clear_cache()
-	{
+	static function clear_cache() {
 		$dir_handle = @opendir(self::$cache_dir);
 
 		if ( FALSE == $dir_handle )
@@ -168,8 +159,7 @@ jQuery(document).ready(function($) {
 		@rmdir(self::$cache_dir);
 	}
 
-	static function load($args = '')
-	{
+	static function load($args = '') {
 		$args = self::validate_args($args);
 
 		$file = self::$cache_dir . md5(join('', $args));
@@ -179,8 +169,7 @@ jQuery(document).ready(function($) {
 		return $cache ? $cache : self::generate($args, $file);
 	}
 
-	private static function validate_args($args)
-	{
+	private static function validate_args($args) {
 		$args = wp_parse_args($args, self::$options->get());
 
 		if ( isset($args['include_cat']) )
@@ -206,29 +195,27 @@ jQuery(document).ready(function($) {
 		return $final_args;
 	}
 
-	private static function generate($args, $file)
-	{
+	private static function generate($args, $file) {
 		global $wpdb;
 
 		extract($args, EXTR_SKIP);
 
-		if ( ! empty($exclude_cat) )
-		{
+		if ( ! empty($exclude_cat) ) {
 			$where = "AND ID NOT IN (";
 			$ids = $exclude_cat;
 		}
 
-		if ( ! empty($include_cat) )
-		{
+		if ( ! empty($include_cat) ) {
 			$where = "AND ID IN (\n";
 			$ids = $include_cat;
 		}
 
-		if ( ! empty($ids) )
-		{
+		if ( ! empty($ids) ) {
 			if ( ! is_array($ids) )
 				$ids = explode(',', $ids);
+
 			$ids = array_to_sql($ids);
+
 			$where .= "
 					SELECT r.object_id
 					FROM {$wpdb->term_relationships} r NATURAL JOIN {$wpdb->term_taxonomy} t
@@ -260,9 +247,8 @@ jQuery(document).ready(function($) {
 		$columns = self::get_columns();
 
 		// Get months with posts
-		foreach ( self::$yearsWithPosts as $current )
-			for ( $i = 1; $i <= 12; $i++ )
-			{
+		foreach ( self::$yearsWithPosts as $current ) {
+			for ( $i = 1; $i <= 12; $i++ ) {
 				$query = $wpdb->prepare("
 					SELECT {$columns}
 					FROM {$wpdb->posts}
@@ -274,8 +260,7 @@ jQuery(document).ready(function($) {
 					ORDER BY post_date DESC
 				");
 
-				if ( $posts = $wpdb->get_results($query) )
-				{
+				if ( $posts = $wpdb->get_results($query) ) {
 					$month = array(
 						'posts' => $posts,
 						'link' => get_month_link($current, $i)
@@ -284,9 +269,9 @@ jQuery(document).ready(function($) {
 					self::$monthsWithPosts[$current][$i] = $month;
 				}
 			}
+		}
 
-		switch ( $format )
-		{
+		switch ( $format ) {
 			case 'block': $output = self::generate_block(); break;
 			case 'list': $output = self::generate_list(); break;
 			case 'both': $output = self::generate_block() . self::generate_list(); break;
@@ -300,8 +285,7 @@ jQuery(document).ready(function($) {
 	}
 
 	// The "fancy" archive
-	private static function generate_fancy()
-	{
+	private static function generate_fancy() {
 		$available_tags = self::get_available_tags();
 
 		foreach ( $available_tags as $i => $tag )
@@ -316,37 +300,33 @@ jQuery(document).ready(function($) {
 
 		$years = "<ul id='smart-archives' class='tabs'>\n" . $years . "</ul>\n";
 
-		foreach ( self::$yearsWithPosts as $current )
-		{
+		$months = '';
+		foreach ( self::$yearsWithPosts as $current ) {
+			// Generate top panes
 			$months .= sprintf("\n\t\t<div class='pane'>\n\t\t\t<ul id='month-list-%s' class='tabs month-list'>", $current);
-
-			for ( $i = 1; $i <= 12; $i++ )
-			{
+			for ( $i = 1; $i <= 12; $i++ ) {
 				if ( self::$options->block_numeric )
 					$month = sprintf('%02d', $i);
 				else
 					$month = $months_short[$i];
 
-				if ( self::$monthsWithPosts[$current][$i]['posts'] )
-				{
+				if ( self::$monthsWithPosts[$current][$i]['posts'] ) {
 					$url = self::$monthsWithPosts[$current][$i]['link'];
-
 					$months .= sprintf("\n\t\t<li><a href='%s'>%s</a></li>", $url, $month);
-				}
-				else
+				} else {
 					$months .= sprintf("\n\t\t<li><span class='emptymonth'>%s</span></li>", $month);
+				}
 			}
 			$months .= "\n\t\t\t</ul>";
 
-			for ( $i = 1; $i <= 12; $i++ )
-			{
+			// Generate post lists
+			for ( $i = 1; $i <= 12; $i++ ) {
 				if ( ! self::$monthsWithPosts[$current][$i] )
 					continue;
 
 				// Get post links for current month
 				$post_list = '';
-				foreach ( self::$monthsWithPosts[$current][$i]['posts'] as $post )
-				{
+				foreach ( self::$monthsWithPosts[$current][$i]['posts'] as $post ) {
 					// $post = self::$monthsWithPosts[$current][$i]['posts'];
 					
 					$list_item = self::$options->list_format;
@@ -355,7 +335,7 @@ jQuery(document).ready(function($) {
 						$list_item = str_replace($tag, call_user_func(array(__CLASS__, 'substitute_' . substr($tag, 1, -1)), $post), $list_item);
 
 					$post_list .= "\t<li>" . $list_item . "</li>\n";
-				}
+				} // end post block
 
 				$titlef = "\n<h2 class='month-heading'>%s <span class='month-archive-link'>(<a href='%s'>" . 
 					__('View complete archive page for %s', 'smart-archives-reloaded') . 
@@ -366,13 +346,13 @@ jQuery(document).ready(function($) {
 				$list .= sprintf($titlef, $months_long[$i] . ' ' . $current, self::$monthsWithPosts[$current][$i]['link'], $months_long[$i] . ' ' . $current);
 				$list .= sprintf("<ul class='archive-list'>\n%s</ul>\n", $post_list);
 				$list .= "</div>";
-			}
+			} // end month block
 
 			$block .= $months . $list;
 			$block .= "\n\t\t</div>";
 			$list = "";
 			$months = "";
-		}
+		} // end year block
 
 		// Wrap it up
 		$block = $years . $block;
@@ -381,8 +361,7 @@ jQuery(document).ready(function($) {
 	}
 
 	// The list
-	private static function generate_list()
-	{
+	private static function generate_list() {
 		$available_tags = self::get_available_tags();
 
 		foreach ( $available_tags as $i => $tag )
@@ -391,39 +370,37 @@ jQuery(document).ready(function($) {
 
 		$months_long = self::get_months();
 
-		foreach ( self::$yearsWithPosts as $current )
-			for ( $i = 12; $i >= 1; $i-- )
-			{
+		foreach ( self::$yearsWithPosts as $current ) {
+			for ( $i = 12; $i >= 1; $i-- ) {
 				if ( ! self::$monthsWithPosts[$current][$i] )
 					continue;
 
 				// Get post links for current month
 				$post_list = '';
-				foreach ( self::$monthsWithPosts[$current][$i]['posts'] as $post )
-				{
+				foreach ( self::$monthsWithPosts[$current][$i]['posts'] as $post ) {
 					$list_item = self::$options->list_format;
 
-					foreach ( $available_tags as $tag )
-					{
+					foreach ( $available_tags as $tag ) {
 						$method = 'substitute_' . substr($tag, 1, -1);
 						$list_item = str_replace($tag, self::$method($post), $list_item);
 					}
 
 					$post_list .= "\t<li>" . $list_item . "</li>\n";
-				}
+				} // end post block
 
 				// Set title format
-				if ( self::$options->anchors )
-				{
+				if ( self::$options->anchors ) {
 					$anchor = "{$current}{$i}";
 					$titlef = "\n<h2 id='{$anchor}'><a href='%s'>%s</a></h2>\n";
-				} else
+				} else {
 					$titlef = "\n<h2><a href='%s'>%s</a></h2>\n";
+				}
 
 				// Append to list
 				$list .= sprintf($titlef, self::$monthsWithPosts[$current][$i]['link'], $months_long[$i] . ' ' . $current);
 				$list .= sprintf("<ul>\n%s</ul>\n", $post_list);
-			}
+			} // end month block
+		} // end year block
 
 		// Wrap it up
 		$list = "\n<div id='smart-archives-list'>\n{$list}</div>\n";
@@ -432,12 +409,10 @@ jQuery(document).ready(function($) {
 	}
 
 	// The block
-	private static function generate_block()
-	{
+	private static function generate_block() {
 		$months_short = self::get_months(true);
 
-		foreach ( self::$yearsWithPosts as $current )
-		{
+		foreach ( self::$yearsWithPosts as $current ) {
 			$block .= sprintf("\t<li><strong><a href='%s'>%s</a>:</strong> ", get_year_link($current), $current);
 
 			for ( $i = 1; $i <= 12; $i++ )
@@ -469,12 +444,10 @@ jQuery(document).ready(function($) {
 		return $block;
 	}
 
-	private static function get_months($abrev = false)
-	{
+	private static function get_months($abrev = false) {
 		global $wp_locale;
 	
-		for($i = 1; $i <= 12; $i++)
-		{
+		for($i = 1; $i <= 12; $i++) {
 			$month = $wp_locale->get_month($i);
 
 			if ( $abrev )
@@ -487,13 +460,11 @@ jQuery(document).ready(function($) {
 	}
 
 	// Substitution tags
-	function get_available_tags()
-	{
+	function get_available_tags() {
 		return array('%post_link%', '%author_link%', '%author%', '%comment_count%', '%category_link%', '%category%', '%date%');
 	}
 
-	private static function get_columns()
-	{
+	private static function get_columns() {
 		$columns = array('ID', 'post_title');
 
 		if ( 'block' == self::$options->format )
@@ -511,39 +482,33 @@ jQuery(document).ready(function($) {
 		return implode(',', $columns);
 	}
 
-	private static function substitute_post_link($post)
-	{
+	private static function substitute_post_link($post) {
 		return sprintf("<a href='%s'>%s</a>", 
 			get_permalink($post->ID),
 			apply_filters('smart_archives_title', $post->post_title, $post->ID)
 		);
 	}
 
-	private static function substitute_author_link($post)
-	{
+	private static function substitute_author_link($post) {
 		return sprintf("<a href='%s'>%s</a>", 
 			get_author_posts_url($post->post_author), 
 			get_user_option('display_name', $post->post_author)
 		);
 	}
 
-	private static function substitute_author($post)
-	{
+	private static function substitute_author($post) {
 		return get_user_option('display_name', $post->post_author);
 	}
 
-	private static function substitute_comment_count($post)
-	{
+	private static function substitute_comment_count($post) {
 		return $post->comment_count;
 	}
 
-	private static function substitute_date($post)
-	{
+	private static function substitute_date($post) {
 		return sprintf("<span class='post_date'>%s</span>", mysql2date(self::$options->date_format, $post->post_date));
 	}
 
-	private static function substitute_category_link($post)
-	{
+	private static function substitute_category_link($post) {
 		$categorylist = array();
 		foreach ( get_the_category($post->ID) as $category )
 			$categorylist[] = sprintf("<a href='%s'>%s</a>", get_category_link($category->cat_ID), $category->cat_name);
@@ -551,8 +516,7 @@ jQuery(document).ready(function($) {
 		return implode(', ', $categorylist);
 	}
 
-	private static function substitute_category($post)
-	{
+	private static function substitute_category($post) {
 		$categorylist = array();
 		foreach ( get_the_category($post->ID) as $category )
 			$categorylist[] = $category->cat_name;
@@ -563,8 +527,7 @@ jQuery(document).ready(function($) {
 
 // Utilities
 if ( ! function_exists('array_to_sql') ) :
-function array_to_sql($values)
-{
+function array_to_sql($values) {
 	foreach ( $values as &$val )
 		$val = "'" . esc_sql(trim($val)) . "'";
 
