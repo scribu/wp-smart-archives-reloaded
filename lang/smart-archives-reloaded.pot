@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Smart Archives Reloaded 1.8b\n"
+"Project-Id-Version: Smart Archives Reloaded 1.8\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/smart-archives-reloaded\n"
-"POT-Creation-Date: 2009-11-10 21:45+0200\n"
+"POT-Creation-Date: 2009-11-10 21:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -113,10 +113,6 @@ msgstr ""
 
 #: scb/AdminPage.php:338
 msgid "Settings"
-msgstr ""
-
-#: scb/Dependency.php:46
-msgid "Install now"
 msgstr ""
 
 #: smart-archives-reloaded.php:361
