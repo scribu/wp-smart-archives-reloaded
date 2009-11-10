@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Smart Archives Reloaded in italiano\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/smart-archives-reloaded\n"
-"POT-Creation-Date: 2009-09-26 03:54+0300\n"
+"POT-Creation-Date: 2009-11-10 21:45+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Gianni Diurno (aka gidibao) <gidibao@gmail.com>\n"
 "Language-Team: Gianni Diurno | http://gidibao.net/ <gidibao@gmail.com>\n"
@@ -17,92 +17,88 @@ msgstr ""
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: admin.php:14
+#: admin.php:10
 msgid "Smart Archives Settings"
 msgstr "Impostazioni Smart Archives"
 
-#: admin.php:15
+#: admin.php:11
 msgid "Smart Archives"
 msgstr "Smart Archives"
 
-#: admin.php:91
+#: admin.php:84
 msgid "Default"
 msgstr "predefinito"
 
-#: admin.php:93
+#: admin.php:86
 msgid "General settings"
 msgstr "Impostazioni generali"
 
-#: admin.php:95
+#: admin.php:88
 msgid "Exclude Categories by ID"
 msgstr "Escludi le categorie via ID"
 
-#: admin.php:96
-msgid "(space separated)"
-msgstr "(separate da uno spazio)"
+#: admin.php:89
+msgid "(comma separated)"
+msgstr "(separate da una virgola)"
 
-#: admin.php:102
+#: admin.php:96
 msgid "Use wp-cron"
 msgstr "Utilizza wp-cron"
 
-#: admin.php:103
-msgid "Updates the archives in the background"
-msgstr "aggiorna in background gli archivi"
-
-#: admin.php:109
+#: admin.php:102
 msgid "Format"
 msgstr "Formato"
 
-#: admin.php:114
+#: admin.php:107
 msgid "list"
 msgstr "lista"
 
-#: admin.php:115
+#: admin.php:108
 msgid "block"
 msgstr "blocco"
 
-#: admin.php:116
+#: admin.php:109
 msgid "both"
 msgstr "entrambi"
 
-#: admin.php:117
+#: admin.php:110
 msgid "fancy"
 msgstr "personalizzato"
 
-#: admin.php:122
+#: admin.php:115
 msgid "Specific settings"
 msgstr "Impostazioni specifiche"
 
-#: admin.php:124
+#: admin.php:117
 msgid "List format"
 msgstr "Formato elenco"
 
-#: admin.php:125
+#: admin.php:118
 msgid "Available substitution tags"
 msgstr "Tag disponibili"
 
-#: admin.php:134
+#: admin.php:127
 #, php-format
 msgid "%s format"
 msgstr "%s formato"
 
-#: admin.php:135
+#: admin.php:128
 msgid "See available date formatting characters <a href=\"http://php.net/date\" target=\"_blank\">here</a>."
 msgstr "Vedi <a href=\"http://php.net/date\" target=\"_blank\">qui</a> i formati disponibili."
 
-#: admin.php:141
+#: admin.php:134
 msgid "Numeric months in block"
 msgstr "Visualizzazione mesi"
 
-#: admin.php:142
+#: admin.php:135
 msgid "The month links in the block will be shown as numbers"
 msgstr "i link del mese presenti nella versione compressa verranno mostrati in forma numerica"
 
-#: admin.php:148
+#: admin.php:141
 msgid "Use anchor links in block"
 msgstr "Usa i link interni"
 
-#: admin.php:149
+#: admin.php:142
 msgid "The month links in the block will point to the month links in the list"
 msgstr "nella versione compressa il collegamento ai mesi punterà ai link del mese presente nella lista"
 
@@ -122,7 +118,7 @@ msgstr "Impostazioni"
 msgid "Install now"
 msgstr "Installa adesso"
 
-#: smart-archives-reloaded.php:262
+#: smart-archives-reloaded.php:361
 #, php-format
 msgid "View complete archive page for %s"
 msgstr "Visualizza la pagina dell'archivio completo per %s"
@@ -147,6 +143,8 @@ msgstr "scribu"
 msgid "http://scribu.net"
 msgstr "http://scribu.net"
 
+#~ msgid "Updates the archives in the background"
+#~ msgstr "aggiorna in background gli archivi"
 #~ msgid "Uncheck this if your archive isn't being updated"
 #~ msgstr "non attivare se il tuo archivio non fosse stato aggiornato"
 #~ msgid "An elegant and easy way to present your archives."
