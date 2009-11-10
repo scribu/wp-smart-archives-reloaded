@@ -337,8 +337,8 @@ jQuery(document).ready(function($) {
 					$post_list .= "\t<li>" . $list_item . "</li>\n";
 				} // end post block
 
-				$titlef = "\n<h2 class='month-heading'>%s <span class='month-archive-link'>(<a href='%s'>" . 
-					__('View complete archive page for %s', 'smart-archives-reloaded') . 
+				$titlef = "\n<h2 class='month-heading'>%s <span class='month-archive-link'>(<a href='%s'>" .
+					__('View complete archive page for %s', 'smart-archives-reloaded') .
 					"</a>)</span></h2>\n";
 
 				// Append to list
@@ -483,15 +483,15 @@ jQuery(document).ready(function($) {
 	}
 
 	private static function substitute_post_link($post) {
-		return sprintf("<a href='%s'>%s</a>", 
+		return sprintf("<a href='%s'>%s</a>",
 			get_permalink($post->ID),
 			apply_filters('smart_archives_title', $post->post_title, $post->ID)
 		);
 	}
 
 	private static function substitute_author_link($post) {
-		return sprintf("<a href='%s'>%s</a>", 
-			get_author_posts_url($post->post_author), 
+		return sprintf("<a href='%s'>%s</a>",
+			get_author_posts_url($post->post_author),
 			get_user_option('display_name', $post->post_author)
 		);
 	}
