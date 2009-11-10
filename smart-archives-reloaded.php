@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.8a
+Version: 1.8b
 Description: An elegant and easy way to present your archives. (With help from <a href="http://www.conceptfusion.co.nz/">Simon Pritchard</a>)
 Author: scribu
 Author URI: http://scribu.net
@@ -25,7 +25,25 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-// Init
+
+/**
+ * Display the archives
+ *
+ * Available args:
+ * format: string, one of these: block | list | both | fancy
+ * exclude_cat: array of category ids to exclude
+ * include_cat: array of category ids to include
+ * anchors: boolean
+ * block_numeric: boolean
+ * list_format: string
+ * date_format: string
+ */
+function smart_archives($args = '')
+{
+	echo displaySAR::load($args);
+}
+
+
 _sar_init();
 function _sar_init()
 {
@@ -541,12 +559,6 @@ jQuery(document).ready(function($) {
 
 		return implode(', ', $categorylist);
 	}
-}
-
-// Template tag
-function smart_archives($args = '')
-{
-	echo displaySAR::load($args);
 }
 
 // Utilities

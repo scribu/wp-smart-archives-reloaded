@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Smart Archives Reloaded 1.8a\n"
+"Project-Id-Version: Smart Archives Reloaded 1.8b\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/smart-archives-reloaded\n"
-"POT-Creation-Date: 2009-10-16 17:43+0300\n"
+"POT-Creation-Date: 2009-11-10 21:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,94 +16,90 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: admin.php:14
+#: admin.php:10
 msgid "Smart Archives Settings"
 msgstr ""
 
-#: admin.php:15
+#: admin.php:11
 msgid "Smart Archives"
 msgstr ""
 
-#: admin.php:88
+#: admin.php:84
 msgid "Default"
 msgstr ""
 
-#: admin.php:90
+#: admin.php:86
 msgid "General settings"
 msgstr ""
 
-#: admin.php:92
+#: admin.php:88
 msgid "Exclude Categories by ID"
 msgstr ""
 
-#: admin.php:93
+#: admin.php:89
 msgid "(comma separated)"
 msgstr ""
 
-#: admin.php:100
+#: admin.php:96
 msgid "Use wp-cron"
 msgstr ""
 
-#: admin.php:101
-msgid "Updates the archives in the background"
-msgstr ""
-
-#: admin.php:107
+#: admin.php:102
 msgid "Format"
 msgstr ""
 
-#: admin.php:112
+#: admin.php:107
 msgid "list"
 msgstr ""
 
-#: admin.php:113
+#: admin.php:108
 msgid "block"
 msgstr ""
 
-#: admin.php:114
+#: admin.php:109
 msgid "both"
 msgstr ""
 
-#: admin.php:115
+#: admin.php:110
 msgid "fancy"
 msgstr ""
 
-#: admin.php:120
+#: admin.php:115
 msgid "Specific settings"
 msgstr ""
 
-#: admin.php:122
+#: admin.php:117
 msgid "List format"
 msgstr ""
 
-#: admin.php:123
+#: admin.php:118
 msgid "Available substitution tags"
 msgstr ""
 
-#: admin.php:132
+#: admin.php:127
 #, php-format
 msgid "%s format"
 msgstr ""
 
-#: admin.php:133
+#: admin.php:128
 msgid ""
 "See available date formatting characters <a href=\"http://php.net/date\" "
 "target=\"_blank\">here</a>."
 msgstr ""
 
-#: admin.php:139
+#: admin.php:134
 msgid "Numeric months in block"
 msgstr ""
 
-#: admin.php:140
+#: admin.php:135
 msgid "The month links in the block will be shown as numbers"
 msgstr ""
 
-#: admin.php:146
+#: admin.php:141
 msgid "Use anchor links in block"
 msgstr ""
 
-#: admin.php:147
+#: admin.php:142
 msgid "The month links in the block will point to the month links in the list"
 msgstr ""
 
@@ -123,7 +119,7 @@ msgstr ""
 msgid "Install now"
 msgstr ""
 
-#: smart-archives-reloaded.php:339
+#: smart-archives-reloaded.php:361
 #, php-format
 msgid "View complete archive page for %s"
 msgstr ""
