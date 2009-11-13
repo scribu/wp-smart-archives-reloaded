@@ -200,13 +200,16 @@ jQuery(document).ready(function($) {
 
 		extract($args, EXTR_SKIP);
 
-		if ( ! empty($exclude_cat) ) {
-			$where = "AND ID NOT IN (";
-			$ids = $exclude_cat;
-		}
+		$where = "
+			WHERE post_type = 'post'
+			AND post_status = 'publish'		
+		";
 
-		if ( ! empty($include_cat) ) {
-			$where = "AND ID IN (\n";
+		if ( ! empty($exclude_cat) ) {
+			$where .= "AND ID NOT IN (";
+			$ids = $exclude_cat;
+		} elseif ( ! empty($include_cat) ) {
+			$where .= "AND ID IN (\n";
 			$ids = $include_cat;
 		}
 
@@ -231,8 +234,6 @@ jQuery(document).ready(function($) {
 		$query = "
 			SELECT DISTINCT year(post_date) AS year
 			FROM {$wpdb->posts}
-			WHERE post_type = 'post'
-			AND post_status = 'publish'
 			{$where}
 			GROUP BY year(post_date)
 			HAVING count(year(post_date)) > 0
@@ -252,11 +253,9 @@ jQuery(document).ready(function($) {
 				$query = $wpdb->prepare("
 					SELECT {$columns}
 					FROM {$wpdb->posts}
-					WHERE post_type = 'post'
-					AND post_status = 'publish'
+					{$where}
 					AND year(post_date) = {$current}
 					AND month(post_date) = {$i}
-					{$where}
 					ORDER BY post_date DESC
 				");
 
