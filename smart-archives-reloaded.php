@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.8
+Version: 1.8.1a
 Description: An elegant and easy way to present your archives. (With help from <a href="http://www.conceptfusion.co.nz/">Simon Pritchard</a>)
 Author: scribu
 Author URI: http://scribu.net
@@ -298,7 +298,7 @@ jQuery(document).ready(function($) {
 		foreach ( self::$yearsWithPosts as $current )
 			$years .= sprintf("\t<li class='list-%s'><a href='%s'>%s</a></li>", $current, get_year_link($current), $current);
 
-		$years = "<ul id='smart-archives' class='tabs'>\n" . $years . "</ul>\n";
+		$years = "<ul class='tabs years-list'>\n" . $years . "</ul>\n";
 
 		$months = '';
 		foreach ( self::$yearsWithPosts as $current ) {
@@ -342,7 +342,7 @@ jQuery(document).ready(function($) {
 					"</a>)</span></h2>\n";
 
 				// Append to list
-				$list .= "<div id='{$anchor}' class='pane'>";
+				$list .= "<div class='pane'>";
 				$list .= sprintf($titlef, $months_long[$i] . ' ' . $current, self::$monthsWithPosts[$current][$i]['link'], $months_long[$i] . ' ' . $current);
 				$list .= sprintf("<ul class='archive-list'>\n%s</ul>\n", $post_list);
 				$list .= "</div>";
@@ -355,7 +355,7 @@ jQuery(document).ready(function($) {
 		} // end year block
 
 		// Wrap it up
-		$block = $years . $block;
+		$block = "<div id='smart-archives'>\n" . $years . $block . "\n</div>";
 
 		return $block;
 	}

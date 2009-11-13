@@ -10,7 +10,7 @@
 .tabs {
 	width: 100%;
 	float: left;
-	background:  url(img/archive-year-background.png) repeat-x center bottom;
+	background: url(img/archive-year-background.png) repeat-x center bottom;
 	margin: 0 !important;
 	text-indent: 0 !important;
 }

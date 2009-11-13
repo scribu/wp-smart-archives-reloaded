@@ -1,6 +1,8 @@
 <?php
 
 class settingsSAR extends scbAdminPage  {
+	private $override_cron = false;
+
 	function __construct($file, $options) {
 		$this->textdomain = 'smart-archives-reloaded';
 
@@ -24,7 +26,7 @@ class settingsSAR extends scbAdminPage  {
 		if ( !$cond )
 			return;
 
-		if ( $this->options->cron ) {
+		if ( $this->options->cron && ! $this->override_cron ) {
 			wp_clear_scheduled_hook(displaySAR::hook);
 			wp_schedule_single_event(time(), displaySAR::hook);
 		} else {
@@ -64,6 +66,16 @@ class settingsSAR extends scbAdminPage  {
 		return $new_options;
 	}
 
+	function form_handler() {
+		if ( isset($_POST['action']) && $_POST['action'] == __('Clear', $this->textdomain) ) {
+			$this->override_cron = true;
+			$this->update_cache();
+			$this->admin_msg(__('Cache cleared.', $this->textdomain));
+		} else {
+			parent::form_handler();
+		}
+	}
+
 	function _subsection($title, $id, $rows) {
 		return "<div id='$id'>\n" . "<h3>$title</h3>\n" . $this->table($rows) . "</div>\n";
 	}
@@ -84,19 +96,13 @@ class settingsSAR extends scbAdminPage  {
 			),
 
 			array(
-				'title' => __('Use wp-cron', $this->textdomain),
-				'type' => 'checkbox',
-				'name' => 'cron'
-			),
-
-			array(
 				'title' => __('Format', $this->textdomain),
 				'type' => 'radio',
 				'name' => 'format',
-				'value' => array( 'list', 'block', 'both', 'fancy'),
+				'value' => array('block', 'list', 'both', 'fancy'),
 				'desc' => array(
-					__('list', $this->textdomain),
 					__('block', $this->textdomain),
+					__('list', $this->textdomain),
 					__('both', $this->textdomain),
 					__('fancy', $this->textdomain),
 				)
@@ -133,6 +139,22 @@ class settingsSAR extends scbAdminPage  {
 				'desc' => __('The month links in the block will point to the month links in the list', $this->textdomain),
 				'type' => 'checkbox',
 				'name' => 'anchors',
+			),
+		))
+
+		. $this->_subsection(__('Cache control', $this->textdomain), 'cache', array(
+			array(
+				'title' => __('Use wp-cron', $this->textdomain),
+				'type' => 'checkbox',
+				'name' => 'cron'
+			),
+
+			array(
+				'title' => __('Clear cache', $this->textdomain),
+				'type' => 'submit',
+				'name' => 'action',
+				'value' => __('Clear', $this->textdomain),
+				'extra' => 'class="button no-ajax"',
 			),
 		));
 
