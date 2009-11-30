@@ -308,7 +308,7 @@ abstract class scbForms {
 		$label = trim(str_replace(self::token, $input, $label));
 
 		// Add label
-		if ( empty($label) || $desc === false )
+		if ( empty($desc) )
 			$output = $input . "\n";
 		else
 			$output = "<label>{$label}</label>\n";

@@ -11,8 +11,9 @@ abstract class scbAdminPage {
 	 * string $page_title  (mandatory)
 	 * string $menu_title
 	 * string $page_slug
-	 * array $action_link  (default: Settings)
+	 * string $capability (default: 'manage_options')
 	 * string $nonce
+	 * array $action_link  (default: 'Settings')
 	 */
 	protected $args;
 
@@ -34,7 +35,7 @@ abstract class scbAdminPage {
 	protected $formdata = array();
 
 
-//_____MAIN METHODS_____
+//  ____________MAIN METHODS____________
 
 
 	// Constructor
@@ -101,7 +102,7 @@ abstract class scbAdminPage {
 	}
 
 
-// ____________UTILITIES____________
+//  ____________UTILITIES____________
 
 
 	// Generates a form submit button
@@ -136,12 +137,64 @@ abstract class scbAdminPage {
 			$content .= $this->submit_button();
 		} elseif ( false !== strpos($submit_button, '<input') ) {
 			$content .= $submit_button;
-		} else {
+		} elseif ( false !== $submit_button ) {
 			$button_args = array_slice(func_get_args(), 1);
 			$content .= call_user_func_array(array($this, 'submit_button'), $button_args);
 		}
 
 		return scbForms::form_wrap($content, $this->nonce);
+	}
+
+	// See scbForms::input()
+	function input($args, $options = NULL) {
+		if ( $options === NULL )
+			$options = $this->formdata;
+
+		return scbForms::input($args, $options);
+	}
+
+	// See scbForms::form()
+	function form($rows, $options = NULL) {
+		if ( $options === NULL )
+			$options = $this->formdata;
+
+		return scbForms::form($rows, $options, $this->nonce);
+	}
+
+	// See scbForms::table()
+	function table($rows, $options = NULL) {
+		if ( $options === NULL )
+			$options = $this->formdata;
+
+		return scbForms::table($rows, $options);
+	}
+
+	// See scbForms::table_row()
+	function table_row($row, $options = NULL) {
+		if ( $options === NULL )
+			$options = $this->formdata;
+
+		return scbForms::table_row($row, $options);
+	}
+
+	// Mimics scbForms::form_table()
+	function form_table($rows, $options = NULL) {
+		$output = $this->table($rows, $options);
+
+		$args = array_slice(func_get_args(), 2);
+		array_unshift($args, $output);
+
+		return call_user_func_array(array($this, 'form_wrap'), $args);
+	}
+	
+	// Mimics scbForms::form_table_wrap()
+	function form_table_wrap($content) {
+		$output = self::table_wrap($content);
+
+		$args = array_slice(func_get_args(), 1);
+		array_unshift($args, $output);
+
+		return call_user_func_array(array($this, 'form_wrap'), $args);
 	}
 
 	// Generates a standard admin notice
@@ -160,20 +213,12 @@ abstract class scbAdminPage {
 	}
 
 
-// ____________INTERNAL METHODS____________
+//  ____________INTERNAL METHODS____________
 
-
-	// Allow calling of scbForms methods, with contextual defaults
-	function __call($name, $args) {
-		if ( ! isset($args[1]) ) {
-			if ( in_array( $name, array('form_wrap', 'form_table_wrap') ) )
-				$args[1] = $this->nonce;
-			else
-				$args[1] = $this->formdata;
-		}
-
-		return call_user_func_array(array('scbForms', $name), $args);
+	function __call($method, $args) {
+		return call_user_func_array(array('scbForms', $method), $args);
 	}
+
 
 	// Registers a page
 	function page_init() {
