@@ -16,7 +16,7 @@ class SAR_settings extends scbAdminPage {
 		add_action('transition_post_status', array($this, 'update_cache'), 10, 2);
 		add_action('deleted_post', array($this, 'update_cache'), 10, 0);
 		
-		if ( in_array('%comment_count%', SAR_display::get_active_tags()) )
+//		if ( in_array('%comment_count%', SAR_display::get_active_tags()) )
 			add_action('wp_update_comment_count', array($this, 'update_cache'), 10, 0);
 
 		parent::__construct($file, $options);
