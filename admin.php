@@ -1,6 +1,6 @@
 <?php
 
-class settingsSAR extends scbAdminPage  {
+class SAR_settings extends scbAdminPage {
 	private $override_cron = false;
 
 	function __construct($file, $options) {
@@ -12,8 +12,12 @@ class settingsSAR extends scbAdminPage  {
 			'page_slug' => 'smart-archives'
 		);
 
+		// Cache invalidation
 		add_action('transition_post_status', array($this, 'update_cache'), 10, 2);
 		add_action('deleted_post', array($this, 'update_cache'), 10, 0);
+		
+		if ( in_array('%comment_count%', SAR_display::get_active_tags()) )
+			add_action('wp_update_comment_count', array($this, 'update_cache'), 10, 0);
 
 		parent::__construct($file, $options);
 	}
@@ -21,16 +25,16 @@ class settingsSAR extends scbAdminPage  {
 	function update_cache($new_status = '', $old_status = '') {
 		$cond =
 			( 'publish' == $new_status || 'publish' == $old_status ) ||		// publish or unpublish
-			( empty($new_status) && empty($old_status) );					// delete post or update options
+			( func_num_args() == 0 );
 
 		if ( !$cond )
 			return;
 
 		if ( $this->options->cron && ! $this->override_cron ) {
-			wp_clear_scheduled_hook(displaySAR::hook);
-			wp_schedule_single_event(time(), displaySAR::hook);
+			wp_clear_scheduled_hook(SAR_display::hook);
+			wp_schedule_single_event(time(), SAR_display::hook);
 		} else {
-			do_action(displaySAR::hook);
+			do_action(SAR_display::hook);
 		}
 	}
 
@@ -81,7 +85,7 @@ class settingsSAR extends scbAdminPage  {
 	}
 
 	function page_content() {
-		foreach ( displaySAR::get_available_tags() as $tag )
+		foreach ( SAR_display::get_available_tags() as $tag )
 			$tags .= "<li><em>$tag</em></li>\n";
 
 		$default_date = __('Default', $this->textdomain) . ': F j, Y (' . date_i18n("F j, Y") . ')';

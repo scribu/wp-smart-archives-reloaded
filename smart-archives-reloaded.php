@@ -39,7 +39,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
  * date_format: string
  */
 function smart_archives($args = '') {
-	echo displaySAR::load($args);
+	echo SAR_display::load($args);
 }
 
 
@@ -59,11 +59,11 @@ function _sar_init() {
 		'cron' => true
 	));
 
-	displaySAR::init($options);
+	SAR_display::init($options);
 
 	if ( is_admin() ) {
 		require_once dirname(__FILE__) . '/admin.php';
-		new settingsSAR(__FILE__, $options);
+		new SAR_settings(__FILE__, $options);
 	}
 
 	// Load translations
@@ -71,23 +71,16 @@ function _sar_init() {
 	load_plugin_textdomain('smart-archives-reloaded', "wp-content/plugins/$plugin_dir/lang", "$plugin_dir/lang");
 }
 
-abstract class displaySAR {
+abstract class SAR_display {
 	const hook = 'smart_archives_update';
 
 	private static $options;
 
 	private static $yearsWithPosts;
 	private static $monthsWithPosts;
-	private static $cache_dir;
 
 	static function init($options) {
 		self::$options = $options;
-
-		// Set cache dir
-		$wud = wp_upload_dir();
-		self::$cache_dir = $wud['basedir'] . '/sar_cache/';
-		if ( !is_dir(self::$cache_dir) )
-			@mkdir(self::$cache_dir);
 
 		// Set cron hook
 		add_action(self::hook, array(__CLASS__, 'clear_cache'));
@@ -145,28 +138,43 @@ jQuery(document).ready(function($) {
 <?php
 	}
 
+	static function load($args = '') {
+		$args = self::validate_args($args);
+
+		$file = self::get_cache_path(md5(join('', $args)));
+
+		$cache = @file_get_contents($file);
+
+		return $cache ? $cache : self::generate($args, $file);
+	}
+
 	static function clear_cache() {
-		$dir_handle = @opendir(self::$cache_dir);
+		$cache_dir = self::get_cache_path('', false);
+		$dir_handle = @opendir($cache_dir);
 
 		if ( FALSE == $dir_handle )
 			return;
 
 		while ( $file = readdir($dir_handle) )
 			if ( $file != "." && $file != ".." )
-				unlink(self::$cache_dir . DIRECTORY_SEPARATOR . $file);
+				unlink(self::get_cache_path($file));
 
 		@closedir($dir_handle);
-		@rmdir(self::$cache_dir);
+		@rmdir($cache_dir);
 	}
 
-	static function load($args = '') {
-		$args = self::validate_args($args);
+	private static $cache_dir;
 
-		$file = self::$cache_dir . md5(join('', $args));
+	static function get_cache_path($file = '', $create = true) {
+		// Set cache dir
+		if ( empty(self::$cache_dir) ) {
+			$wud = wp_upload_dir();
+			self::$cache_dir = $wud['basedir'] . '/sar_cache/';
+			if ( $create && !is_dir(self::$cache_dir) )
+				@mkdir(self::$cache_dir);
+		}
 
-		$cache = @file_get_contents($file);
-
-		return $cache ? $cache : self::generate($args, $file);
+		return self::$cache_dir . $file;
 	}
 
 	private static function validate_args($args) {
@@ -463,19 +471,33 @@ jQuery(document).ready(function($) {
 		return array('%post_link%', '%author_link%', '%author%', '%comment_count%', '%category_link%', '%category%', '%date%');
 	}
 
+	private static $active_tags;
+
+	static function get_active_tags() {
+		if ( is_array(self::$active_tags) )
+			return self::$active_tags;
+
+		self::$active_tags = array();
+		foreach ( self::get_available_tags() as $tag )
+			if ( FALSE !== strpos(self::$options->list_format, $tag) )
+				self::$active_tags[] = $tag;
+
+		return self::$active_tags;
+	}
+
 	private static function get_columns() {
 		$columns = array('ID', 'post_title');
 
 		if ( 'block' == self::$options->format )
 			return implode(',', $columns);
 
-		if ( FALSE !== strpos(self::$options->list_format, '%author') )
+		if ( count(array_intersect(array('%author%', '%author_link%'), self::get_active_tags())) )
 			$columns[] = 'post_author';
 
-		if ( FALSE !== strpos(self::$options->list_format, '%comment') )
+		if ( count(array_intersect(array('%comment_count%'), self::get_active_tags())) )
 			$columns[] = 'comment_count';
 
-		if ( FALSE !== strpos(self::$options->list_format, '%date') )
+		if ( count(array_intersect(array('%date%'), self::get_active_tags())) )
 			$columns[] = 'post_date';
 
 		return implode(',', $columns);
