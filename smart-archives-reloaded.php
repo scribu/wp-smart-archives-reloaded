@@ -225,7 +225,7 @@ jQuery(document).ready(function($) {
 			if ( ! is_array($ids) )
 				$ids = explode(',', $ids);
 
-			$ids = array_to_sql($ids);
+			$ids = scbUtil::array_to_sql($ids);
 
 			$where .= "
 					SELECT r.object_id
@@ -545,14 +545,4 @@ jQuery(document).ready(function($) {
 		return implode(', ', $categorylist);
 	}
 }
-
-// Utilities
-if ( ! function_exists('array_to_sql') ) :
-function array_to_sql($values) {
-	foreach ( $values as &$val )
-		$val = "'" . esc_sql(trim($val)) . "'";
-
-	return implode(',', $values);
-}
-endif;
 
