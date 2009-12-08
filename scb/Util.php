@@ -2,13 +2,7 @@
 
 class scbUtil {
 
-	static function array_to_sql($values) {
-		foreach ( $values as &$val )
-			$val = "'" . esc_sql(trim($val)) . "'";
-
-		return implode(',', $values);
-	}
-
+	// Extract $keys from $array
 	static function array_extract($array, $keys) {
 		$r = array();
 		foreach ( $keys as $key )
@@ -17,7 +11,16 @@ class scbUtil {
 
 	   return $r;
 	}
-	
+
+	// Prepare an array for an IN statement
+	static function array_to_sql($values) {
+		foreach ( $values as &$val )
+			$val = "'" . esc_sql(trim($val)) . "'";
+
+		return implode(',', $values);
+	}
+
+	// Force script enqueue
 	static function do_scripts($handles) {
 		global $wp_scripts;
 
@@ -27,6 +30,7 @@ class scbUtil {
 		$wp_scripts->do_items((array) $handles);
 	}
 
+	// Force style enqueue
 	static function do_styles($handles) {
 		global $wp_styles;
 
@@ -36,6 +40,7 @@ class scbUtil {
 		$wp_styles->do_items((array) $handles);
 	}
 
+	// Better debug function
 	static function debug() {
 		echo "<pre>";
 		foreach ( func_get_args() as $arg )
@@ -46,3 +51,4 @@ class scbUtil {
 		echo "</pre>";
 	}
 }
+

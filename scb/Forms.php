@@ -197,7 +197,7 @@ abstract class scbForms {
 		$func = in_array($type, array('checkbox', 'radio')) ? '_checkbox_single' : '_input_single';
 
 		// Set constant args
-		$const_args = self::array_slice_assoc($args, array('type', 'desc_pos', 'checked'));
+		$const_args = self::array_extract($args, array('type', 'desc_pos', 'checked'));
 		if ( isset($extra) )
 			$const_args['extra'] = explode(' ', $extra);
 
@@ -404,7 +404,7 @@ abstract class scbForms {
 		return array_keys($keys) !== $keys;
 	}
 
-	private static function array_slice_assoc($array, $keys) {
+	private static function array_extract($array, $keys) {
 		$r = array();
 		foreach ( $keys as $key )
 			if ( isset($array[$key]) )
