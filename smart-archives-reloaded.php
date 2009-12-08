@@ -113,13 +113,13 @@ abstract class SAR_display {
 	}
 
 	static function register_scripts() {
-		// TODO: check static var in footer
+		$css_dev = defined('STYLE_DEBUG') && STYLE_DEBUG ? '.dev' : '';
 
-		$plugin_url = plugin_dir_url(__FILE__);
+		$plugin_url = plugin_dir_url(__FILE__) . 'inc/';
 
-		wp_enqueue_style('fancy-archives', $plugin_url . 'inc/fancy-archives.css', array(), '0.1');
+		wp_enqueue_style('fancy-archives', $plugin_url . "fancy-archives$css_dev.css", array(), '0.1');
 
-		wp_register_script('tools-tabs', $plugin_url . 'inc/tools.tabs.min.js', array('jquery'), '1.0.4', true);
+		wp_register_script('tools-tabs', $plugin_url . 'tools.tabs.min.js', array('jquery'), '1.0.4', true);
 
 		add_action('wp_footer', array(__CLASS__, 'init_fancy'), 20);
 	}
