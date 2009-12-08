@@ -17,6 +17,24 @@ class scbUtil {
 
 	   return $r;
 	}
+	
+	static function do_scripts($handles) {
+		global $wp_scripts;
+
+		if ( ! is_a($wp_scripts, 'WP_Scripts') )
+			$wp_scripts = new WP_Scripts();
+
+		$wp_scripts->do_items((array) $handles);
+	}
+
+	static function do_styles($handles) {
+		global $wp_styles;
+
+		if ( ! is_a($wp_styles, 'WP_Styles') )
+			$wp_styles = new WP_Styles();
+
+		$wp_styles->do_items((array) $handles);
+	}
 
 	static function debug() {
 		echo "<pre>";

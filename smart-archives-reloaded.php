@@ -128,11 +128,7 @@ abstract class SAR_display {
 		if ( ! self::$fancy )
 			return;
 
-		global $wp_scripts;
-		if ( !is_a($wp_scripts, 'WP_Scripts') )
-			$wp_scripts = new WP_Scripts();
-
-		$wp_scripts->do_items(array('jquery', 'tools-tabs'));
+		scbUtil::do_scripts('tools-tabs');
 
 ?>
 <script type="text/javascript">
