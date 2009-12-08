@@ -74,6 +74,7 @@ function _sar_init() {
 abstract class SAR_display {
 	const hook = 'smart_archives_update';
 
+	private static $fancy = false;
 	private static $options;
 
 	private static $yearsWithPosts;
@@ -90,7 +91,7 @@ abstract class SAR_display {
 
 		// Set fancy archive
 		if ( self::$options->format == 'fancy' )
-			add_action('template_redirect', array(__CLASS__, 'add_scripts'));
+			add_action('template_redirect', array(__CLASS__, 'register_scripts'));
 			
 		// Install / uninstall
 		register_activation_hook(__FILE__, array(__CLASS__, 'upgrade'));
@@ -111,19 +112,28 @@ abstract class SAR_display {
 		self::$options->update($options);
 	}
 
-	static function add_scripts() {
+	static function register_scripts() {
 		// TODO: check static var in footer
 
 		$plugin_url = plugin_dir_url(__FILE__);
 
-		wp_enqueue_script('tools-tabs', $plugin_url . 'inc/tools.tabs.min.js', array('jquery'), '1.0.4', true);
+		wp_enqueue_style('fancy-archives', $plugin_url . 'inc/fancy-archives.css', array(), '0.1');
 
-		wp_enqueue_style('fancy-archives-css', $plugin_url . 'inc/fancy-archives.css', array(), '0.1');
+		wp_register_script('tools-tabs', $plugin_url . 'inc/tools.tabs.min.js', array('jquery'), '1.0.4', true);
 
 		add_action('wp_footer', array(__CLASS__, 'init_fancy'), 20);
 	}
 
 	static function init_fancy() {
+		if ( ! self::$fancy )
+			return;
+
+		global $wp_scripts;
+		if ( !is_a($wp_scripts, 'WP_Scripts') )
+			$wp_scripts = new WP_Scripts();
+
+		$wp_scripts->do_items(array('jquery', 'tools-tabs'));
+
 ?>
 <script type="text/javascript">
 jQuery(document).ready(function($) {
@@ -140,6 +150,9 @@ jQuery(document).ready(function($) {
 
 	static function load($args = '') {
 		$args = self::validate_args($args);
+
+		if ( 'fancy' == $args['format'] )
+			self::$fancy = true;
 
 		$file = self::get_cache_path(md5(join('', $args)));
 
