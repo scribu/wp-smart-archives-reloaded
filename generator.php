@@ -59,13 +59,13 @@ class SAR_Generator {
 		$columns = self::get_columns();
 
 		// Get months with posts
-		foreach ( self::$yearsWithPosts as $current ) {
+		foreach ( self::$yearsWithPosts as $year ) {
 			for ( $i = 1; $i <= 12; $i++ ) {
 				$query = $wpdb->prepare("
 					SELECT {$columns}
 					FROM {$wpdb->posts}
 					{$where}
-					AND year(post_date) = {$current}
+					AND year(post_date) = {$year}
 					AND month(post_date) = {$i}
 					ORDER BY post_date DESC
 				");
@@ -73,10 +73,10 @@ class SAR_Generator {
 				if ( $posts = $wpdb->get_results($query) ) {
 					$month = array(
 						'posts' => $posts,
-						'link' => get_month_link($current, $i)
+						'link' => get_month_link($year, $i)
 					);
 
-					self::$monthsWithPosts[$current][$i] = $month;
+					self::$monthsWithPosts[$year][$i] = $month;
 				}
 			}
 		}
@@ -94,9 +94,9 @@ class SAR_Generator {
 		$months_long = self::get_months();
 
 		$years = '';
-		foreach ( self::$yearsWithPosts as $current )
-			$years .= "\n\t" . html("li class='list-$current'", 
-				html_link(get_year_link($current), $current)
+		foreach ( self::$yearsWithPosts as $year )
+			$years .= "\n\t" . html("li class='list-$year'", 
+				html_link(get_year_link($year), $year)
 			);
 		$years = html("ul class='tabs years-list'", $years, "\n");
 
@@ -168,7 +168,7 @@ class SAR_Generator {
 					continue;
 
 				// Get post links for current month
-				$post_list = self::generate_post_list($current['posts'], "\n\t");
+				$post_list = self::generate_post_list($current['posts'], "\n\t\t");
 
 				// Set title format
 				if ( SAR_Core::$options->anchors )
@@ -177,18 +177,16 @@ class SAR_Generator {
 					$titlef = "h2";
 
 				// Append to list
-				$list .= "\n" . html($titlef, 
-					html_link($current['link'], $months_long[$i] . ' ' . $current)
+				$list .= "\n\t" . html($titlef,
+					html_link($current['link'], $months_long[$i] . ' ' . $year)
 				);
 
-				$list .= html('ul', $post_list, "\n");
+				$list .= html('ul', $post_list, "\n\t");
 			} // end month block
 		} // end year block
 
 		// Wrap it up
-		$list = "\n<div id='smart-archives-list'>\n{$list}</div>\n";
-
-		return $list;
+		return html("div id='smart-archives-list'", $list, "\n");
 	}
 
 	private static function generate_post_list($posts, $indent) {
@@ -211,34 +209,39 @@ class SAR_Generator {
 	private static function generate_block() {
 		$months_short = self::get_months(true);
 
-		foreach ( self::$yearsWithPosts as $current ) {
-			$block .= sprintf("\t<li><strong><a href='%s'>%s</a>:</strong> ", get_year_link($current), $current);
-
+		$block = '';
+		foreach ( self::$yearsWithPosts as $year ) {
+			$year_link = html('strong', html_link(get_year_link($year), $year)  . ':');
+			
+			$list = '';
 			for ( $i = 1; $i <= 12; $i++ ) {
 				if ( SAR_Core::$options->block_numeric )
-					$month = sprintf('%02d', $i);
+					$month = zeroise($i, 2);
 				else
 					$month = $months_short[$i];
 
-				if ( self::$monthsWithPosts[$current][$i]['posts'] ) {
-					if ( SAR_Core::$options->anchors )
-						$url = "#{$current}{$i}";
-					else
-					 	$url = self::$monthsWithPosts[$current][$i]['link'];
+				$current = self::$monthsWithPosts[$year][$i];
 
-					$block .= sprintf("\n\t\t<a href='%s'>%s</a>", $url, $month);
+				if ( $current['posts'] ) {
+					if ( SAR_Core::$options->anchors )
+						$url = "#{$year}{$i}";
+					else
+					 	$url = $current['link'];
+
+					$list .= "\n\t\t" . html_link($url, $month);
+				} else {
+					$list .= "\n\t\t" . html("span class='emptymonth'", $month);
 				}
-				else
-					$block .= sprintf("\n\t\t<span class='emptymonth'>%s</span>", $month);
 			}
 
-			$block .= "\n</li>\n";
+			$block .= "\n\t" . html('li', 
+				$year_link
+				.$list
+			);
 		}
 
 		// Wrap it up
-		$block = "<ul id='smart-archives-block'>\n{$block}</ul>\n";
-
-		return $block;
+		return html("ul id='smart-archives-block'", $block, "\n");
 	}
 
 	private static function get_months($abrev = false) {
