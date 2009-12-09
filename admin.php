@@ -1,6 +1,6 @@
 <?php
 
-class SAR_settings extends scbAdminPage {
+class SAR_Settings extends scbAdminPage {
 	private $override_cron = false;
 
 	function __construct($file, $options) {
@@ -16,7 +16,7 @@ class SAR_settings extends scbAdminPage {
 		add_action('transition_post_status', array($this, 'update_cache'), 10, 2);
 		add_action('deleted_post', array($this, 'update_cache'), 10, 0);
 		
-//		if ( in_array('%comment_count%', SAR_display::get_active_tags()) )
+//		if ( in_array('%comment_count%', SAR_Core::get_active_tags()) )
 			add_action('wp_update_comment_count', array($this, 'update_cache'), 10, 0);
 
 		parent::__construct($file, $options);
@@ -31,10 +31,10 @@ class SAR_settings extends scbAdminPage {
 			return;
 
 		if ( $this->options->cron && ! $this->override_cron ) {
-			wp_clear_scheduled_hook(SAR_display::hook);
-			wp_schedule_single_event(time(), SAR_display::hook);
+			wp_clear_scheduled_hook(SAR_Core::hook);
+			wp_schedule_single_event(time(), SAR_Core::hook);
 		} else {
-			do_action(SAR_display::hook);
+			do_action(SAR_Core::hook);
 		}
 	}
 
@@ -85,7 +85,7 @@ class SAR_settings extends scbAdminPage {
 	}
 
 	function page_content() {
-		foreach ( SAR_display::get_available_tags() as $tag )
+		foreach ( SAR_Core::get_available_tags() as $tag )
 			$tags .= "<li><em>$tag</em></li>\n";
 
 		$default_date = __('Default', $this->textdomain) . ': F j, Y (' . date_i18n("F j, Y") . ')';
