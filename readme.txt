@@ -55,6 +55,11 @@ Go to your wp-content/uploads directory, create an empty file called "sar_cache.
 
 == Changelog ==
 
+= 1.8.1 =
+* added Clear cache button
+* load js only when needed
+* compatibility with the MailPress plugin
+
 = 1.8 =
 * override arguments with smart_archives() or [smart_archives]
 * added include_cat arg
