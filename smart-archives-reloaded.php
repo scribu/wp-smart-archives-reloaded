@@ -76,6 +76,11 @@ abstract class SAR_Core {
 
 	static $options;
 
+	// Substitution tags
+	static function get_available_tags() {
+		return array('%post_link%', '%author_link%', '%author%', '%comment_count%', '%category_link%', '%category%', '%date%');
+	}
+
 	private static $fancy = false;
 
 	static function init($options) {

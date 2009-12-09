@@ -259,19 +259,14 @@ class SAR_Generator {
 		return $months;
 	}
 
-	// Substitution tags
-	function get_available_tags() {
-		return array('%post_link%', '%author_link%', '%author%', '%comment_count%', '%category_link%', '%category%', '%date%');
-	}
-
 	private static $active_tags;
 
 	static function get_active_tags() {
-		if ( is_array(self::$active_tags) )
+		if ( self::$active_tags )
 			return self::$active_tags;
 
 		self::$active_tags = array();
-		foreach ( self::get_available_tags() as $tag )
+		foreach ( SAR_Core::get_available_tags() as $tag )
 			if ( FALSE !== strpos(SAR_Core::$options->list_format, $tag) )
 				self::$active_tags[] = $tag;
 
