@@ -44,10 +44,6 @@ In footer.php in your theme directory, make sure you have this code somewhere:
 
 `<?php wp_footer(); ?>`.
 
-= "Can't open cache file!" =
-
-Go to your wp-content/uploads directory, create an empty file called "sar_cache.txt" and set it's permissions (chmod) to 757.
-
 == Screenshots ==
 
 1. A fancy archive
@@ -112,7 +108,7 @@ Go to your wp-content/uploads directory, create an empty file called "sar_cache.
 * optimization & bugfixes
 * [more info](http://scribu.net/wordpress/smart-archives-reloaded/sar-1-3.html)
 
-= 1.2 =[block & list](http://scribu.net/arhiva)
+= 1.2 =
 * better HTML output
 * [more info](http://scribu.net/wordpress/smart-archives-reloaded/sar-1-2.html)
 
