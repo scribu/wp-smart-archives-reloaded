@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.8.1a
+Version: 1.8.1
 Description: An elegant and easy way to present your archives. (With help from <a href="http://www.conceptfusion.co.nz/">Simon Pritchard</a>)
 Author: scribu
 Author URI: http://scribu.net
@@ -102,9 +102,7 @@ abstract class SAR_Core {
 		// Cache invalidation
 		add_action('transition_post_status', array(__CLASS__, 'update_cache'), 10, 2);
 		add_action('deleted_post', array(__CLASS__, 'update_cache'), 10, 0);
-		
-//		if ( in_array('%comment_count%', SAR_Core::get_active_tags()) )
-			add_action('wp_update_comment_count', array(__CLASS__, 'update_cache'), 10, 0);
+		add_action('wp_update_comment_count', array(__CLASS__, 'update_cache'), 10, 0);
 
 		// Install / uninstall
 		register_activation_hook(__FILE__, array(__CLASS__, 'upgrade'));

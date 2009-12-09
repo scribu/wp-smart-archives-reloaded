@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Smart Archives Reloaded\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/smart-archives-reloaded\n"
-"POT-Creation-Date: 2009-11-10 21:45+0200\n"
+"POT-Creation-Date: 2009-12-10 00:14+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: scribu <scribu@gmail.com>\n"
 "Language-Team: \n"
@@ -10,111 +10,123 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: admin.php:10
+#: admin.php:8
 msgid "Smart Archives Settings"
 msgstr "Setări Smart Archives"
 
-#: admin.php:11
+#: admin.php:9
 msgid "Smart Archives"
 msgstr "Smart Archives"
 
-#: admin.php:84
+#: admin.php:49
+#: admin.php:133
+msgid "Clear"
+msgstr "Golește"
+
+#: admin.php:52
+msgid "Cache <strong>cleared</strong>."
+msgstr "Cache-ul a fost <strong>golit</strong>."
+
+#: admin.php:62
 msgid "Default"
 msgstr "Implicit"
 
-#: admin.php:86
+#: admin.php:64
 msgid "General settings"
 msgstr "Setări generale"
 
-#: admin.php:88
+#: admin.php:66
 msgid "Exclude Categories by ID"
 msgstr "Exclude categorii prin ID"
 
-#: admin.php:89
+#: admin.php:67
 msgid "(comma separated)"
 msgstr "(separate prin virgulă)"
 
-#: admin.php:96
-msgid "Use wp-cron"
-msgstr "Folosește wp-cron"
-
-#: admin.php:102
+#: admin.php:74
 msgid "Format"
 msgstr "Format"
 
-#: admin.php:107
-msgid "list"
-msgstr "listă"
-
-#: admin.php:108
+#: admin.php:79
 msgid "block"
 msgstr "bloc"
 
-#: admin.php:109
+#: admin.php:80
+msgid "list"
+msgstr "listă"
+
+#: admin.php:81
 msgid "both"
 msgstr "ambele"
 
-#: admin.php:110
+#: admin.php:82
 msgid "fancy"
 msgstr "extravagant"
 
-#: admin.php:115
+#: admin.php:87
 msgid "Specific settings"
 msgstr "Setări specifice"
 
-#: admin.php:117
+#: admin.php:89
 msgid "List format"
 msgstr "Format listă"
 
-#: admin.php:118
+#: admin.php:90
 msgid "Available substitution tags"
 msgstr "Tag-uri de substituție valabile"
 
-#: admin.php:127
+#: admin.php:97
 #, php-format
 msgid "%s format"
 msgstr "Format %s"
 
-#: admin.php:128
+#: admin.php:100
 msgid "See available date formatting characters <a href=\"http://php.net/date\" target=\"_blank\">here</a>."
 msgstr "Vezi caracterele valabile pentru formatarea date <a href=\"http://php.net/date\" target=\"_blank\">aici</a>."
 
-#: admin.php:134
+#: admin.php:108
 msgid "Numeric months in block"
 msgstr "Luni sub formă numerică în bloc"
 
-#: admin.php:135
+#: admin.php:109
 msgid "The month links in the block will be shown as numbers"
 msgstr "Lunile din bloc vor fi afișate numeric"
 
-#: admin.php:141
+#: admin.php:115
 msgid "Use anchor links in block"
 msgstr "Folosește ancore în bloc"
 
-#: admin.php:142
+#: admin.php:116
 msgid "The month links in the block will point to the month links in the list"
 msgstr "Lunile din bloc vor trimite la lunile din listă"
 
-#: scb/AdminPage.php:105
+#: admin.php:122
+msgid "Cache control"
+msgstr "Control cache"
+
+#: admin.php:124
+msgid "Use wp-cron"
+msgstr "Folosește wp-cron"
+
+#: admin.php:130
+msgid "Clear cache"
+msgstr "Golește cache-ul"
+
+#: generator.php:119
+msgid "View complete archive page"
+msgstr "Vezi arhiva completă"
+
+#: scb/AdminPage.php:101
 msgid "Settings <strong>saved</strong>."
 msgstr "Setările au fost <strong>salvate</strong>."
 
-#: scb/AdminPage.php:163
+#: scb/AdminPage.php:111
 msgid "Save Changes"
 msgstr "Salvează schimbările"
 
-#: scb/AdminPage.php:338
+#: scb/AdminPage.php:314
 msgid "Settings"
 msgstr "Setări"
-
-#: scb/Dependency.php:46
-msgid "Install now"
-msgstr "Instalează acum"
-
-#: smart-archives-reloaded.php:361
-#, php-format
-msgid "View complete archive page for %s"
-msgstr "Vezi arhiva completă pentru %s"
 
 #. Plugin Name of an extension
 msgid "Smart Archives Reloaded"
@@ -136,6 +148,10 @@ msgstr ""
 msgid "http://scribu.net"
 msgstr ""
 
+#~ msgid "Cache cleared."
+#~ msgstr "Cache-ul a fost golit"
+#~ msgid "Install now"
+#~ msgstr "Instalează acum"
 #~ msgid "Updates the archives in the background"
 #~ msgstr "Actualizează arhivele în fundal"
 #~ msgid "%date% format"

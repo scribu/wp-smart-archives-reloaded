@@ -3,8 +3,8 @@ Contributors: scribu
 Donate link: http://scribu.net/wordpress
 Tags: archive, post list
 Requires at least: 2.8
-Tested up to: 2.9-rare
-Stable tag: 1.8
+Tested up to: 2.9
+Stable tag: trunk
 
 An elegant and easy way to present your archives.
 

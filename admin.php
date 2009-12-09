@@ -49,7 +49,7 @@ class SAR_Settings extends scbAdminPage {
 		if ( isset($_POST['action']) && $_POST['action'] == __('Clear', $this->textdomain) ) {
 			SAR_Core::$override_cron = true;
 			SAR_Core::update_cache();
-			$this->admin_msg(__('Cache cleared.', $this->textdomain));
+			$this->admin_msg(__('Cache <strong>cleared</strong>.', $this->textdomain));
 		} else {
 			parent::form_handler();
 		}

@@ -257,20 +257,6 @@ class SAR_Generator {
 		return $months;
 	}
 
-	private static $active_tags;
-
-	static function get_active_tags() {
-		if ( self::$active_tags )
-			return self::$active_tags;
-
-		self::$active_tags = array();
-		foreach ( SAR_Core::get_available_tags() as $tag )
-			if ( FALSE !== strpos(SAR_Core::$options->list_format, $tag) )
-				self::$active_tags[] = $tag;
-
-		return self::$active_tags;
-	}
-
 	private static function get_columns() {
 		$columns = array('ID', 'post_title');
 
@@ -287,6 +273,21 @@ class SAR_Generator {
 			$columns[] = 'post_date';
 
 		return implode(',', $columns);
+	}
+
+
+	private static $active_tags;
+
+	static function get_active_tags() {
+		if ( self::$active_tags )
+			return self::$active_tags;
+
+		self::$active_tags = array();
+		foreach ( SAR_Core::get_available_tags() as $tag )
+			if ( FALSE !== strpos(SAR_Core::$options->list_format, $tag) )
+				self::$active_tags[] = $tag;
+
+		return self::$active_tags;
 	}
 
 	private static function substitute_post_link($post) {
