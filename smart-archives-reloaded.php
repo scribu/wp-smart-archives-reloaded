@@ -318,11 +318,9 @@ jQuery(document).ready(function($) {
 		$block = '';
 		foreach ( self::$yearsWithPosts as $year ) {
 			// Generate top panes
-			$months = html("div class='pane'",
-				html("ul id='month-list-$year' class='tabs month-list'", 
-					self::generate_month_list($year)
-				, "\n\t")
-			, "\n");
+			$months = html("ul id='month-list-$year' class='tabs month-list'", 
+				self::generate_month_list($year)
+			, "\n\t");
 
 			// Generate post lists
 			$list = '';
@@ -344,13 +342,13 @@ jQuery(document).ready(function($) {
 				, "\n\t");
 			} // end month block
 
-			$block .= $months . $list;
+			$block .= html("div class='pane'", 
+				$months . $list
+			, "\n");
 		} // end year block
 
 		// Wrap it up
-		$block = html('div id="smart-archives-fancy"', $years . $block);
-
-		return $block;
+		return html('div id="smart-archives-fancy"', $years . $block);
 	}
 
 	private static function generate_month_list($year) {
