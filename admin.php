@@ -1,8 +1,6 @@
 <?php
 
 class SAR_Settings extends scbAdminPage {
-	private $override_cron = false;
-
 	function __construct($file, $options) {
 		$this->textdomain = 'smart-archives-reloaded';
 
@@ -12,30 +10,7 @@ class SAR_Settings extends scbAdminPage {
 			'page_slug' => 'smart-archives'
 		);
 
-		// Cache invalidation
-		add_action('transition_post_status', array($this, 'update_cache'), 10, 2);
-		add_action('deleted_post', array($this, 'update_cache'), 10, 0);
-		
-//		if ( in_array('%comment_count%', SAR_Core::get_active_tags()) )
-			add_action('wp_update_comment_count', array($this, 'update_cache'), 10, 0);
-
 		parent::__construct($file, $options);
-	}
-
-	function update_cache($new_status = '', $old_status = '') {
-		$cond =
-			( 'publish' == $new_status || 'publish' == $old_status ) ||		// publish or unpublish
-			( func_num_args() == 0 );
-
-		if ( !$cond )
-			return;
-
-		if ( $this->options->cron && ! $this->override_cron ) {
-			wp_clear_scheduled_hook(SAR_Core::hook);
-			wp_schedule_single_event(time(), SAR_Core::hook);
-		} else {
-			do_action(SAR_Core::hook);
-		}
 	}
 
 	// Page methods
@@ -72,21 +47,17 @@ class SAR_Settings extends scbAdminPage {
 
 	function form_handler() {
 		if ( isset($_POST['action']) && $_POST['action'] == __('Clear', $this->textdomain) ) {
-			$this->override_cron = true;
-			$this->update_cache();
+			SAR_Core::$override_cron = true;
+			SAR_Core::update_cache();
 			$this->admin_msg(__('Cache cleared.', $this->textdomain));
 		} else {
 			parent::form_handler();
 		}
 	}
 
-	function _subsection($title, $id, $rows) {
-		return "<div id='$id'>\n" . "<h3>$title</h3>\n" . $this->table($rows) . "</div>\n";
-	}
-
 	function page_content() {
 		foreach ( SAR_Core::get_available_tags() as $tag )
-			$tags .= "<li><em>$tag</em></li>\n";
+			$tags .= "\n\t" . html('li', html('em', $tag));
 
 		$default_date = __('Default', $this->textdomain) . ': F j, Y (' . date_i18n("F j, Y") . ')';
 
@@ -113,20 +84,22 @@ class SAR_Settings extends scbAdminPage {
 			),
 		))
 
-		. $this->_subsection(__('Specific settings', $this->textdomain), 'specific', array(
+		.$this->_subsection(__('Specific settings', $this->textdomain), 'specific', array(
 			array(
 				'title' => __('List format', $this->textdomain),
-				'desc' => '<p>' . __('Available substitution tags', $this->textdomain) . ':</p>
-					<ul>
-						' . $tags . '
-					</ul>',
+				'desc' => html('p', __('Available substitution tags', $this->textdomain))
+					.html('ul', $tags),
 				'type' => 'text',
 				'name' => 'list_format',
 			),
 
 			array(
 				'title' => sprintf(__('%s format', $this->textdomain), '%date%'),
-				'desc' => '<p>' . $default_date . '</p><p><em>' . __('See available date formatting characters <a href="http://php.net/date" target="_blank">here</a>.', $this->textdomain) . '</em></p>',
+				'desc' => html('p', $default_date)
+					.html('p', 
+						html('em', __('See available date formatting characters <a href="http://php.net/date" target="_blank">here</a>.'
+						, $this->textdomain))
+					),
 				'type' => 'text',
 				'name' => 'date_format',
 			),
@@ -146,7 +119,7 @@ class SAR_Settings extends scbAdminPage {
 			),
 		))
 
-		. $this->_subsection(__('Cache control', $this->textdomain), 'cache', array(
+		.$this->_subsection(__('Cache control', $this->textdomain), 'cache', array(
 			array(
 				'title' => __('Use wp-cron', $this->textdomain),
 				'type' => 'checkbox',
@@ -163,6 +136,13 @@ class SAR_Settings extends scbAdminPage {
 		));
 
 		echo $this->form_wrap($output);
+	}
+
+	function _subsection($title, $id, $rows) {
+		return html("div id='$id'", 
+			"\n" . html('h3', $title)
+			."\n" . $this->table($rows)
+		, "\n");
 	}
 }
 

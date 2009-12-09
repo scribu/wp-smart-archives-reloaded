@@ -5,8 +5,6 @@ class SAR_Generator {
 	private static $monthsWithPosts;
 
 	public static function generate($args) {
-		require dirname(__FILE__) . '/inc/html.php';
-
 		global $wpdb;
 
 		extract($args, EXTR_SKIP);

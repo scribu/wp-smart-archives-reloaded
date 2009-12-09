@@ -48,6 +48,8 @@ function _sar_init() {
 	// Load scbFramework
 	require_once dirname(__FILE__) . '/scb/load.php';
 
+	require dirname(__FILE__) . '/inc/html.php';
+
 	// Create an instance of each class
 	$options = new scbOptions('smart-archives', __FILE__, array(
 		'format' => 'both',
@@ -73,15 +75,16 @@ function _sar_init() {
 
 abstract class SAR_Core {
 	const hook = 'smart_archives_update';
+	static $override_cron = false;
 
 	static $options;
+
+	private static $fancy = false;
 
 	// Substitution tags
 	static function get_available_tags() {
 		return array('%post_link%', '%author_link%', '%author%', '%comment_count%', '%category_link%', '%category%', '%date%');
 	}
-
-	private static $fancy = false;
 
 	static function init($options) {
 		self::$options = $options;
@@ -95,10 +98,33 @@ abstract class SAR_Core {
 		// Set fancy archive
 		if ( self::$options->format == 'fancy' )
 			add_action('template_redirect', array(__CLASS__, 'register_scripts'));
-			
+
+		// Cache invalidation
+		add_action('transition_post_status', array(__CLASS__, 'update_cache'), 10, 2);
+		add_action('deleted_post', array(__CLASS__, 'update_cache'), 10, 0);
+		
+//		if ( in_array('%comment_count%', SAR_Core::get_active_tags()) )
+			add_action('wp_update_comment_count', array(__CLASS__, 'update_cache'), 10, 0);
+
 		// Install / uninstall
 		register_activation_hook(__FILE__, array(__CLASS__, 'upgrade'));
 		register_uninstall_hook(__FILE__, array(__CLASS__, 'clear_cache'));
+	}
+
+	static function update_cache($new_status = '', $old_status = '') {
+		$cond =
+			( 'publish' == $new_status || 'publish' == $old_status ) ||		// publish or unpublish
+			( func_num_args() == 0 );
+
+		if ( !$cond )
+			return;
+
+		if ( self::$options->cron && ! self::$override_cron ) {
+			wp_clear_scheduled_hook(self::hook);
+			wp_schedule_single_event(time(), self::hook);
+		} else {
+			do_action(self::hook);
+		}
 	}
 
 	static function upgrade() {
@@ -156,7 +182,7 @@ jQuery(document).ready(function($) {
 		$file = self::get_cache_path(md5(join('', $args)));
 
 #DEBUG
-#		$cache = @file_get_contents($file);
+		$cache = @file_get_contents($file);
 #DEBUG
 
 		if ( empty($cache) ) {
