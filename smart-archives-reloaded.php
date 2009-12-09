@@ -134,7 +134,7 @@ abstract class SAR_display {
 <script type="text/javascript">
 jQuery(document).ready(function($) {
 	$('.tabs').tabs('> .pane');
-	$('#smart-archives')
+	$('#smart-archives-fancy .years-list')
 		.find('a').click(function(ev) {
 			$('.pane .tabs:visible a:last').click();
 		}).end()
@@ -152,7 +152,9 @@ jQuery(document).ready(function($) {
 
 		$file = self::get_cache_path(md5(join('', $args)));
 
-		$cache = @file_get_contents($file);
+#DEBUG
+#		$cache = @file_get_contents($file);
+#DEBUG
 
 		return $cache ? $cache : self::generate($args, $file);
 	}
@@ -213,6 +215,8 @@ jQuery(document).ready(function($) {
 	}
 
 	private static function generate($args, $file) {
+		require dirname(__FILE__) . '/inc/html.php';
+
 		global $wpdb;
 
 		extract($args, EXTR_SKIP);
@@ -302,119 +306,99 @@ jQuery(document).ready(function($) {
 
 	// The "fancy" archive
 	private static function generate_fancy() {
-		$available_tags = self::get_available_tags();
-
-		foreach ( $available_tags as $i => $tag )
-			if ( FALSE === strpos(self::$options->list_format, $tag) )
-				unset($available_tags[$i]);
-		
 		$months_long = self::get_months();
-		$months_short = self::get_months(true);
 
+		$years = '';
 		foreach ( self::$yearsWithPosts as $current )
-			$years .= sprintf("\t<li class='list-%s'><a href='%s'>%s</a></li>", $current, get_year_link($current), $current);
+			$years .= "\n\t" . html("li class='list-$current'", 
+				html_link(get_year_link($current), $current)
+			);
+		$years = html("ul class='tabs years-list'", $years, "\n");
 
-		$years = "<ul class='tabs years-list'>\n" . $years . "</ul>\n";
-
-		$months = '';
-		foreach ( self::$yearsWithPosts as $current ) {
+		$block = '';
+		foreach ( self::$yearsWithPosts as $year ) {
 			// Generate top panes
-			$months .= sprintf("\n\t\t<div class='pane'>\n\t\t\t<ul id='month-list-%s' class='tabs month-list'>", $current);
-			for ( $i = 1; $i <= 12; $i++ ) {
-				if ( self::$options->block_numeric )
-					$month = sprintf('%02d', $i);
-				else
-					$month = $months_short[$i];
-
-				if ( self::$monthsWithPosts[$current][$i]['posts'] ) {
-					$url = self::$monthsWithPosts[$current][$i]['link'];
-					$months .= sprintf("\n\t\t<li><a href='%s'>%s</a></li>", $url, $month);
-				} else {
-					$months .= sprintf("\n\t\t<li><span class='emptymonth'>%s</span></li>", $month);
-				}
-			}
-			$months .= "\n\t\t\t</ul>";
+			$months = html("div class='pane'",
+				html("ul id='month-list-$year' class='tabs month-list'", 
+					self::generate_month_list($year)
+				, "\n\t")
+			, "\n");
 
 			// Generate post lists
+			$list = '';
 			for ( $i = 1; $i <= 12; $i++ ) {
-				if ( ! self::$monthsWithPosts[$current][$i] )
+				if ( ! $current = self::$monthsWithPosts[$year][$i] )
 					continue;
 
-				// Get post links for current month
-				$post_list = '';
-				foreach ( self::$monthsWithPosts[$current][$i]['posts'] as $post ) {
-					// $post = self::$monthsWithPosts[$current][$i]['posts'];
-					
-					$list_item = self::$options->list_format;
-							
-					foreach ( $available_tags as $tag )
-						$list_item = str_replace($tag, call_user_func(array(__CLASS__, 'substitute_' . substr($tag, 1, -1)), $post), $list_item);
-
-					$post_list .= "\t<li>" . $list_item . "</li>\n";
-				} // end post block
-
-				$titlef = "\n<h2 class='month-heading'>%s <span class='month-archive-link'>(<a href='%s'>" .
-					__('View complete archive page for %s', 'smart-archives-reloaded') .
-					"</a>)</span></h2>\n";
-
 				// Append to list
-				$list .= "<div class='pane'>";
-				$list .= sprintf($titlef, $months_long[$i] . ' ' . $current, self::$monthsWithPosts[$current][$i]['link'], $months_long[$i] . ' ' . $current);
-				$list .= sprintf("<ul class='archive-list'>\n%s</ul>\n", $post_list);
-				$list .= "</div>";
+				$list .= html('did class="pane"',
+					"\n\t\t" . html('h2 class="month-heading"',
+						$months_long[$i] . ' ' . $year . ' '
+						.html('span class="month-archive-link"',
+							'('. html_link($current['link'], __('View complete archive page', 'smart-archives-reloaded')) .')'
+						)
+					)
+					.html('ul class="archive-list"', 
+						self::generate_post_list($current['posts'], "\n\t\t\t")
+					, "\n\t\t")
+				, "\n\t");
 			} // end month block
 
 			$block .= $months . $list;
-			$block .= "\n\t\t</div>";
-			$list = "";
-			$months = "";
 		} // end year block
 
 		// Wrap it up
-		$block = "<div id='smart-archives'>\n" . $years . $block . "\n</div>";
+		$block = html('div id="smart-archives-fancy"', $years . $block);
 
 		return $block;
 	}
 
+	private static function generate_month_list($year) {
+		$months_short = self::get_months(true);
+
+		$month_list = '';
+		for ( $i = 1; $i <= 12; $i++ ) {
+			if ( self::$options->block_numeric )
+				$month = sprintf('%02d', $i);
+			else
+				$month = $months_short[$i];
+
+			$current = self::$monthsWithPosts[$year][$i];
+
+			$month_list .= "\n\t\t";
+			if ( $current['posts'] )
+				$month_list .= html('li', html_link($current['link'], $month));
+			else
+				$month_list .= html('li', html("span class='emptymonth'", $month));
+		}
+
+		return $month_list;
+	}
+
 	// The list
 	private static function generate_list() {
-		$available_tags = self::get_available_tags();
-
-		foreach ( $available_tags as $i => $tag )
-			if ( FALSE === strpos(self::$options->list_format, $tag) )
-				unset($available_tags[$i]);
-
 		$months_long = self::get_months();
 
-		foreach ( self::$yearsWithPosts as $current ) {
+		foreach ( self::$yearsWithPosts as $year ) {
 			for ( $i = 12; $i >= 1; $i-- ) {
-				if ( ! self::$monthsWithPosts[$current][$i] )
+				if ( ! $current = self::$monthsWithPosts[$year][$i] )
 					continue;
 
 				// Get post links for current month
-				$post_list = '';
-				foreach ( self::$monthsWithPosts[$current][$i]['posts'] as $post ) {
-					$list_item = self::$options->list_format;
-
-					foreach ( $available_tags as $tag ) {
-						$method = 'substitute_' . substr($tag, 1, -1);
-						$list_item = str_replace($tag, self::$method($post), $list_item);
-					}
-
-					$post_list .= "\t<li>" . $list_item . "</li>\n";
-				} // end post block
+				$post_list = self::generate_post_list($current['posts'], "\n\t");
 
 				// Set title format
-				if ( self::$options->anchors ) {
-					$anchor = "{$current}{$i}";
-					$titlef = "\n<h2 id='{$anchor}'><a href='%s'>%s</a></h2>\n";
-				} else {
-					$titlef = "\n<h2><a href='%s'>%s</a></h2>\n";
-				}
+				if ( self::$options->anchors )
+					$titlef = "h2 id='{$year}{$i}'"; 
+				else
+					$titlef = "h2";
 
 				// Append to list
-				$list .= sprintf($titlef, self::$monthsWithPosts[$current][$i]['link'], $months_long[$i] . ' ' . $current);
-				$list .= sprintf("<ul>\n%s</ul>\n", $post_list);
+				$list .= "\n" . html($titlef, 
+					html_link($current['link'], $months_long[$i] . ' ' . $current)
+				);
+
+				$list .= html('ul', $post_list, "\n");
 			} // end month block
 		} // end year block
 
@@ -424,6 +408,22 @@ jQuery(document).ready(function($) {
 		return $list;
 	}
 
+	private static function generate_post_list($posts, $indent) {
+		$active_tags = self::get_active_tags();
+
+		$post_list = '';
+		foreach ( $posts as $post ) {
+			$list_item = self::$options->list_format;
+
+			foreach ( $active_tags as $tag )
+				$list_item = str_replace($tag, call_user_func(array(__CLASS__, 'substitute_' . substr($tag, 1, -1)), $post), $list_item);
+
+			$post_list .= $indent . html('li', $list_item);
+		}
+
+		return $post_list;
+	}
+
 	// The block
 	private static function generate_block() {
 		$months_short = self::get_months(true);
@@ -431,15 +431,13 @@ jQuery(document).ready(function($) {
 		foreach ( self::$yearsWithPosts as $current ) {
 			$block .= sprintf("\t<li><strong><a href='%s'>%s</a>:</strong> ", get_year_link($current), $current);
 
-			for ( $i = 1; $i <= 12; $i++ )
-			{
+			for ( $i = 1; $i <= 12; $i++ ) {
 				if ( self::$options->block_numeric )
 					$month = sprintf('%02d', $i);
 				else
 					$month = $months_short[$i];
 
-				if ( self::$monthsWithPosts[$current][$i]['posts'] )
-				{
+				if ( self::$monthsWithPosts[$current][$i]['posts'] ) {
 					if ( self::$options->anchors )
 						$url = "#{$current}{$i}";
 					else
