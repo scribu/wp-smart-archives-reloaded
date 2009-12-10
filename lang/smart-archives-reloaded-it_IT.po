@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Smart Archives Reloaded in italiano\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/smart-archives-reloaded\n"
-"POT-Creation-Date: 2009-11-10 21:45+0200\n"
+"POT-Creation-Date: 2009-12-10 00:14+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Gianni Diurno (aka gidibao) <gidibao@gmail.com>\n"
 "Language-Team: Gianni Diurno | http://gidibao.net/ <gidibao@gmail.com>\n"
@@ -17,111 +17,123 @@ msgstr ""
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: admin.php:10
+#: admin.php:8
 msgid "Smart Archives Settings"
 msgstr "Impostazioni Smart Archives"
 
-#: admin.php:11
+#: admin.php:9
 msgid "Smart Archives"
 msgstr "Smart Archives"
 
-#: admin.php:84
+#: admin.php:49
+#: admin.php:133
+msgid "Clear"
+msgstr "Svuota"
+
+#: admin.php:52
+msgid "Cache <strong>cleared</strong>."
+msgstr "La cache é stata <strong>svuotata</strong>."
+
+#: admin.php:62
 msgid "Default"
 msgstr "predefinito"
 
-#: admin.php:86
+#: admin.php:64
 msgid "General settings"
 msgstr "Impostazioni generali"
 
-#: admin.php:88
+#: admin.php:66
 msgid "Exclude Categories by ID"
 msgstr "Escludi le categorie via ID"
 
-#: admin.php:89
+#: admin.php:67
 msgid "(comma separated)"
 msgstr "(separate da una virgola)"
 
-#: admin.php:96
-msgid "Use wp-cron"
-msgstr "Utilizza wp-cron"
-
-#: admin.php:102
+#: admin.php:74
 msgid "Format"
 msgstr "Formato"
 
-#: admin.php:107
-msgid "list"
-msgstr "lista"
-
-#: admin.php:108
+#: admin.php:79
 msgid "block"
 msgstr "blocco"
 
-#: admin.php:109
+#: admin.php:80
+msgid "list"
+msgstr "lista"
+
+#: admin.php:81
 msgid "both"
 msgstr "entrambi"
 
-#: admin.php:110
+#: admin.php:82
 msgid "fancy"
 msgstr "personalizzato"
 
-#: admin.php:115
+#: admin.php:87
 msgid "Specific settings"
 msgstr "Impostazioni specifiche"
 
-#: admin.php:117
+#: admin.php:89
 msgid "List format"
 msgstr "Formato elenco"
 
-#: admin.php:118
+#: admin.php:90
 msgid "Available substitution tags"
 msgstr "Tag disponibili"
 
-#: admin.php:127
+#: admin.php:97
 #, php-format
 msgid "%s format"
 msgstr "%s formato"
 
-#: admin.php:128
+#: admin.php:100
 msgid "See available date formatting characters <a href=\"http://php.net/date\" target=\"_blank\">here</a>."
 msgstr "Vedi <a href=\"http://php.net/date\" target=\"_blank\">qui</a> i formati disponibili."
 
-#: admin.php:134
+#: admin.php:108
 msgid "Numeric months in block"
 msgstr "Visualizzazione mesi"
 
-#: admin.php:135
+#: admin.php:109
 msgid "The month links in the block will be shown as numbers"
 msgstr "i link del mese presenti nella versione compressa verranno mostrati in forma numerica"
 
-#: admin.php:141
+#: admin.php:115
 msgid "Use anchor links in block"
 msgstr "Usa i link interni"
 
-#: admin.php:142
+#: admin.php:116
 msgid "The month links in the block will point to the month links in the list"
 msgstr "nella versione compressa il collegamento ai mesi punterà ai link del mese presente nella lista"
 
-#: scb/AdminPage.php:105
+#: admin.php:122
+msgid "Cache control"
+msgstr "Controllo cache"
+
+#: admin.php:124
+msgid "Use wp-cron"
+msgstr "Utilizza wp-cron"
+
+#: admin.php:130
+msgid "Clear cache"
+msgstr "Svuota la cache"
+
+#: generator.php:119
+msgid "View complete archive page"
+msgstr "Visualizza la pagina completa dell'archivio"
+
+#: scb/AdminPage.php:101
 msgid "Settings <strong>saved</strong>."
 msgstr "Le impostazioni sono state <strong>salvate</strong>."
 
-#: scb/AdminPage.php:163
+#: scb/AdminPage.php:111
 msgid "Save Changes"
 msgstr "Salva le modifiche"
 
-#: scb/AdminPage.php:338
+#: scb/AdminPage.php:314
 msgid "Settings"
 msgstr "Impostazioni"
-
-#: scb/Dependency.php:46
-msgid "Install now"
-msgstr "Installa adesso"
-
-#: smart-archives-reloaded.php:361
-#, php-format
-msgid "View complete archive page for %s"
-msgstr "Visualizza la pagina dell'archivio completo per %s"
 
 #. Plugin Name of an extension
 msgid "Smart Archives Reloaded"
@@ -143,6 +155,8 @@ msgstr "scribu"
 msgid "http://scribu.net"
 msgstr "http://scribu.net"
 
+#~ msgid "Install now"
+#~ msgstr "Installa adesso"
 #~ msgid "Updates the archives in the background"
 #~ msgstr "aggiorna in background gli archivi"
 #~ msgid "Uncheck this if your archive isn't being updated"
