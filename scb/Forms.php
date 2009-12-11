@@ -326,9 +326,10 @@ abstract class scbForms {
 			'numeric' => false	// use numeric array instead of associative
 		)), EXTR_SKIP);
 
-		$cur_val = $selected;
 		if ( isset($formdata[$name]) )
 			$cur_val = $formdata[$name];
+		else
+			$cur_val = $selected;
 
 		if ( !is_array($value) )
 			return trigger_error("Second argument is expected to be an array", E_USER_WARNING);

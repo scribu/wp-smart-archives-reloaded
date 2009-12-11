@@ -20,6 +20,16 @@ Why is this plugin better?
 
 Examples: [block & list](http://scribu.net/arhiva) | [fancy](http://www.conceptfusion.co.nz/archive)
 
+**Translations:**
+
+* Belarusian - [ilyuha](http://antsar.info/)
+* Chinese - [Yorick Chen](http://www.pihai.net/technology/smart-archives-reloaded-chinese-translation.html)
+* Danish - jos
+* French - [Référenceur Freelance](http://www.referenceurfreelance.com)
+* Italian - [Gianni Diurno](http://gidibao.net/)
+* Russian - [Fat Cow](http://www.fatcow.com)
+* Uzbek - [Alexandra Bolshova](http://comfi.com)
+
 == Installation ==
 
 The plugin can be installed in 3 easy steps:

@@ -52,3 +52,12 @@ class scbUtil {
 	}
 }
 
+if ( ! function_exists('debug') ) :
+function debug() {
+	$args = func_get_args();
+	
+	print_r($args);
+	return call_user_func_array(array('scbUtil', 'debug'), $args);
+}
+endif;
+
