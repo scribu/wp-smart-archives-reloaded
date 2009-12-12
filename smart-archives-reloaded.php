@@ -48,8 +48,6 @@ function _sar_init() {
 	// Load scbFramework
 	require_once dirname(__FILE__) . '/scb/load.php';
 
-	require dirname(__FILE__) . '/inc/html.php';
-
 	// Create an instance of each class
 	$options = new scbOptions('smart-archives', __FILE__, array(
 		'format' => 'both',
