@@ -61,6 +61,9 @@ In footer.php in your theme directory, make sure you have this code somewhere:
 
 == Changelog ==
 
+= 1.8.2. =
+* fix broken update
+
 = 1.8.1 =
 * added Clear cache button
 * load js only when needed

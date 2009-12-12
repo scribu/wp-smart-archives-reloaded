@@ -45,6 +45,6 @@ endif;
 
 scbLoad2::init(__FILE__, array(
 	'scbOptions', 'scbForms', 'scbAdminPage', 'scbBoxesPage',
-	'scbWidget', 'scbCron', 'scbTable', 'scbUtil'
+	'scbWidget', 'scbCron', 'scbTable', 'scbUtil', 'scbRewrite',
 ));
 

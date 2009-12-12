@@ -153,8 +153,7 @@ abstract class scbForms {
 			return $data;
 
 		foreach ( $data as $key => &$value )
-			if ( is_array($value) )
-				$value = self::_validate_data($value);
+			$value = self::_validate_data($value);
 
 		return $data;
 	}
@@ -330,6 +329,9 @@ abstract class scbForms {
 			$cur_val = $formdata[$name];
 		else
 			$cur_val = $selected;
+
+		if ( empty($value) )
+			$value = array();
 
 		if ( !is_array($value) )
 			return trigger_error("Second argument is expected to be an array", E_USER_WARNING);
