@@ -1,0 +1,155 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR scribu
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Smart Archives Reloaded 1.8.1\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/smart-archives-reloaded\n"
+"POT-Creation-Date: 2009-12-10 00:14+0200\n"
+"PO-Revision-Date: 2009-12-15 19:22+0200\n"
+"Last-Translator: scribu <scribu@gmail.com>\n"
+"Language-Team: Dutch nl_NL <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: admin.php:8
+msgid "Smart Archives Settings"
+msgstr "Smart Archives Instellingen"
+
+#: admin.php:9
+msgid "Smart Archives"
+msgstr "Smart Archives"
+
+#: admin.php:49
+#: admin.php:133
+msgid "Clear"
+msgstr "Wissen"
+
+#: admin.php:52
+msgid "Cache <strong>cleared</strong>."
+msgstr "Cache <strong>gewist</strong>."
+
+#: admin.php:62
+msgid "Default"
+msgstr "Standaard"
+
+#: admin.php:64
+msgid "General settings"
+msgstr "Algemene instellingen"
+
+#: admin.php:66
+msgid "Exclude Categories by ID"
+msgstr "Uitsluiten van Categoriën door ID"
+
+#: admin.php:67
+msgid "(comma separated)"
+msgstr "(door comma's gescheiden)"
+
+#: admin.php:74
+msgid "Format"
+msgstr "Opmaak"
+
+#: admin.php:79
+msgid "block"
+msgstr "blok"
+
+#: admin.php:80
+msgid "list"
+msgstr "lijst"
+
+#: admin.php:81
+msgid "both"
+msgstr "beide"
+
+#: admin.php:82
+msgid "fancy"
+msgstr "fancy"
+
+#: admin.php:87
+msgid "Specific settings"
+msgstr "Specifieke instellingen"
+
+#: admin.php:89
+msgid "List format"
+msgstr "Lijst opmaak"
+
+#: admin.php:90
+msgid "Available substitution tags"
+msgstr "Beschikbare plaatsvervangende tags"
+
+#: admin.php:97
+#, php-format
+msgid "%s format"
+msgstr "%s opmaak"
+
+#: admin.php:100
+msgid "See available date formatting characters <a href=\"http://php.net/date\" target=\"_blank\">here</a>."
+msgstr "Klik voor alle beschikbare karakters voor de datumopmaak <a href=\"http://php.net/date\" target=\"_blank\">hier</a>."
+
+#: admin.php:108
+msgid "Numeric months in block"
+msgstr "Numerieke maanden in blok"
+
+#: admin.php:109
+msgid "The month links in the block will be shown as numbers"
+msgstr "The maandverwijzingen in het blok zullen als nummers worden weergegeven"
+
+#: admin.php:115
+msgid "Use anchor links in block"
+msgstr "Gebruik ankers in blok"
+
+#: admin.php:116
+msgid "The month links in the block will point to the month links in the list"
+msgstr "De maandverwijzingen in het blok zullen naar de maand in de lijst wijzen"
+
+#: admin.php:122
+msgid "Cache control"
+msgstr "Cache beheer"
+
+#: admin.php:124
+msgid "Use wp-cron"
+msgstr "Gebruik wp-cron"
+
+#: admin.php:130
+msgid "Clear cache"
+msgstr "Wis cache"
+
+#: generator.php:119
+msgid "View complete archive page"
+msgstr "Zie complete archief pagina"
+
+#: scb/AdminPage.php:101
+msgid "Settings <strong>saved</strong>."
+msgstr "Instellingen <strong>opgeslagen</strong>."
+
+#: scb/AdminPage.php:111
+msgid "Save Changes"
+msgstr "Sla wijzigingen op"
+
+#: scb/AdminPage.php:314
+msgid "Settings"
+msgstr "Instellingen"
+
+#. Plugin Name of an extension
+msgid "Smart Archives Reloaded"
+msgstr "Smart Archives Reloaded"
+
+#. Plugin URI of an extension
+msgid "http://scribu.net/wordpress/smart-archives-reloaded"
+msgstr "http://scribu.net/wordpress/smart-archives-reloaded"
+
+#. Description of an extension
+msgid "An elegant and easy way to present your archives. (With help from <a href=\"http://www.conceptfusion.co.nz/\">Simon Pritchard</a>)"
+msgstr "Een elegante en gemakkelijke manier om je archieven te presenteren. (Met hulp van <a href=\"http://www.conceptfusion.co.nz/\">Simon Pritchard</a>)"
+
+#. Author of an extension
+msgid "scribu"
+msgstr "scribu"
+
+#. Author URI of an extension
+msgid "http://scribu.net"
+msgstr "http://scribu.net"
+
