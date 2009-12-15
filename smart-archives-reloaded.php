@@ -48,6 +48,9 @@ function _sar_init() {
 	// Load scbFramework
 	require_once dirname(__FILE__) . '/scb/load.php';
 
+	// Load translations
+	load_plugin_textdomain('smart-archives-reloaded', '', basename(dirname(__FILE__)) . '/lang');
+
 	// Create an instance of each class
 	$options = new scbOptions('smart-archives', __FILE__, array(
 		'format' => 'both',
@@ -65,10 +68,6 @@ function _sar_init() {
 		require_once dirname(__FILE__) . '/admin.php';
 		new SAR_Settings(__FILE__, $options);
 	}
-
-	// Load translations
-	$plugin_dir = basename(dirname(__FILE__));
-	load_plugin_textdomain('smart-archives-reloaded', "wp-content/plugins/$plugin_dir/lang", "$plugin_dir/lang");
 }
 
 abstract class SAR_Core {
@@ -142,7 +141,7 @@ abstract class SAR_Core {
 
 		$plugin_url = plugin_dir_url(__FILE__) . 'inc/';
 
-		wp_enqueue_style('fancy-archives', $plugin_url . "fancy-archives$css_dev.css", array(), '0.1');
+		wp_enqueue_style('fancy-archives', $plugin_url . "fancy-archives$css_dev.css", array(), '1.8');
 
 		wp_register_script('tools-tabs', $plugin_url . 'tools.tabs.min.js', array('jquery'), '1.0.4', true);
 

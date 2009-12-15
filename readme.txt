@@ -25,6 +25,7 @@ Examples: [block & list](http://scribu.net/arhiva) | [fancy](http://www.conceptf
 * Belarusian - [ilyuha](http://antsar.info/)
 * Chinese - [Yorick Chen](http://www.pihai.net/technology/smart-archives-reloaded-chinese-translation.html)
 * Danish - jos
+* Dutch - [Lourens Rolograaf](http://rolograaf.nl)
 * French - [Référenceur Freelance](http://www.referenceurfreelance.com)
 * Italian - [Gianni Diurno](http://gidibao.net/)
 * Russian - [Fat Cow](http://www.fatcow.com)
