@@ -9,146 +9,164 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Poedit-Language: Italian\n"
 "X-Poedit-Country: ITALY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: \n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
 
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR scribu
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#: admin.php:14
+#  SOME DESCRIPTIVE TITLE.
+#  Copyright (C) YEAR scribu
+#  This file is distributed under the same license as the PACKAGE package.
+#  FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#: admin.php:8
+#@ smart-archives-reloaded
 msgid "Smart Archives Settings"
 msgstr "Paramètres Smart Archives"
 
-#: admin.php:15
+#: admin.php:9
+#@ smart-archives-reloaded
 msgid "Smart Archives"
 msgstr "Smart Archives"
 
-#: admin.php:91
+#: admin.php:62
+#@ smart-archives-reloaded
 msgid "Default"
 msgstr "Défaut"
 
-#: admin.php:93
+#: admin.php:64
+#@ smart-archives-reloaded
 msgid "General settings"
 msgstr "Paramètres généraux"
 
-#: admin.php:95
+#: admin.php:66
+#@ smart-archives-reloaded
 msgid "Exclude Categories by ID"
 msgstr "Exclure des catégories par ID"
 
-#: admin.php:96
-msgid "(space separated)"
-msgstr "(séparer par un espace)"
-
-#: admin.php:102
+#: admin.php:124
+#@ smart-archives-reloaded
 msgid "Use wp-cron"
 msgstr "Utiliser wp-cron"
 
-#: admin.php:103
-msgid "Updates the archives in the background"
-msgstr "Mettre à jour les archives en arrière-plan"
-
-#: admin.php:109
+#: admin.php:74
+#@ smart-archives-reloaded
 msgid "Format"
 msgstr "Format"
 
-#: admin.php:114
+#: admin.php:80
+#@ smart-archives-reloaded
 msgid "list"
 msgstr "liste"
 
-#: admin.php:115
+#: admin.php:79
+#@ smart-archives-reloaded
 msgid "block"
 msgstr "bloc"
 
-#: admin.php:116
+#: admin.php:81
+#@ smart-archives-reloaded
 msgid "both"
 msgstr "les deux"
 
-#: admin.php:117
+#: admin.php:82
+#@ smart-archives-reloaded
 msgid "fancy"
 msgstr "personnalisé"
 
-#: admin.php:122
+#: admin.php:87
+#@ smart-archives-reloaded
 msgid "Specific settings"
 msgstr "Paramètres spécifiques"
 
-#: admin.php:124
+#: admin.php:89
+#@ smart-archives-reloaded
 msgid "List format"
 msgstr "Format de la liste"
 
-#: admin.php:125
+#: admin.php:90
+#@ smart-archives-reloaded
 msgid "Available substitution tags"
 msgstr "Balises de substitution disponibles"
 
-#: admin.php:134
+#: admin.php:97
 #, php-format
+#@ smart-archives-reloaded
 msgid "%s format"
 msgstr "%s format"
 
-#: admin.php:135
+#: admin.php:100
+#@ smart-archives-reloaded
 msgid "See available date formatting characters <a href=\"http://php.net/date\" target=\"_blank\">here</a>."
 msgstr " <a href=\"http://php.net/date\" target=\"_blank\">Voir les caractères disponibles pour le formatage de la date</a>"
 
-#: admin.php:141
+#: admin.php:108
+#@ smart-archives-reloaded
 msgid "Numeric months in block"
 msgstr "Mois en chiffre"
 
-#: admin.php:142
+#: admin.php:109
+#@ smart-archives-reloaded
 msgid "The month links in the block will be shown as numbers"
 msgstr "Les liens des mois dans le bloc apparaîtront en chiffres"
 
-#: admin.php:148
+#: admin.php:115
+#@ smart-archives-reloaded
 msgid "Use anchor links in block"
 msgstr "Utiliser l'ancrage des liens dans le bloc"
 
-#: admin.php:149
+#: admin.php:116
+#@ smart-archives-reloaded
 msgid "The month links in the block will point to the month links in the list"
 msgstr "Les liens des mois dans le bloc pointeront vers les liens des mois dans la liste"
 
-#: scb/AdminPage.php:105
+#: scb/AdminPage.php:101
+#@ smart-archives-reloaded
 msgid "Settings <strong>saved</strong>."
 msgstr "Paramètres <strong>enregistrés</strong>."
 
-#: scb/AdminPage.php:163
+#: scb/AdminPage.php:111
+#@ smart-archives-reloaded
 msgid "Save Changes"
 msgstr "Enregistrer les changements"
 
-#: scb/AdminPage.php:338
+#: scb/AdminPage.php:314
+#@ smart-archives-reloaded
 msgid "Settings"
 msgstr "Paramètres"
 
-#: scb/Dependency.php:46
-msgid "Install now"
-msgstr "Installer maintenant"
+#: admin.php:49
+#: admin.php:133
+#@ smart-archives-reloaded
+msgid "Clear"
+msgstr "Vider"
 
-#: smart-archives-reloaded.php:262
-#, php-format
-msgid "View complete archive page for %s"
-msgstr "Voir la page d'archives pour %s"
+#: admin.php:52
+#@ smart-archives-reloaded
+msgid "Cache <strong>cleared</strong>."
+msgstr "Cache <strong>vidé</strong>."
 
-#. Plugin Name of an extension
-msgid "Smart Archives Reloaded"
-msgstr "Smart Archives Reloaded"
+#: admin.php:67
+#@ smart-archives-reloaded
+msgid "(comma separated)"
+msgstr "(séparés par une virgule)"
 
-#. Plugin URI of an extension
-msgid "http://scribu.net/wordpress/smart-archives-reloaded"
-msgstr "http://scribu.net/wordpress/smart-archives-reloaded"
+#: admin.php:122
+#@ smart-archives-reloaded
+msgid "Cache control"
+msgstr "Contrôle du cache"
 
-#. Description of an extension
-msgid "An elegant and easy way to present your archives. (With help from <a href=\"http://www.conceptfusion.co.nz/\">Simon Pritchard</a>)"
-msgstr "Une façon élégante et rapide de présenter vos archives. (Avec l'aide de <a href=\"http://www.conceptfusion.co.nz/\">Simon Pritchard</a>)"
+#: admin.php:130
+#@ smart-archives-reloaded
+msgid "Clear cache"
+msgstr "Vider le cache"
 
-#. Author of an extension
-msgid "scribu"
-msgstr "scribu"
-
-#. Author URI of an extension
-msgid "http://scribu.net"
-msgstr "http://scribu.net"
-
-#~ msgid "Uncheck this if your archive isn't being updated"
-#~ msgstr "non attivare se il tuo archivio non fosse stato aggiornato"
-#~ msgid "An elegant and easy way to present your archives."
-#~ msgstr "Un modo semplice ed elegante per mostrare i tuoi archivi."
+#: generator.php:119
+#@ smart-archives-reloaded
+msgid "View complete archive page"
+msgstr "Afficher la page d'archive détaillée"
 

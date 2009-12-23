@@ -112,7 +112,7 @@ class SAR_Generator {
 					continue;
 
 				// Append to list
-				$list .= html('did class="pane"',
+				$list .= html('div class="pane"',
 					"\n\t\t" . html('h2 class="month-heading"',
 						$months_long[$i] . ' ' . $year . ' '
 						.html('span class="month-archive-link"',

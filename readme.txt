@@ -26,7 +26,7 @@ Examples: [block & list](http://scribu.net/arhiva) | [fancy](http://www.conceptf
 * Chinese - [Yorick Chen](http://www.pihai.net/technology/smart-archives-reloaded-chinese-translation.html)
 * Danish - jos
 * Dutch - [Lourens Rolograaf](http://rolograaf.nl)
-* French - [Référenceur Freelance](http://www.referenceurfreelance.com)
+* French - [Référenceur Freelance](http://www.referenceurfreelance.com), [Li-An](http://www.li-an.fr)
 * Italian - [Gianni Diurno](http://gidibao.net/)
 * Russian - [Fat Cow](http://www.fatcow.com)
 * Uzbek - [Alexandra Bolshova](http://comfi.com)
@@ -62,7 +62,12 @@ In footer.php in your theme directory, make sure you have this code somewhere:
 
 == Changelog ==
 
-= 1.8.2. =
+= 1.8.3 =
+
+* fancy archive fix for IE
+* update French translation
+
+= 1.8.2 =
 * fix broken update
 
 = 1.8.1 =
