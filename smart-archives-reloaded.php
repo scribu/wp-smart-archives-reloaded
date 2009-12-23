@@ -93,8 +93,7 @@ abstract class SAR_Core {
 		add_shortcode('smart_archives', array(__CLASS__, 'load'));
 
 		// Set fancy archive
-		if ( self::$options->format == 'fancy' )
-			add_action('template_redirect', array(__CLASS__, 'register_scripts'));
+		add_action('wp_footer', array(__CLASS__, 'init_fancy'), 20);
 
 		// Cache invalidation
 		add_action('transition_post_status', array(__CLASS__, 'update_cache'), 10, 2);
@@ -136,21 +135,19 @@ abstract class SAR_Core {
 		self::$options->update($options);
 	}
 
-	static function register_scripts() {
+	static function init_fancy() {
+		if ( ! self::$fancy )
+			return;
+
 		$css_dev = defined('STYLE_DEBUG') && STYLE_DEBUG ? '.dev' : '';
 
 		$plugin_url = plugin_dir_url(__FILE__) . 'inc/';
 
-		wp_enqueue_style('fancy-archives', $plugin_url . "fancy-archives$css_dev.css", array(), '1.8');
+		$css_url = add_query_arg('ver', '1.8', $plugin_url . "fancy-archives$css_dev.css");
+
+		echo html('style type="text/css"', '@import url("' . $css_url . '")');
 
 		wp_register_script('tools-tabs', $plugin_url . 'tools.tabs.min.js', array('jquery'), '1.0.4', true);
-
-		add_action('wp_footer', array(__CLASS__, 'init_fancy'), 20);
-	}
-
-	static function init_fancy() {
-		if ( ! self::$fancy )
-			return;
 
 		scbUtil::do_scripts('tools-tabs');
 

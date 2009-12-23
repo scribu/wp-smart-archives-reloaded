@@ -63,8 +63,8 @@ In footer.php in your theme directory, make sure you have this code somewhere:
 == Changelog ==
 
 = 1.8.3 =
-
 * fancy archive fix for IE
+* optimized CSS loading
 * update French translation
 
 = 1.8.2 =
