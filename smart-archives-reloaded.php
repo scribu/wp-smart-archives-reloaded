@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.8.3
+Version: 1.9a
 Description: An elegant and easy way to present your archives. (With help from <a href="http://www.conceptfusion.co.nz/">Simon Pritchard</a>)
 Author: scribu
 Author URI: http://scribu.net
@@ -228,7 +228,8 @@ jQuery(document).ready(function($) {
 			'anchors',
 			'block_numeric',
 			'list_format',
-			'date_format'
+			'date_format',
+			'posts_per_month'
 		);
 
 		$final_args = array();

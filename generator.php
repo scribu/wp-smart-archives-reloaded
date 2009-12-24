@@ -39,6 +39,10 @@ class SAR_Generator {
 
 		$order = ( $format == 'fancy' ) ? 'ASC' : 'DESC';
 
+		$limit = '';
+		if ( $posts_per_month = absint($posts_per_month) )
+			$limit = 'LIMIT ' . $posts_per_month;
+
 		// Get non-empty years
 		$query = "
 			SELECT DISTINCT year(post_date) AS year
@@ -66,6 +70,7 @@ class SAR_Generator {
 					AND year(post_date) = {$year}
 					AND month(post_date) = {$i}
 					ORDER BY post_date DESC
+					{$limit}
 				");
 
 				if ( $posts = $wpdb->get_results($query) ) {

@@ -4,7 +4,7 @@ Donate link: http://scribu.net/wordpress
 Tags: archive, post list
 Requires at least: 2.8
 Tested up to: 2.9
-Stable tag: trunk
+Stable tag: 1.8.3
 
 An elegant and easy way to present your archives.
 
@@ -61,6 +61,9 @@ In footer.php in your theme directory, make sure you have this code somewhere:
 2. The Settings Page
 
 == Changelog ==
+
+= 1.9 =
+* added posts_per_month argument
 
 = 1.8.3 =
 * fancy archive fix for IE
