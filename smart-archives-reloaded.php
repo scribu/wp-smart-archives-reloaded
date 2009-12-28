@@ -145,8 +145,6 @@ abstract class SAR_Core {
 
 		$css_url = add_query_arg('ver', '1.8', $plugin_url . "fancy-archives$css_dev.css");
 
-		echo html('style type="text/css"', '@import url("' . $css_url . '")');
-
 		wp_register_script('tools-tabs', $plugin_url . 'tools.tabs.min.js', array('jquery'), '1.0.4', true);
 
 		scbUtil::do_scripts('tools-tabs');
@@ -154,6 +152,13 @@ abstract class SAR_Core {
 ?>
 <script type="text/javascript">
 jQuery(document).ready(function($) {
+	$('head').append($('<link>').attr({
+		rel: 'stylesheet',
+		type: 'text/css',
+		media: 'screen',
+		href: '<?php echo $css_url; ?>'
+	}));
+
 	$('.tabs').tabs('> .pane');
 	$('#smart-archives-fancy .years-list')
 		.find('a').click(function(ev) {
