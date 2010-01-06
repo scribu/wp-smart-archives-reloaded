@@ -112,7 +112,7 @@ class SAR_Generator {
 	
 	private static function set_current_year() {
 		if ( ! $year = get_query_var('year') )
-			$year = self::$yearsWithPosts[count(self::$yearsWithPosts)-1];
+			$year = self::get_last_item(self::$yearsWithPosts);
 
 		self::$current_year = $year;
 	}
@@ -157,11 +157,11 @@ class SAR_Generator {
 	// The "menu"
 	private static function generate_menu() {
 		$year_list = html('ul class="year-list"', 
-			self::generate_year_list()
+			self::generate_year_list(get_query_var('year'))
 		, "\n");
 
 		$month_list = html('ul class="month-list"',
-			self::generate_month_list()
+			self::generate_month_list(get_query_var('year'), get_query_var('monthnum'))
 		, "\n");
 
 		return html('div id="smart-archives-menu"', $year_list . $month_list, "\n");
@@ -286,28 +286,18 @@ class SAR_Generator {
 
 // ____ COMMON TEMPLATES ____
 
-	private static function generate_year_list() {
+	private static function generate_year_list($current_year = 0) {
 		$year_list = '';
 		foreach ( self::$yearsWithPosts as $year ) {
-			if ( $year == self::$current_year )
-				$el = 'li class="current"';
-			else
-				$el = 'li';
-
-			$year_list .= "\n\t" . html($el,
-				html_link(get_year_link($year), $year)
+			$year_list .= "\n\t" . html('li',
+				self::a_link(get_year_link($year), $year, $year == $current_year)
 			);
 		}
-		
+
 		return $year_list;
 	}
 
-	private static function generate_month_list($year = 0) {
-		if ( ! $year )
-			$year = self::$current_year;
-
-		$current_month = get_query_var('monthnum');
-
+	private static function generate_month_list($year, $current_month = 0) {
 		$months_short = self::get_months(true);
 
 		$month_list = '';
@@ -320,19 +310,25 @@ class SAR_Generator {
 			$current = @self::$monthsWithPosts[$year][$i];
 
 			if ( $current['posts'] )
-				$tmp = html_link($current['link'], $month);
+				$tmp = self::a_link($current['link'], $month, $i == $current_month);
 			else
-				$tmp = html('span class="emptymonth"', $month);
+				$tmp = html('span class="empty-month"', $month);
 
-			if ( $i == $current_month )
-				$el = 'li class="current"';
-			else
-				$el = 'li';
-
-			$month_list .= "\n\t\t" . html($el, $tmp);
+			$month_list .= "\n\t\t" . html('li', $tmp);
 		}
 
 		return $month_list;
+	}
+
+	private static function a_link($link, $title, $current) {
+		$el = $current ? 'a class="current"' : 'a';
+
+		return html($el . ' href="' . $link . '"', $title);
+	}
+
+	private static function get_last_item($array) {
+		$keys = array_keys($array);
+		return $array[$keys[count($keys)-1]];
 	}
 
 	private static function generate_post_list($posts, $indent) {

@@ -185,6 +185,11 @@ jQuery(document).ready(function($) {
 		if ( in_array($args['format'], array('menu', 'fancy')) )
 			self::$css = true;
 
+		if ( 'menu' == $args['format'] ) {
+			require dirname(__FILE__) . '/generator.php';
+			return SAR_Generator::generate($args);
+		}
+
 		$file = self::get_cache_path(md5(@implode('', $args)));
 
 #DEBUG
