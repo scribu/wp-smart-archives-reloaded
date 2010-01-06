@@ -154,6 +154,8 @@ class SAR_Generator {
 		return self::$active_tags;
 	}
 
+// ____ MAIN TEMPLATES ____
+
 	// The "menu"
 	private static function generate_menu() {
 		$year_list = html('ul class="year-list"', 
@@ -284,7 +286,7 @@ class SAR_Generator {
 		return html("ul id='smart-archives-block'", $block, "\n");
 	}
 
-// ____ COMMON TEMPLATES ____
+// ____ HELPER TEMPLATES ____
 
 	private static function generate_year_list($current_year = 0) {
 		$year_list = '';
@@ -320,17 +322,6 @@ class SAR_Generator {
 		return $month_list;
 	}
 
-	private static function a_link($link, $title, $current) {
-		$el = $current ? 'a class="current"' : 'a';
-
-		return html($el . ' href="' . $link . '"', $title);
-	}
-
-	private static function get_last_item($array) {
-		$keys = array_keys($array);
-		return $array[$keys[count($keys)-1]];
-	}
-
 	private static function generate_post_list($posts, $indent) {
 		$active_tags = self::get_active_tags();
 
@@ -347,6 +338,7 @@ class SAR_Generator {
 		return $post_list;
 	}
 
+
 	private static function get_months($abrev = false) {
 		global $wp_locale;
 	
@@ -362,15 +354,28 @@ class SAR_Generator {
 		return $months;
 	}
 
+	private static function a_link($link, $title, $current) {
+		$el = $current ? 'a class="current"' : 'a';
+
+		return html($el . ' href="' . $link . '"', $title);
+	}
+
+	private static function get_last_item($array) {
+		$keys = array_keys($array);
+		return $array[$keys[count($keys)-1]];
+	}
+
+// ____ SUBSTITUTION TAGS ____
+
 	private static function substitute_post_link($post) {
-		return sprintf("<a href='%s'>%s</a>",
+		return html_link(
 			get_permalink($post->ID),
 			apply_filters('smart_archives_title', $post->post_title, $post->ID)
 		);
 	}
 
 	private static function substitute_author_link($post) {
-		return sprintf("<a href='%s'>%s</a>",
+		return html_link(
 			get_author_posts_url($post->post_author),
 			get_user_option('display_name', $post->post_author)
 		);
@@ -385,13 +390,13 @@ class SAR_Generator {
 	}
 
 	private static function substitute_date($post) {
-		return sprintf("<span class='post_date'>%s</span>", mysql2date(self::$args->date_format, $post->post_date));
+		return html('span class="post_date"', mysql2date(self::$args->date_format, $post->post_date));
 	}
 
 	private static function substitute_category_link($post) {
 		$categorylist = array();
 		foreach ( get_the_category($post->ID) as $category )
-			$categorylist[] = sprintf("<a href='%s'>%s</a>", get_category_link($category->cat_ID), $category->cat_name);
+			$categorylist[] = html_link(get_category_link($category->cat_ID), $category->cat_name);
 
 		return implode(', ', $categorylist);
 	}

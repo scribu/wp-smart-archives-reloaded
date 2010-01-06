@@ -145,7 +145,7 @@ abstract class SAR_Core {
 
 		$plugin_url = plugin_dir_url(__FILE__) . 'inc/';
 
-		$css_url = add_query_arg('ver', '1.8', $plugin_url . "fancy-archives$css_dev.css");
+		$css_url = add_query_arg('ver', '1.8', $plugin_url . "styles$css_dev.css");
 
 		wp_register_script('tools-tabs', $plugin_url . 'tools.tabs.min.js', array('jquery'), '1.0.4', true);
 
