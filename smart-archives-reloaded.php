@@ -78,6 +78,7 @@ abstract class SAR_Core {
 	private static $options;
 
 	private static $fancy = false;
+	private static $css = false;
 
 	// Substitution tags
 	static function get_available_tags() {
@@ -137,9 +138,9 @@ abstract class SAR_Core {
 	}
 
 	static function init_fancy() {
-		if ( ! self::$fancy )
+		if ( !self::$fancy && !self::$css )
 			return;
-
+	
 		$css_dev = defined('STYLE_DEBUG') && STYLE_DEBUG ? '.dev' : '';
 
 		$plugin_url = plugin_dir_url(__FILE__) . 'inc/';
@@ -148,24 +149,28 @@ abstract class SAR_Core {
 
 		wp_register_script('tools-tabs', $plugin_url . 'tools.tabs.min.js', array('jquery'), '1.0.4', true);
 
-		scbUtil::do_scripts('tools-tabs');
-
+		scbUtil::do_scripts('jquery');
+		if ( self::$fancy )
+			scbUtil::do_scripts('tools-tabs');
 ?>
 <script type="text/javascript">
 jQuery(document).ready(function($) {
+<?php if ( self::$css ) : ?>
 	$('head').append($('<link>').attr({
 		rel: 'stylesheet',
 		type: 'text/css',
 		media: 'screen',
 		href: '<?php echo $css_url; ?>'
 	}));
-
+<?php endif; ?>
+<?php if ( self::$fancy ) : ?>
 	$('.tabs').tabs('> .pane');
-	$('#smart-archives-fancy .years-list')
+	$('#smart-archives-fancy .year-list')
 		.find('a').click(function(ev) {
 			$('.pane .tabs:visible a:last').click();
 		}).end()
 		.find('a:last').click();
+<?php endif; ?>
 });
 </script>
 <?php
@@ -176,6 +181,9 @@ jQuery(document).ready(function($) {
 
 		if ( 'fancy' == $args['format'] )
 			self::$fancy = true;
+
+		if ( in_array($args['format'], array('menu', 'fancy')) )
+			self::$css = true;
 
 		$file = self::get_cache_path(md5(@implode('', $args)));
 

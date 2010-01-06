@@ -63,6 +63,7 @@ In footer.php in your theme directory, make sure you have this code somewhere:
 == Changelog ==
 
 = 1.9 =
+* added 'menu' format
 * added posts_per_month argument
 
 = 1.8.3 =

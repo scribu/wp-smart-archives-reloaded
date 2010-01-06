@@ -6,6 +6,8 @@ class SAR_Generator {
 	private static $yearsWithPosts;
 	private static $monthsWithPosts;
 
+	private static $current_year;
+
 	public static function generate($args) {
 		global $wpdb;
 
@@ -41,7 +43,7 @@ class SAR_Generator {
 			";
 		}
 
-		$order = ( $format == 'fancy' ) ? 'ASC' : 'DESC';
+		$order = ( in_array($format, array('menu', 'fancy')) ) ? 'ASC' : 'DESC';
 
 		$limit = '';
 		if ( $posts_per_month = absint(@$posts_per_month) )
@@ -59,6 +61,8 @@ class SAR_Generator {
 
 		if ( ! self::$yearsWithPosts )
 			return false;
+
+		self::set_current_year();
 
 		if ( $columns = self::get_columns() ) {
 			// Get post list for each month
@@ -87,25 +91,30 @@ class SAR_Generator {
 		}
 		else {
 			// Get months with posts
-			foreach ( self::$yearsWithPosts as $year ) {
-				$months = $wpdb->get_col("
-					SELECT MONTH(post_date)
-					FROM {$wpdb->posts}
-					{$where}
-					AND YEAR(post_date) = {$year}
-					GROUP BY MONTH(post_date)
-					ORDER BY MONTH(post_date) ASC
-				");
-				
-				foreach ( $months as $i )
-					self::$monthsWithPosts[$year][$i] = array(
-						'posts' => true,
-						'link' => get_month_link($year, $i)
-					);
-			}
+			$months = $wpdb->get_col($wpdb->prepare("
+				SELECT MONTH(post_date)
+				FROM {$wpdb->posts}
+				{$where}
+				AND YEAR(post_date) = %d
+				GROUP BY MONTH(post_date)
+				ORDER BY MONTH(post_date) ASC
+			", self::$current_year));
+
+			foreach ( $months as $i )
+				self::$monthsWithPosts[self::$current_year][$i] = array(
+					'posts' => true,
+					'link' => get_month_link(self::$current_year, $i)
+				);
 		}
 
 		return call_user_func(array(__CLASS__, 'generate_' . $format));
+	}
+	
+	private static function set_current_year() {
+		if ( ! $year = get_query_var('year') )
+			$year = self::$yearsWithPosts[count(self::$yearsWithPosts)-1];
+
+		self::$current_year = $year;
 	}
 
 	private static function get_columns() {
@@ -278,11 +287,9 @@ class SAR_Generator {
 // ____ COMMON TEMPLATES ____
 
 	private static function generate_year_list() {
-		$current_year = get_query_var('year');
-
 		$year_list = '';
 		foreach ( self::$yearsWithPosts as $year ) {
-			if ( $year == $current_year )
+			if ( $year == self::$current_year )
 				$el = 'li class="current"';
 			else
 				$el = 'li';
@@ -297,9 +304,9 @@ class SAR_Generator {
 
 	private static function generate_month_list($year = 0) {
 		if ( ! $year )
-			$year = self::$yearsWithPosts[count(self::$yearsWithPosts)-1];
+			$year = self::$current_year;
 
-		$current_month = get_query_var('m');
+		$current_month = get_query_var('monthnum');
 
 		$months_short = self::get_months(true);
 
@@ -317,7 +324,7 @@ class SAR_Generator {
 			else
 				$tmp = html('span class="emptymonth"', $month);
 
-			if ( $month == $current_month )
+			if ( $i == $current_month )
 				$el = 'li class="current"';
 			else
 				$el = 'li';
