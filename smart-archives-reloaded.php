@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.9a2
+Version: 1.9a3
 Description: An elegant and easy way to present your archives. (With help from <a href="http://www.conceptfusion.co.nz/">Simon Pritchard</a>)
 Author: scribu
 Author URI: http://scribu.net
@@ -51,14 +51,15 @@ function _sar_init() {
 	// Load translations
 	load_plugin_textdomain('smart-archives-reloaded', '', basename(dirname(__FILE__)) . '/lang');
 
-	// Create an instance of each class
 	$options = new scbOptions('smart-archives', __FILE__, array(
 		'format' => 'both',
-		'exclude_cat' => '',
-		'anchors' => '',
-		'block_numeric' => '',
 		'list_format' => '%post_link%',
 		'date_format' => 'F j, Y',
+		'posts_per_month' => false,
+		'include_cat' => array(),
+		'exclude_cat' => array(),
+		'anchors' => false,
+		'block_numeric' => false,
 		'cron' => true
 	));
 
@@ -74,7 +75,7 @@ abstract class SAR_Core {
 	const hook = 'smart_archives_update';
 	static $override_cron = false;
 
-	static $options;
+	private static $options;
 
 	private static $fancy = false;
 
@@ -176,10 +177,10 @@ jQuery(document).ready(function($) {
 		if ( 'fancy' == $args['format'] )
 			self::$fancy = true;
 
-		$file = self::get_cache_path(md5(join('', $args)));
+		$file = self::get_cache_path(md5(@implode('', $args)));
 
 #DEBUG
-		$cache = @file_get_contents($file);
+#		$cache = @file_get_contents($file);
 #DEBUG
 
 		if ( empty($cache) ) {
@@ -227,24 +228,21 @@ jQuery(document).ready(function($) {
 			unset($args['exclude_cat']);
 
 		$whitelist = array(
-			'format',
 			'include_cat',
 			'exclude_cat',
-			'anchors',
-			'block_numeric',
+			'format',
 			'list_format',
 			'date_format',
+			'anchors',
+			'block_numeric',
 			'posts_per_month'
 		);
 
-		$final_args = array();
-		foreach ( $whitelist as $key )
-			if ( isset($args[$key]) )
-				$final_args[$key] = $args[$key];
+		$args = scbUtil::array_extract($args, $whitelist);
 
 		ksort($args);
 
-		return $final_args;
+		return $args;
 	}
 }
 

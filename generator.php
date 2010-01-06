@@ -1,11 +1,15 @@
 <?php
 
 class SAR_Generator {
+	private static $args;
+
 	private static $yearsWithPosts;
 	private static $monthsWithPosts;
 
 	public static function generate($args) {
 		global $wpdb;
+
+		self::$args = (object) $args;
 
 		extract($args, EXTR_SKIP);
 
@@ -40,68 +44,127 @@ class SAR_Generator {
 		$order = ( $format == 'fancy' ) ? 'ASC' : 'DESC';
 
 		$limit = '';
-		if ( $posts_per_month = absint($posts_per_month) )
+		if ( $posts_per_month = absint(@$posts_per_month) )
 			$limit = 'LIMIT ' . $posts_per_month;
 
 		// Get non-empty years
-		$query = "
-			SELECT DISTINCT year(post_date) AS year
+		self::$yearsWithPosts = $wpdb->get_col("
+			SELECT YEAR(post_date) AS year
 			FROM {$wpdb->posts}
 			{$where}
-			GROUP BY year(post_date)
-			HAVING count(year(post_date)) > 0
-			ORDER BY post_date $order
-		";
-
-		self::$yearsWithPosts = $wpdb->get_col($query);
+			GROUP BY YEAR(post_date)
+			HAVING COUNT(YEAR(post_date)) > 0
+			ORDER BY YEAR(post_date) $order
+		");
 
 		if ( ! self::$yearsWithPosts )
 			return false;
 
-		$columns = self::get_columns();
+		if ( $columns = self::get_columns() ) {
+			// Get post list for each month
+			foreach ( self::$yearsWithPosts as $year ) {
+				for ( $i = 1; $i <= 12; $i++ ) {
+					$query = $wpdb->prepare("
+						SELECT {$columns}
+						FROM {$wpdb->posts}
+						{$where}
+						AND YEAR(post_date) = {$year}
+						AND MONTH(post_date) = {$i}
+						ORDER BY post_date DESC
+						{$limit}
+					");
 
-		// Get months with posts
-		foreach ( self::$yearsWithPosts as $year ) {
-			for ( $i = 1; $i <= 12; $i++ ) {
-				$query = $wpdb->prepare("
-					SELECT {$columns}
-					FROM {$wpdb->posts}
-					{$where}
-					AND year(post_date) = {$year}
-					AND month(post_date) = {$i}
-					ORDER BY post_date DESC
-					{$limit}
-				");
+					if ( $posts = $wpdb->get_results($query) ) {
+						$month = array(
+							'posts' => $posts,
+							'link' => get_month_link($year, $i)
+						);
 
-				if ( $posts = $wpdb->get_results($query) ) {
-					$month = array(
-						'posts' => $posts,
-						'link' => get_month_link($year, $i)
-					);
-
-					self::$monthsWithPosts[$year][$i] = $month;
+						self::$monthsWithPosts[$year][$i] = $month;
+					}
 				}
 			}
 		}
-
-		switch ( $format ) {
-			case 'block': return self::generate_block();
-			case 'list': return self::generate_list();
-			case 'both': return self::generate_block() . self::generate_list();
-			case 'fancy': return self::generate_fancy();
+		else {
+			// Get months with posts
+			foreach ( self::$yearsWithPosts as $year ) {
+				$months = $wpdb->get_col("
+					SELECT MONTH(post_date)
+					FROM {$wpdb->posts}
+					{$where}
+					AND YEAR(post_date) = {$year}
+					GROUP BY MONTH(post_date)
+					ORDER BY MONTH(post_date) ASC
+				");
+				
+				foreach ( $months as $i )
+					self::$monthsWithPosts[$year][$i] = array(
+						'posts' => true,
+						'link' => get_month_link($year, $i)
+					);
+			}
 		}
+
+		return call_user_func(array(__CLASS__, 'generate_' . $format));
+	}
+
+	private static function get_columns() {
+		if ( 'menu' == self::$args->format )
+			return false;
+
+		$columns = array('ID', 'post_title');
+
+		if ( 'block' == self::$args->format )
+			return implode(',', $columns);
+
+		$column_map = array(
+			'post_author' => array('%author%', '%author_link%'),
+			'post_date' => array('%date%'),
+			'comment_count' => array('%comment_count%'),
+		);
+
+		$active_tags = self::get_active_tags();
+		foreach ( $column_map as $column => $tags )
+			if ( count(array_intersect($tags, $active_tags)) )
+				$columns[] = $column;
+
+		return implode(',', $columns);
+	}
+
+	private static $active_tags;
+
+	static function get_active_tags() {
+		if ( self::$active_tags )
+			return self::$active_tags;
+
+		self::$active_tags = array();
+		foreach ( SAR_Core::get_available_tags() as $tag )
+			if ( FALSE !== strpos(self::$args->list_format, $tag) )
+				self::$active_tags[] = $tag;
+
+		return self::$active_tags;
+	}
+
+	// The "menu"
+	private static function generate_menu() {
+		$year_list = html('ul class="year-list"', 
+			self::generate_year_list()
+		, "\n");
+
+		$month_list = html('ul class="month-list"',
+			self::generate_month_list()
+		, "\n");
+
+		return html('div id="smart-archives-menu"', $year_list . $month_list, "\n");
 	}
 
 	// The "fancy" archive
 	private static function generate_fancy() {
 		$months_long = self::get_months();
 
-		$years = '';
-		foreach ( self::$yearsWithPosts as $year )
-			$years .= "\n\t" . html("li class='list-$year'", 
-				html_link(get_year_link($year), $year)
-			);
-		$years = html("ul class='tabs years-list'", $years, "\n");
+		$year_list = html("ul class='tabs year-list'",
+			self::generate_year_list()
+		, "\n");
 
 		$block = '';
 		foreach ( self::$yearsWithPosts as $year ) {
@@ -113,13 +176,13 @@ class SAR_Generator {
 			// Generate post lists
 			$list = '';
 			for ( $i = 1; $i <= 12; $i++ ) {
-				if ( ! $current = self::$monthsWithPosts[$year][$i] )
+				if ( ! $current = @self::$monthsWithPosts[$year][$i] )
 					continue;
 
 				// Append to list
 				$list .= html('div class="pane"',
 					"\n\t\t" . html('h2 class="month-heading"',
-						$months_long[$i] . ' ' . $year . ' '
+						"$months_long[$i] $year "
 						.html('span class="month-archive-link"',
 							'('. html_link($current['link'], __('View complete archive page', 'smart-archives-reloaded')) .')'
 						)
@@ -130,35 +193,16 @@ class SAR_Generator {
 				, "\n\t");
 			} // end month block
 
-			$block .= html("div class='pane'", 
-				$months . $list
-			, "\n");
+			$block .= html('div class="pane"', $months . $list, "\n");
 		} // end year block
 
 		// Wrap it up
-		return html('div id="smart-archives-fancy"', $years . $block);
+		return html('div id="smart-archives-fancy"', $year_list . $block);
 	}
 
-	private static function generate_month_list($year) {
-		$months_short = self::get_months(true);
-
-		$month_list = '';
-		for ( $i = 1; $i <= 12; $i++ ) {
-			if ( SAR_Core::$options->block_numeric )
-				$month = sprintf('%02d', $i);
-			else
-				$month = $months_short[$i];
-
-			$current = self::$monthsWithPosts[$year][$i];
-
-			$month_list .= "\n\t\t";
-			if ( $current['posts'] )
-				$month_list .= html('li', html_link($current['link'], $month));
-			else
-				$month_list .= html('li', html("span class='emptymonth'", $month));
-		}
-
-		return $month_list;
+	// Both
+	private static function generate_both() {
+		return self::generate_block() . self::generate_list();
 	}
 
 	// The list
@@ -174,13 +218,13 @@ class SAR_Generator {
 				$post_list = self::generate_post_list($current['posts'], "\n\t\t");
 
 				// Set title format
-				if ( SAR_Core::$options->anchors )
-					$titlef = "h2 id='{$year}{$i}'"; 
+				if ( self::$args->anchors )
+					$el = "h2 id='{$year}{$i}'"; 
 				else
-					$titlef = "h2";
+					$el = "h2";
 
 				// Append to list
-				$list .= "\n\t" . html($titlef,
+				$list .= "\n\t" . html($el,
 					html_link($current['link'], $months_long[$i] . ' ' . $year)
 				);
 
@@ -189,25 +233,9 @@ class SAR_Generator {
 		} // end year block
 
 		// Wrap it up
-		return html("div id='smart-archives-list'", $list, "\n");
+		return html('div id="smart-archives-list"', $list, "\n");
 	}
-
-	private static function generate_post_list($posts, $indent) {
-		$active_tags = self::get_active_tags();
-
-		$post_list = '';
-		foreach ( $posts as $post ) {
-			$list_item = SAR_Core::$options->list_format;
-
-			foreach ( $active_tags as $tag )
-				$list_item = str_replace($tag, call_user_func(array(__CLASS__, 'substitute_' . substr($tag, 1, -1)), $post), $list_item);
-
-			$post_list .= $indent . html('li', $list_item);
-		}
-
-		return $post_list;
-	}
-
+	
 	// The block
 	private static function generate_block() {
 		$months_short = self::get_months(true);
@@ -218,7 +246,7 @@ class SAR_Generator {
 			
 			$list = '';
 			for ( $i = 1; $i <= 12; $i++ ) {
-				if ( SAR_Core::$options->block_numeric )
+				if ( self::$args->block_numeric )
 					$month = zeroise($i, 2);
 				else
 					$month = $months_short[$i];
@@ -226,7 +254,7 @@ class SAR_Generator {
 				$current = self::$monthsWithPosts[$year][$i];
 
 				if ( $current['posts'] ) {
-					if ( SAR_Core::$options->anchors )
+					if ( self::$args->anchors )
 						$url = "#{$year}{$i}";
 					else
 					 	$url = $current['link'];
@@ -247,6 +275,75 @@ class SAR_Generator {
 		return html("ul id='smart-archives-block'", $block, "\n");
 	}
 
+// ____ COMMON TEMPLATES ____
+
+	private static function generate_year_list() {
+		$current_year = get_query_var('year');
+
+		$year_list = '';
+		foreach ( self::$yearsWithPosts as $year ) {
+			if ( $year == $current_year )
+				$el = 'li class="current"';
+			else
+				$el = 'li';
+
+			$year_list .= "\n\t" . html($el,
+				html_link(get_year_link($year), $year)
+			);
+		}
+		
+		return $year_list;
+	}
+
+	private static function generate_month_list($year = 0) {
+		if ( ! $year )
+			$year = self::$yearsWithPosts[count(self::$yearsWithPosts)-1];
+
+		$current_month = get_query_var('m');
+
+		$months_short = self::get_months(true);
+
+		$month_list = '';
+		for ( $i = 1; $i <= 12; $i++ ) {
+			if ( self::$args->block_numeric )
+				$month = zeroise($i, 2);
+			else
+				$month = $months_short[$i];
+
+			$current = @self::$monthsWithPosts[$year][$i];
+
+			if ( $current['posts'] )
+				$tmp = html_link($current['link'], $month);
+			else
+				$tmp = html('span class="emptymonth"', $month);
+
+			if ( $month == $current_month )
+				$el = 'li class="current"';
+			else
+				$el = 'li';
+
+			$month_list .= "\n\t\t" . html($el, $tmp);
+		}
+
+		return $month_list;
+	}
+
+	private static function generate_post_list($posts, $indent) {
+		$active_tags = self::get_active_tags();
+
+		$post_list = '';
+		foreach ( $posts as $post ) {
+			$list_item = self::$args->list_format;
+
+			foreach ( $active_tags as $tag )
+				$list_item = str_replace($tag, call_user_func(array(__CLASS__, 'substitute_' . substr($tag, 1, -1)), $post), $list_item);
+
+			$post_list .= $indent . html('li', $list_item);
+		}
+
+		return $post_list;
+	}
+
 	private static function get_months($abrev = false) {
 		global $wp_locale;
 	
@@ -260,39 +357,6 @@ class SAR_Generator {
 		}
 
 		return $months;
-	}
-
-	private static function get_columns() {
-		$columns = array('ID', 'post_title');
-
-		if ( 'block' == SAR_Core::$options->format )
-			return implode(',', $columns);
-
-		if ( count(array_intersect(array('%author%', '%author_link%'), self::get_active_tags())) )
-			$columns[] = 'post_author';
-
-		if ( count(array_intersect(array('%comment_count%'), self::get_active_tags())) )
-			$columns[] = 'comment_count';
-
-		if ( count(array_intersect(array('%date%'), self::get_active_tags())) )
-			$columns[] = 'post_date';
-
-		return implode(',', $columns);
-	}
-
-
-	private static $active_tags;
-
-	static function get_active_tags() {
-		if ( self::$active_tags )
-			return self::$active_tags;
-
-		self::$active_tags = array();
-		foreach ( SAR_Core::get_available_tags() as $tag )
-			if ( FALSE !== strpos(SAR_Core::$options->list_format, $tag) )
-				self::$active_tags[] = $tag;
-
-		return self::$active_tags;
 	}
 
 	private static function substitute_post_link($post) {
@@ -318,7 +382,7 @@ class SAR_Generator {
 	}
 
 	private static function substitute_date($post) {
-		return sprintf("<span class='post_date'>%s</span>", mysql2date(SAR_Core::$options->date_format, $post->post_date));
+		return sprintf("<span class='post_date'>%s</span>", mysql2date(self::$args->date_format, $post->post_date));
 	}
 
 	private static function substitute_category_link($post) {

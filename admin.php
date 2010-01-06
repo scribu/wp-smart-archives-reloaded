@@ -56,6 +56,7 @@ class SAR_Settings extends scbAdminPage {
 	}
 
 	function page_content() {
+		$tags = '';
 		foreach ( SAR_Core::get_available_tags() as $tag )
 			$tags .= "\n\t" . html('li', html('em', $tag));
 
