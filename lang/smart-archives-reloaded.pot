@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Smart Archives Reloaded 1.8.2\n"
+"Project-Id-Version: Smart Archives Reloaded 1.9a4\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/smart-archives-reloaded\n"
-"POT-Creation-Date: 2009-12-15 20:29+0200\n"
+"POT-Creation-Date: 2010-01-07 19:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,102 +24,102 @@ msgstr ""
 msgid "Smart Archives"
 msgstr ""
 
-#: admin.php:49 admin.php:133
+#: admin.php:29 admin.php:115
 msgid "Clear"
 msgstr ""
 
-#: admin.php:52
+#: admin.php:32
 msgid "Cache <strong>cleared</strong>."
 msgstr ""
 
-#: admin.php:62
+#: admin.php:43
 msgid "Default"
 msgstr ""
 
-#: admin.php:64
+#: admin.php:45
 msgid "General settings"
 msgstr ""
 
-#: admin.php:66
+#: admin.php:47
 msgid "Exclude Categories by ID"
 msgstr ""
 
-#: admin.php:67
+#: admin.php:48
 msgid "(comma separated)"
 msgstr ""
 
-#: admin.php:74
+#: admin.php:55
 msgid "Format"
 msgstr ""
 
-#: admin.php:79
+#: admin.php:60
 msgid "block"
 msgstr ""
 
-#: admin.php:80
+#: admin.php:61
 msgid "list"
 msgstr ""
 
-#: admin.php:81
+#: admin.php:62
 msgid "both"
 msgstr ""
 
-#: admin.php:82
+#: admin.php:63
 msgid "fancy"
 msgstr ""
 
-#: admin.php:87
+#: admin.php:68
 msgid "Specific settings"
 msgstr ""
 
-#: admin.php:89
+#: admin.php:70
 msgid "List format"
 msgstr ""
 
-#: admin.php:90
+#: admin.php:71
 msgid "Available substitution tags"
 msgstr ""
 
-#: admin.php:97
+#: admin.php:78
 #, php-format
 msgid "%s format"
 msgstr ""
 
-#: admin.php:100
+#: admin.php:81
 msgid ""
 "See available date formatting characters <a href=\"http://php.net/date\" "
 "target=\"_blank\">here</a>."
 msgstr ""
 
-#: admin.php:108
-msgid "Numeric months in block"
+#: admin.php:89
+msgid "Month names"
 msgstr ""
 
-#: admin.php:109
-msgid "The month links in the block will be shown as numbers"
+#: admin.php:90
+msgid "How should the month links be displayed"
 msgstr ""
 
-#: admin.php:115
+#: admin.php:97
 msgid "Use anchor links in block"
 msgstr ""
 
-#: admin.php:116
+#: admin.php:98
 msgid "The month links in the block will point to the month links in the list"
 msgstr ""
 
-#: admin.php:122
+#: admin.php:104
 msgid "Cache control"
 msgstr ""
 
-#: admin.php:124
+#: admin.php:106
 msgid "Use wp-cron"
 msgstr ""
 
-#: admin.php:130
+#: admin.php:112
 msgid "Clear cache"
 msgstr ""
 
-#: generator.php:119
+#: generator.php:199
 msgid "View complete archive page"
 msgstr ""
 
@@ -127,11 +127,11 @@ msgstr ""
 msgid "Settings <strong>saved</strong>."
 msgstr ""
 
-#: scb/AdminPage.php:111
+#: scb/AdminPage.php:112 scb/AdminPage.php:123
 msgid "Save Changes"
 msgstr ""
 
-#: scb/AdminPage.php:314
+#: scb/AdminPage.php:329
 msgid "Settings"
 msgstr ""
 

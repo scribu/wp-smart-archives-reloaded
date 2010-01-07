@@ -15,34 +15,14 @@ class SAR_Settings extends scbAdminPage {
 
 	// Page methods
 	function page_head() {
-		wp_enqueue_script('sar-admin', $this->plugin_url . 'inc/admin.js', array('jquery'), '1.7', true);
+		$js_dev = defined('STYLE_DEBUG') && SCRIPT_DEBUG ? '.dev' : '';
+	
+		wp_enqueue_script('sar-admin', $this->plugin_url . "inc/admin$js_dev.js", array('jquery'), '1.9', true);
 		echo $this->css_wrap('h3 {margin-bottom: 0 !important}');
 	}
 
 	function validate($new_options, $old_options) {
-		// Validate numeric
-		if ( $new_options['format'] == 'list' )
-			$new_options['block_numeric'] = false;
-
-		// Validate anchors
-		if ( $new_options['format'] != 'both' )
-			$new_options['anchors'] = false;
-
-		// Validate cat ids
-		$ids = array();
-		foreach ( explode(', ', $new_options['exclude_cat']) as $id ) {
-			$id = intval($id);
-			if ( $id > 0 )
-				$ids[] = $id;
-		}
-		$new_options['exclude_cat'] = array_unique($ids);
-
-		// List format
-		$new_options['list_format'] = trim($new_options['list_format']);
-		if ( empty($new_options['list_format']) )
-			$new_options['list_format'] = $this->options->defaults['list_format'];
-
-		return $new_options;
+		return SAR_Core::sanitize_args($new_options);
 	}
 
 	function form_handler() {
@@ -106,10 +86,11 @@ class SAR_Settings extends scbAdminPage {
 			),
 
 			array(
-				'title' => __('Numeric months in block', $this->textdomain),
-				'desc' => __('The month links in the block will be shown as numbers', $this->textdomain),
-				'type' => 'checkbox',
-				'name' => 'block_numeric',
+				'title' => __('Month names', $this->textdomain),
+				'desc' => html('p', __('How should the month links be displayed', $this->textdomain)),
+				'type' => 'radio',
+				'name' => 'month_format',
+				'value' => array('numeric', 'short', 'long')
 			),
 
 			array(

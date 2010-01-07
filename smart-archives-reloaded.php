@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.9a3
+Version: 1.9a4
 Description: An elegant and easy way to present your archives. (With help from <a href="http://www.conceptfusion.co.nz/">Simon Pritchard</a>)
 Author: scribu
 Author URI: http://scribu.net
@@ -59,7 +59,7 @@ function _sar_init() {
 		'include_cat' => array(),
 		'exclude_cat' => array(),
 		'anchors' => false,
-		'block_numeric' => false,
+		'month_format' => 'short',
 		'cron' => true
 	));
 
@@ -71,7 +71,7 @@ function _sar_init() {
 	}
 }
 
-abstract class SAR_Core {
+class SAR_Core {
 	const hook = 'smart_archives_update';
 	static $override_cron = false;
 
@@ -138,7 +138,9 @@ abstract class SAR_Core {
 	}
 
 	static function init_fancy() {
-		if ( !self::$fancy && !self::$css )
+		$add_css = apply_filters('smart_archives_css', self::$css);
+
+		if ( !self::$fancy && !$add_css )
 			return;
 	
 		$css_dev = defined('STYLE_DEBUG') && STYLE_DEBUG ? '.dev' : '';
@@ -155,8 +157,8 @@ abstract class SAR_Core {
 ?>
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-<?php if ( self::$css ) : ?>
-	$('head').append($('<link>').attr({
+<?php if ( $add_css ) : ?>
+	$('head').prepend($('<link>').attr({
 		rel: 'stylesheet',
 		type: 'text/css',
 		media: 'screen',
@@ -186,7 +188,7 @@ jQuery(document).ready(function($) {
 			self::$css = true;
 
 		if ( 'menu' == $args['format'] ) {
-			require dirname(__FILE__) . '/generator.php';
+			require_once dirname(__FILE__) . '/generator.php';
 			return SAR_Generator::generate($args);
 		}
 
@@ -197,7 +199,7 @@ jQuery(document).ready(function($) {
 #DEBUG
 
 		if ( empty($cache) ) {
-			require dirname(__FILE__) . '/generator.php';
+			require_once dirname(__FILE__) . '/generator.php';
 			$cache = SAR_Generator::generate($args);
 			@file_put_contents($file, $cache);
 		}
@@ -237,8 +239,7 @@ jQuery(document).ready(function($) {
 	private static function validate_args($args) {
 		$args = wp_parse_args($args, self::$options->get());
 
-		if ( isset($args['include_cat']) )
-			unset($args['exclude_cat']);
+		$args = self::sanitize_args($args);
 
 		$whitelist = array(
 			'include_cat',
@@ -247,8 +248,8 @@ jQuery(document).ready(function($) {
 			'list_format',
 			'date_format',
 			'anchors',
-			'block_numeric',
-			'posts_per_month'
+			'month_format',
+			'posts_per_month',
 		);
 
 		$args = scbUtil::array_extract($args, $whitelist);
@@ -256,6 +257,49 @@ jQuery(document).ready(function($) {
 		ksort($args);
 
 		return $args;
+	}
+	
+	public static function sanitize_args($args) {
+		$args = wp_parse_args($args, self::$options->get_defaults());
+
+		// Category IDs
+		if ( isset($args['include_cat']) && !empty($args['include_cat']) ) {
+			$args['include_cat'] = self::parse_id_list($args['include_cat']);
+			$args['exclude_cat'] = array();
+		}
+		else {
+			$args['exclude_cat'] = self::parse_id_list($args['exclude_cat']);
+		}
+
+		// Anchors
+		if ( 'both' != $args['format'] )
+			$args['anchors'] = false;
+
+		// Block numeric
+		if ( array_key_exists('block_numeric', $args) ) {
+			if ( 'block' == $args['format'] && ! array_key_exists('month_format', $args) )
+				$args['month_format'] = $args['block_numeric'] ? 'numeric' : 'short';
+
+			unset($args['block_numeric']);
+		}
+
+		// List format
+		$args['list_format'] = trim($args['list_format']);
+
+		return $args;
+	}
+
+	private function parse_id_list($list) {
+		$ids = array();
+
+		if ( !is_array($list) )
+			$list = preg_split('/[\s,]+/', $list);
+
+		foreach ( $list as $id )
+			if ( $id = absint($id) )
+				$ids[] = $id;
+
+		return array_unique($ids);
 	}
 }
 
