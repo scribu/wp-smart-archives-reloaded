@@ -194,7 +194,7 @@ abstract class scbForms {
 		
 		// Correct descriptions
 		$_after = '';
-		if ( !$a_desc ) {
+		if ( isset($desc) && !$a_desc && false === strpos($desc, self::token) ) {
 			if ( $a_value ) {
 				$_after = $desc;
 				$args['desc'] = $desc = $value;
@@ -308,7 +308,10 @@ abstract class scbForms {
 			'desc' => NULL,
 		)), EXTR_SKIP);
 
-		$extra = implode(' ', $extra);
+		if ( !empty($extra) )
+			$extra = ' ' . implode(' ', $extra);
+		else
+			$extra = '';
 
 		$value = esc_attr($value);
 
