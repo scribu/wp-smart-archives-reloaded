@@ -3,8 +3,8 @@ Contributors: scribu
 Donate link: http://scribu.net/wordpress
 Tags: archive, post list
 Requires at least: 2.8
-Tested up to: 2.9
-Stable tag: 1.8.3
+Tested up to: 2.9.1
+Stable tag: trunk
 
 An elegant and easy way to present your archives.
 
@@ -17,6 +17,7 @@ Why is this plugin better?
 * **Easy setup** - no code editing required
 * **Better caching** - no need to wait when publishing a new post
 * **Settings page** - elegantly choose how you want the archives displayed
+* **More options** - besides the 'block' and the 'list', you also have the 'fancy' and the 'menu' formats
 
 Examples: [block & list](http://scribu.net/arhiva) | [fancy](http://www.conceptfusion.co.nz/archive)
 
@@ -54,6 +55,10 @@ Make sure your new host is running PHP 5. Add this line to wp-config.php:
 In footer.php in your theme directory, make sure you have this code somewhere:
 
 `<?php wp_footer(); ?>`.
+
+= How can I change the CSS or HTML? =
+
+Read this: [Advanced Tweaking](http://scribu.net/wordpress/smart-archives-reloaded/advanced-tweaking.html)
 
 == Screenshots ==
 
