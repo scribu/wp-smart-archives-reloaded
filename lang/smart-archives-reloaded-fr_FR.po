@@ -33,93 +33,83 @@ msgstr "Paramètres Smart Archives"
 msgid "Smart Archives"
 msgstr "Smart Archives"
 
-#: admin.php:62
+#: admin.php:43
 #@ smart-archives-reloaded
 msgid "Default"
 msgstr "Défaut"
 
-#: admin.php:64
+#: admin.php:45
 #@ smart-archives-reloaded
 msgid "General settings"
 msgstr "Paramètres généraux"
 
-#: admin.php:66
+#: admin.php:47
 #@ smart-archives-reloaded
 msgid "Exclude Categories by ID"
 msgstr "Exclure des catégories par ID"
 
-#: admin.php:124
+#: admin.php:106
 #@ smart-archives-reloaded
 msgid "Use wp-cron"
 msgstr "Utiliser wp-cron"
 
-#: admin.php:74
+#: admin.php:55
 #@ smart-archives-reloaded
 msgid "Format"
 msgstr "Format"
 
-#: admin.php:80
+#: admin.php:61
 #@ smart-archives-reloaded
 msgid "list"
 msgstr "liste"
 
-#: admin.php:79
+#: admin.php:60
 #@ smart-archives-reloaded
 msgid "block"
 msgstr "bloc"
 
-#: admin.php:81
+#: admin.php:62
 #@ smart-archives-reloaded
 msgid "both"
 msgstr "les deux"
 
-#: admin.php:82
+#: admin.php:63
 #@ smart-archives-reloaded
 msgid "fancy"
 msgstr "personnalisé"
 
-#: admin.php:87
+#: admin.php:68
 #@ smart-archives-reloaded
 msgid "Specific settings"
 msgstr "Paramètres spécifiques"
 
-#: admin.php:89
+#: admin.php:70
 #@ smart-archives-reloaded
 msgid "List format"
 msgstr "Format de la liste"
 
-#: admin.php:90
+#: admin.php:71
 #@ smart-archives-reloaded
 msgid "Available substitution tags"
 msgstr "Balises de substitution disponibles"
 
-#: admin.php:97
+#: admin.php:78
 #, php-format
 #@ smart-archives-reloaded
 msgid "%s format"
 msgstr "%s format"
 
-#: admin.php:100
+#: admin.php:81
 #@ smart-archives-reloaded
 msgid "See available date formatting characters <a href=\"http://php.net/date\" target=\"_blank\">here</a>."
 msgstr " <a href=\"http://php.net/date\" target=\"_blank\">Voir les caractères disponibles pour le formatage de la date</a>"
 
-#: admin.php:108
-#@ smart-archives-reloaded
-msgid "Numeric months in block"
-msgstr "Mois en chiffre"
-
-#: admin.php:109
-#@ smart-archives-reloaded
-msgid "The month links in the block will be shown as numbers"
-msgstr "Les liens des mois dans le bloc apparaîtront en chiffres"
-
-#: admin.php:115
+#: admin.php:97
 #@ smart-archives-reloaded
 msgid "Use anchor links in block"
 msgstr "Utiliser l'ancrage des liens dans le bloc"
 
-#: admin.php:116
+#: admin.php:98
 #@ smart-archives-reloaded
 msgid "The month links in the block will point to the month links in the list"
 msgstr "Les liens des mois dans le bloc pointeront vers les liens des mois dans la liste"
@@ -129,44 +119,55 @@ msgstr "Les liens des mois dans le bloc pointeront vers les liens des mois dans 
 msgid "Settings <strong>saved</strong>."
 msgstr "Paramètres <strong>enregistrés</strong>."
 
-#: scb/AdminPage.php:111
+#: scb/AdminPage.php:112
+#: scb/AdminPage.php:123
 #@ smart-archives-reloaded
 msgid "Save Changes"
 msgstr "Enregistrer les changements"
 
-#: scb/AdminPage.php:314
+#: scb/AdminPage.php:329
 #@ smart-archives-reloaded
 msgid "Settings"
 msgstr "Paramètres"
 
-#: admin.php:49
-#: admin.php:133
+#: admin.php:29
+#: admin.php:115
 #@ smart-archives-reloaded
 msgid "Clear"
 msgstr "Vider"
 
-#: admin.php:52
+#: admin.php:32
 #@ smart-archives-reloaded
 msgid "Cache <strong>cleared</strong>."
 msgstr "Cache <strong>vidé</strong>."
 
-#: admin.php:67
+#: admin.php:48
 #@ smart-archives-reloaded
 msgid "(comma separated)"
 msgstr "(séparés par une virgule)"
 
-#: admin.php:122
+#: admin.php:104
 #@ smart-archives-reloaded
 msgid "Cache control"
 msgstr "Contrôle du cache"
 
-#: admin.php:130
+#: admin.php:112
 #@ smart-archives-reloaded
 msgid "Clear cache"
 msgstr "Vider le cache"
 
-#: generator.php:119
+#: generator.php:197
 #@ smart-archives-reloaded
 msgid "View complete archive page"
 msgstr "Afficher la page d'archive détaillée"
+
+#: admin.php:89
+#@ smart-archives-reloaded
+msgid "Month names"
+msgstr "Noms des mois"
+
+#: admin.php:90
+#@ smart-archives-reloaded
+msgid "How should the month links be displayed"
+msgstr "La manière dont les liens du mois doivent être affichés "
 
