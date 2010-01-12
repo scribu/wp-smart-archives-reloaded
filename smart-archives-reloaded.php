@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.9a4
+Version: 1.9a5
 Description: An elegant and easy way to present your archives. (With help from <a href="http://www.conceptfusion.co.nz/">Simon Pritchard</a>)
 Author: scribu
 Author URI: http://scribu.net
@@ -42,6 +42,11 @@ function smart_archives($args = '') {
 	echo SAR_Core::load($args);
 }
 
+/* If you want to extend the SAR_Generator class, call this function first */
+function smart_archives_load_default_generator() {
+	SAR_Core::load_default_generator();
+}
+
 
 _sar_init();
 function _sar_init() {
@@ -79,6 +84,8 @@ class SAR_Core {
 
 	private static $fancy = false;
 	private static $css = false;
+
+	private static $cache_dir;
 
 	// Substitution tags
 	static function get_available_tags() {
@@ -138,7 +145,7 @@ class SAR_Core {
 	}
 
 	static function init_fancy() {
-		$add_css = apply_filters('smart_archives_css', self::$css);
+		$add_css = apply_filters('smart_archives_load_default_styles', self::$css);
 
 		if ( !self::$fancy && !$add_css )
 			return;
@@ -181,30 +188,43 @@ jQuery(document).ready(function($) {
 	static function load($args = '') {
 		$args = self::validate_args($args);
 
+		$generator = '';
+		if ( isset($args['generator']) ) {
+			$generator = $args['generator'];
+			unset($args['generator']);
+		}
+		
 		if ( 'fancy' == $args['format'] )
 			self::$fancy = true;
 
 		if ( in_array($args['format'], array('menu', 'fancy')) )
 			self::$css = true;
 
-		if ( 'menu' == $args['format'] ) {
-			require_once dirname(__FILE__) . '/generator.php';
-			return SAR_Generator::generate($args);
-		}
+		if ( 'menu' == $args['format'] )
+			return self::generate($args, $generator);
 
 		$file = self::get_cache_path(md5(@implode('', $args)));
 
-#DEBUG
-#		$cache = @file_get_contents($file);
-#DEBUG
+		$cache = @file_get_contents($file);
 
 		if ( empty($cache) ) {
-			require_once dirname(__FILE__) . '/generator.php';
-			$cache = SAR_Generator::generate($args);
+			$cache = self::generate($args, $generator);
 			@file_put_contents($file, $cache);
 		}
 
 		return $cache;
+	}
+
+	private function generate($args, $generator = '') {
+		if ( !empty($generator) )
+			return call_user_func(array($generator, 'generate'), $args);
+
+		self::load_default_generator();
+		return SAR_Generator::generate($args);
+	}
+
+	public function load_default_generator() {
+		require_once dirname(__FILE__) . '/generator.php';	
 	}
 
 	static function clear_cache() {
@@ -221,8 +241,6 @@ jQuery(document).ready(function($) {
 		@closedir($dir_handle);
 		@rmdir($cache_dir);
 	}
-
-	private static $cache_dir;
 
 	static function get_cache_path($file = '', $create = true) {
 		// Set cache dir
@@ -241,24 +259,13 @@ jQuery(document).ready(function($) {
 
 		$args = self::sanitize_args($args);
 
-		$whitelist = array(
-			'include_cat',
-			'exclude_cat',
-			'format',
-			'list_format',
-			'date_format',
-			'anchors',
-			'month_format',
-			'posts_per_month',
-		);
-
-		$args = scbUtil::array_extract($args, $whitelist);
+		unset($args['cron']);
 
 		ksort($args);
 
 		return $args;
 	}
-	
+
 	public static function sanitize_args($args) {
 		$args = wp_parse_args($args, self::$options->get_defaults());
 

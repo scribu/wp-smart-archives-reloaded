@@ -10,8 +10,6 @@ class SAR_Generator {
 	protected static $current_year;
 
 	public static function generate($args) {
-//		debug($args);
-
 		self::$args = (object) $args;
 
 		extract($args, EXTR_SKIP);

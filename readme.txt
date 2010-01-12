@@ -64,8 +64,9 @@ In footer.php in your theme directory, make sure you have this code somewhere:
 
 = 1.9 =
 * added 'menu' format
-* added 'month_format' argument
-* added 'posts_per_month' argument
+* added new arguments: 'month_format', 'posts_per_month', 'generator'
+* added 'smart_archives_css' filter
+* [more info](http://scribu.net/wordpress/smart-archives-reloaded/sar-1-9.html)
 
 = 1.8.3 =
 * fancy archive fix for IE
