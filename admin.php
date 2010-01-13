@@ -87,10 +87,15 @@ class SAR_Settings extends scbAdminPage {
 
 			array(
 				'title' => __('Month names', $this->textdomain),
-				'desc' => html('p', __('How should the month links be displayed', $this->textdomain)),
+//				'after' => html('p', __('How should the month links be displayed', $this->textdomain)),
 				'type' => 'radio',
 				'name' => 'month_format',
-				'value' => array('numeric', 'short', 'long')
+				'value' => array('numeric', 'short', 'long'),
+				'desc' => array(
+					__('numeric', $this->textdomain),
+					__('short', $this->textdomain),
+					__('long', $this->textdomain),
+				)
 			),
 
 			array(
