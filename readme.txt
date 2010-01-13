@@ -28,6 +28,7 @@ Examples: [block & list](http://scribu.net/arhiva) | [fancy](http://www.conceptf
 * Danish - jos
 * Dutch - [Lourens Rolograaf](http://rolograaf.nl)
 * French - [Référenceur Freelance](http://www.referenceurfreelance.com), [Li-An](http://www.li-an.fr)
+* German - [Cornelius Schiffer](http://schiffr.de/)
 * Italian - [Gianni Diurno](http://gidibao.net/)
 * Russian - [Fat Cow](http://www.fatcow.com)
 * Uzbek - [Alexandra Bolshova](http://comfi.com)
