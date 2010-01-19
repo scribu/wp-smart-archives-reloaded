@@ -68,6 +68,10 @@ Read this: [Advanced Tweaking](http://scribu.net/wordpress/smart-archives-reload
 
 == Changelog ==
 
+= 1.9.1 =
+* updated .pot file
+* made generator class non-static
+
 = 1.9 =
 * added 'menu' format
 * added new arguments: 'month_format', 'posts_per_month', 'generator'

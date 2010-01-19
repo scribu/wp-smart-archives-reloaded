@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Smart Archives Reloaded 1.9a4\n"
+"Project-Id-Version: Smart Archives Reloaded 1.9.1a\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/smart-archives-reloaded\n"
-"POT-Creation-Date: 2010-01-07 19:59+0200\n"
+"POT-Creation-Date: 2010-01-19 16:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid "Smart Archives"
 msgstr ""
 
-#: admin.php:29 admin.php:115
+#: admin.php:29 admin.php:120
 msgid "Clear"
 msgstr ""
 
@@ -95,31 +95,39 @@ msgstr ""
 msgid "Month names"
 msgstr ""
 
-#: admin.php:90
-msgid "How should the month links be displayed"
+#: admin.php:95
+msgid "numeric"
+msgstr ""
+
+#: admin.php:96
+msgid "short"
 msgstr ""
 
 #: admin.php:97
+msgid "long"
+msgstr ""
+
+#: admin.php:102
 msgid "Use anchor links in block"
 msgstr ""
 
-#: admin.php:98
+#: admin.php:103
 msgid "The month links in the block will point to the month links in the list"
 msgstr ""
 
-#: admin.php:104
+#: admin.php:109
 msgid "Cache control"
 msgstr ""
 
-#: admin.php:106
+#: admin.php:111
 msgid "Use wp-cron"
 msgstr ""
 
-#: admin.php:112
+#: admin.php:117
 msgid "Clear cache"
 msgstr ""
 
-#: generator.php:199
+#: generator.php:197
 msgid "View complete archive page"
 msgstr ""
 

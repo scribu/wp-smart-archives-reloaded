@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.9
+Version: 1.9.1
 Description: An elegant and easy way to present your archives. (With help from <a href="http://www.conceptfusion.co.nz/">Simon Pritchard</a>)
 Author: scribu
 Author URI: http://scribu.net
@@ -193,7 +193,7 @@ jQuery(document).ready(function($) {
 			$generator = $args['generator'];
 			unset($args['generator']);
 		}
-		
+
 		if ( 'fancy' == $args['format'] )
 			self::$fancy = true;
 
@@ -205,7 +205,8 @@ jQuery(document).ready(function($) {
 
 		$file = self::get_cache_path(md5(@implode('', $args)));
 
-		$cache = @file_get_contents($file);
+#DEBUG
+#		$cache = @file_get_contents($file);
 
 		if ( empty($cache) ) {
 			$cache = self::generate($args, $generator);
@@ -216,11 +217,14 @@ jQuery(document).ready(function($) {
 	}
 
 	private function generate($args, $generator = '') {
-		if ( !empty($generator) )
-			return call_user_func(array($generator, 'generate'), $args);
+		if ( empty($generator) ) {
+			self::load_default_generator();
+			$generator = new SAR_Generator();
+		} elseif ( is_string($generator) ) {
+			$generator = new $generator;
+		}
 
-		self::load_default_generator();
-		return SAR_Generator::generate($args);
+		return call_user_func(array($generator, 'generate'), $args);
 	}
 
 	public function load_default_generator() {
