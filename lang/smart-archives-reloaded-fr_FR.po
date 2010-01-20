@@ -48,7 +48,7 @@ msgstr "Paramètres généraux"
 msgid "Exclude Categories by ID"
 msgstr "Exclure des catégories par ID"
 
-#: admin.php:106
+#: admin.php:111
 #@ smart-archives-reloaded
 msgid "Use wp-cron"
 msgstr "Utiliser wp-cron"
@@ -104,12 +104,12 @@ msgstr "%s format"
 msgid "See available date formatting characters <a href=\"http://php.net/date\" target=\"_blank\">here</a>."
 msgstr " <a href=\"http://php.net/date\" target=\"_blank\">Voir les caractères disponibles pour le formatage de la date</a>"
 
-#: admin.php:97
+#: admin.php:102
 #@ smart-archives-reloaded
 msgid "Use anchor links in block"
 msgstr "Utiliser l'ancrage des liens dans le bloc"
 
-#: admin.php:98
+#: admin.php:103
 #@ smart-archives-reloaded
 msgid "The month links in the block will point to the month links in the list"
 msgstr "Les liens des mois dans le bloc pointeront vers les liens des mois dans la liste"
@@ -131,7 +131,7 @@ msgid "Settings"
 msgstr "Paramètres"
 
 #: admin.php:29
-#: admin.php:115
+#: admin.php:120
 #@ smart-archives-reloaded
 msgid "Clear"
 msgstr "Vider"
@@ -146,12 +146,12 @@ msgstr "Cache <strong>vidé</strong>."
 msgid "(comma separated)"
 msgstr "(séparés par une virgule)"
 
-#: admin.php:104
+#: admin.php:109
 #@ smart-archives-reloaded
 msgid "Cache control"
 msgstr "Contrôle du cache"
 
-#: admin.php:112
+#: admin.php:117
 #@ smart-archives-reloaded
 msgid "Clear cache"
 msgstr "Vider le cache"
@@ -166,8 +166,18 @@ msgstr "Afficher la page d'archive détaillée"
 msgid "Month names"
 msgstr "Noms des mois"
 
-#: admin.php:90
+#: admin.php:95
 #@ smart-archives-reloaded
-msgid "How should the month links be displayed"
-msgstr "La manière dont les liens du mois doivent être affichés "
+msgid "numeric"
+msgstr "numérique"
+
+#: admin.php:96
+#@ smart-archives-reloaded
+msgid "short"
+msgstr "court"
+
+#: admin.php:97
+#@ smart-archives-reloaded
+msgid "long"
+msgstr "long"
 
