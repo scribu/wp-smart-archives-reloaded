@@ -89,7 +89,14 @@ class SAR_Core {
 
 	// Substitution tags
 	static function get_available_tags() {
-		return array('%post_link%', '%author_link%', '%author%', '%comment_count%', '%category_link%', '%category%', '%date%');
+		return array(
+			'%post_link%', 
+			'%date%',
+			'%excerpt%',
+			'%author_link%', '%author%', 
+			'%comment_count%', 
+			'%category_link%', '%category%', 
+		);
 	}
 
 	static function init($options) {

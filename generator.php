@@ -121,6 +121,7 @@ class SAR_Generator {
 			return implode(',', $columns);
 
 		$column_map = array(
+			'post_excerpt' => array('%excerpt%'),
 			'post_author' => array('%author%', '%author_link%'),
 			'post_date' => array('%date%'),
 			'comment_count' => array('%comment_count%'),
@@ -395,8 +396,12 @@ class SAR_Generator {
 		return $post->comment_count;
 	}
 
+	protected function substitute_excerpt($post) {
+		return $post->post_excerpt;
+	}
+
 	protected function substitute_date($post) {
-		return html('span class="post_date"', mysql2date($this->args->date_format, $post->post_date));
+		return mysql2date($this->args->date_format, $post->post_date);
 	}
 
 	protected function substitute_category_link($post) {
