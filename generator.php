@@ -19,8 +19,7 @@ class SAR_Generator {
 		if ( empty($months) )
 			return false;
 
-		if ( 'menu' != $this->args->format ) {
-			$columns = $this->get_columns();
+		if ( $columns = $this->get_columns() ) {
 			$limit = $this->get_limit();
 
 			// Get post list for each month
@@ -115,6 +114,9 @@ class SAR_Generator {
 	}
 
 	protected function get_columns() {
+		if ( 'menu' == $this->args->format )
+			return false;
+
 		$columns = array('ID', 'post_title');
 
 		if ( 'block' == $this->args->format )
