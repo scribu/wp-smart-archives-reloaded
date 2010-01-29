@@ -4,16 +4,58 @@ class SAR_Generator {
 	protected $args;
 	protected $active_tags;
 
-	protected $yearsWithPosts;
-	protected $monthsWithPosts;
-
-	protected $current_year;
+	protected $months_with_posts;
+	protected $sorted_posts;
 
 	public function generate($args) {
+		global $wpdb;
+	
 		$this->args = (object) $args;
 
-		extract($args, EXTR_SKIP);
+		$where = $this->get_where();
 
+		$months = $this->set_months_with_posts($where);
+
+		if ( empty($months) )
+			return false;
+
+		if ( 'menu' != $this->args->format ) {
+			$columns = $this->get_columns();
+			$limit = $this->get_limit();
+
+			// Get post list for each month
+			foreach ( $this->get_months_with_posts() as $year => $months ) {
+				foreach ( $months as $month ) {
+					$query = $wpdb->prepare("
+						SELECT {$columns}
+						FROM {$wpdb->posts}
+						{$where}
+						AND YEAR(post_date) = {$year}
+						AND MONTH(post_date) = {$month}
+						ORDER BY post_date DESC
+						{$limit}
+					");
+
+					$this->sorted_posts[$year][$month] = array(
+						'posts' => $wpdb->get_results($query),
+						'link' => get_month_link($year, $month)
+					);
+				}
+			}
+		}
+		else {
+			$current_year = $this->get_current_year();
+			foreach ( $this->get_months_with_posts($current_year) as $month )
+				$this->sorted_posts[$current_year][$month] = array(
+					'posts' => true,
+					'link' => get_month_link($current_year, $month)
+				);
+		}
+
+		return call_user_func(array($this, 'generate_' . $this->args->format));
+	}
+
+	protected function get_where() {
 		global $wpdb;
 
 		$where = "
@@ -21,12 +63,12 @@ class SAR_Generator {
 			AND post_status = 'publish'		
 		";
 
-		if ( ! empty($exclude_cat) ) {
+		if ( ! empty($this->args->exclude_cat) ) {
 			$where .= "AND ID NOT IN (";
-			$ids = $exclude_cat;
-		} elseif ( ! empty($include_cat) ) {
+			$ids = $this->args->exclude_cat;
+		} elseif ( ! empty($this->args->include_cat) ) {
 			$where .= "AND ID IN (\n";
-			$ids = $include_cat;
+			$ids = $this->args->include_cat;
 		}
 
 		if ( ! empty($ids) ) {
@@ -44,84 +86,35 @@ class SAR_Generator {
 			";
 		}
 
-		$order = ( in_array($format, array('menu', 'fancy')) ) ? 'ASC' : 'DESC';
+		return $where;
+	}
 
+	protected function get_limit() {
 		$limit = '';
-		if ( $posts_per_month = absint(@$posts_per_month) )
+		if ( $posts_per_month = absint(@$this->args->posts_per_month) )
 			$limit = 'LIMIT ' . $posts_per_month;
 
-		// Get non-empty years
-		$this->yearsWithPosts = $wpdb->get_col("
-			SELECT YEAR(post_date) AS year
+		return $limit;
+	}
+
+	protected function set_months_with_posts($where) {
+		global $wpdb;
+
+		$rows = $wpdb->get_results("
+			SELECT DISTINCT YEAR(post_date) AS year, MONTH(post_date) AS month
 			FROM {$wpdb->posts}
 			{$where}
-			GROUP BY YEAR(post_date)
-			HAVING COUNT(YEAR(post_date)) > 0
-			ORDER BY YEAR(post_date) $order
+			ORDER BY year ASC, month ASC
 		");
 
-		if ( ! $this->yearsWithPosts )
-			return false;
+		$months = array();
+		foreach ( $rows as $row )
+			$months[$row->year][] = $row->month;
 
-		$this->set_current_year();
-
-		if ( $columns = $this->get_columns() ) {
-			// Get post list for each month
-			foreach ( $this->yearsWithPosts as $year ) {
-				for ( $i = 1; $i <= 12; $i++ ) {
-					$query = $wpdb->prepare("
-						SELECT {$columns}
-						FROM {$wpdb->posts}
-						{$where}
-						AND YEAR(post_date) = {$year}
-						AND MONTH(post_date) = {$i}
-						ORDER BY post_date DESC
-						{$limit}
-					");
-
-					if ( $posts = $wpdb->get_results($query) ) {
-						$month = array(
-							'posts' => $posts,
-							'link' => get_month_link($year, $i)
-						);
-
-						$this->monthsWithPosts[$year][$i] = $month;
-					}
-				}
-			}
-		}
-		else {
-			// Get months with posts
-			$months = $wpdb->get_col($wpdb->prepare("
-				SELECT MONTH(post_date)
-				FROM {$wpdb->posts}
-				{$where}
-				AND YEAR(post_date) = %d
-				GROUP BY MONTH(post_date)
-				ORDER BY MONTH(post_date) ASC
-			", $this->current_year));
-
-			foreach ( $months as $i )
-				$this->monthsWithPosts[$this->current_year][$i] = array(
-					'posts' => true,
-					'link' => get_month_link($this->current_year, $i)
-				);
-		}
-
-		return call_user_func(array($this, 'generate_' . $format));
-	}
-	
-	protected function set_current_year() {
-		if ( ! $year = get_query_var('year') )
-			$year = $this->get_last_item($this->yearsWithPosts);
-
-		$this->current_year = $year;
+		return $this->months_with_posts = $months;
 	}
 
 	protected function get_columns() {
-		if ( 'menu' == $this->args->format )
-			return false;
-
 		$columns = array('ID', 'post_title');
 
 		if ( 'block' == $this->args->format )
@@ -153,6 +146,35 @@ class SAR_Generator {
 		return $this->active_tags;
 	}
 
+// Data access
+
+	protected function get_current_year() {
+		if ( ! $year = get_query_var('year') )
+			$year = $this->get_last_item($this->get_years_with_posts());
+
+		return $year;
+	}
+
+	protected function get_months_with_posts($year = 0) {
+		if ( $year )
+			return (array) @$this->months_with_posts[$year];
+
+		return $this->months_with_posts;
+	}
+
+	protected function get_years_with_posts() {
+		return array_keys($this->months_with_posts);
+	}
+	
+	protected function get_posts($year = 0, $month = 0) {
+
+		if ( ! $year && ! $month )
+			return $this->sorted_posts;
+
+		return @$this->sorted_posts[$year][$month];
+	}
+
+
 // ____ MAIN TEMPLATES ____
 
 	// The "menu"
@@ -177,7 +199,8 @@ class SAR_Generator {
 		, "\n");
 
 		$block = '';
-		foreach ( $this->yearsWithPosts as $year ) {
+
+		foreach ( $this->get_years_with_posts() as $year ) {
 			// Generate top panes
 			$months = html("ul id='month-list-$year' class='tabs month-list'", 
 				$this->generate_month_list($year)
@@ -186,7 +209,7 @@ class SAR_Generator {
 			// Generate post lists
 			$list = '';
 			for ( $i = 1; $i <= 12; $i++ ) {
-				if ( ! $current = @$this->monthsWithPosts[$year][$i] )
+				if ( ! $current = $this->get_posts($year, $i) )
 					continue;
 
 				// Append to list
@@ -220,9 +243,9 @@ class SAR_Generator {
 		$months_long = $this->get_months();
 
 		$list = '';
-		foreach ( $this->yearsWithPosts as $year ) {
+		foreach ( $this->get_years_with_posts() as $year ) {
 			for ( $i = 12; $i >= 1; $i-- ) {
-				if ( ! $current = @$this->monthsWithPosts[$year][$i] )
+				if ( ! $current = $this->get_posts($year, $i) )
 					continue;
 
 				// Get post links for current month
@@ -250,7 +273,7 @@ class SAR_Generator {
 	// The block
 	protected function generate_block() {
 		$block = '';
-		foreach ( $this->yearsWithPosts as $year ) {
+		foreach ( $this->get_years_with_posts() as $year ) {
 			$year_link = html('strong', html_link(get_year_link($year), $year) . ':');
 
 			$month_list = $this->generate_month_list($year, 0, true);
@@ -266,7 +289,7 @@ class SAR_Generator {
 
 	protected function generate_year_list($current_year = 0) {
 		$year_list = '';
-		foreach ( $this->yearsWithPosts as $year ) {
+		foreach ( $this->get_years_with_posts() as $year ) {
 			$year_list .= "\n\t" . html('li',
 				$this->a_link(get_year_link($year), $year, $year == $current_year)
 			);
@@ -282,9 +305,7 @@ class SAR_Generator {
 		for ( $i = 1; $i <= 12; $i++ ) {
 			$month = $month_names[$i];
 
-			$current = @$this->monthsWithPosts[$year][$i];
-
-			if ( $current['posts'] ) {
+			if ( $current = $this->get_posts($year, $i) ) {
 				$url = $this->args->anchors ? "#{$year}{$i}" : $current['link'];
 				$tmp = $this->a_link($url, $month, $i == $current_month);
 			}

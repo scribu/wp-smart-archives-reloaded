@@ -4,7 +4,7 @@ Donate link: http://scribu.net/wordpress
 Tags: archive, post list
 Requires at least: 2.8
 Tested up to: 2.9.1
-Stable tag: trunk
+Stable tag: 1.9.1
 
 An elegant and easy way to present your archives.
 
@@ -67,6 +67,11 @@ Read this: [Advanced Tweaking](http://scribu.net/wordpress/smart-archives-reload
 2. The Settings Page
 
 == Changelog ==
+
+= 2.0 =
+* added %excerpt% tag
+* fewer queries
+* more flexible generator class
 
 = 1.9.1 =
 * updated .pot file

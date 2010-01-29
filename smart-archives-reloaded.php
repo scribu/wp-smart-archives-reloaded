@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 1.9.1
+Version: 2.0a
 Description: An elegant and easy way to present your archives. (With help from <a href="http://www.conceptfusion.co.nz/">Simon Pritchard</a>)
 Author: scribu
 Author URI: http://scribu.net
@@ -205,8 +205,8 @@ jQuery(document).ready(function($) {
 
 		$file = self::get_cache_path(md5(@implode('', $args)));
 
-#DEBUG
-#		$cache = @file_get_contents($file);
+		if ( ! defined('SAR_DEBUG') )
+			$cache = @file_get_contents($file);
 
 		if ( empty($cache) ) {
 			$cache = self::generate($args, $generator);
