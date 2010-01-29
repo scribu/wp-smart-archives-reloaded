@@ -185,7 +185,7 @@ class SAR_Generator {
 		, "\n");
 
 		$month_list = html('ul class="month-list"',
-			$this->generate_month_list(get_query_var('year'), get_query_var('monthnum'))
+			$this->generate_month_list($this->get_current_year(), get_query_var('monthnum'))
 		, "\n");
 
 		return html('div id="smart-archives-menu"', $year_list . $month_list, "\n");
