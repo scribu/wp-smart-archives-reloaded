@@ -14,10 +14,16 @@ class SAR_Generator {
 
 		$where = $this->get_where();
 
-		$months = $this->set_months_with_posts($where);
-
-		if ( empty($months) )
+		if ( ! $this->set_months_with_posts($where) )
 			return false;
+
+		$this->load_post_list($where);
+
+		return call_user_func(array($this, 'generate_' . $this->args->format));
+	}
+
+	protected function load_post_list($where) {
+		global $wpdb;
 
 		if ( $columns = $this->get_columns() ) {
 			$limit = $this->get_limit();
@@ -43,6 +49,7 @@ class SAR_Generator {
 			}
 		}
 		else {
+			// fake it for generate_menu()
 			$current_year = $this->get_current_year();
 			foreach ( $this->get_months_with_posts($current_year) as $month )
 				$this->sorted_posts[$current_year][$month] = array(
@@ -50,8 +57,6 @@ class SAR_Generator {
 					'link' => get_month_link($current_year, $month)
 				);
 		}
-
-		return call_user_func(array($this, 'generate_' . $this->args->format));
 	}
 
 	protected function get_where() {
@@ -105,12 +110,17 @@ class SAR_Generator {
 			{$where}
 			ORDER BY year ASC, month ASC
 		");
+		
+		if ( empty($rows) )
+			return false;
 
 		$months = array();
 		foreach ( $rows as $row )
 			$months[$row->year][] = $row->month;
 
-		return $this->months_with_posts = $months;
+		$this->months_with_posts = $months;
+
+		return true;
 	}
 
 	protected function get_columns() {
