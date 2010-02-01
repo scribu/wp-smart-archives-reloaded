@@ -6,20 +6,24 @@ Requires at least: 2.8
 Tested up to: 2.9.1
 Stable tag: 1.9.1
 
-An elegant and easy way to present your archives.
+Easily display posts grouped by month, in one or more elegant formats
 
 == Description ==
 
-Smart Archives Reloaded is an enhanced version of the [Smart Archives](http://justinblanton.com/projects/smartarchives/) plugin by Justin Blanton.
+Smart Archives Reloaded allows you to display a list of posts grouped by month. It also provides several interesting navigation elements.
 
-Why is this plugin better?
+**Format list:**
 
-* **Easy setup** - no code editing required
-* **Better caching** - no need to wait when publishing a new post
-* **Settings page** - elegantly choose how you want the archives displayed
-* **More options** - besides the 'block' and the 'list', you also have the 'fancy' and the 'menu' formats
+* **list** = a list of posts grouped by month
+* **block** = a compact block of links to year and date archive pages
+* **menu** = a two-level menu with links to year and date archive pages
+* **both** = block + list ([example](http://scribu.net/arhiva))
+* **fancy** = menu + list + JavaScript ([example](http://www.conceptfusion.co.nz/archive))
 
-Examples: [block & list](http://scribu.net/arhiva) | [fancy](http://www.conceptfusion.co.nz/archive)
+**Credits:**
+
+* [Justin Blanton](http://justinblanton.com), for the original [Smart Archives](http://justinblanton.com/projects/smartarchives/) plugin
+* [Simon Pritchard](http://www.conceptfusion.co.nz/), for the fancy format
 
 **Translations:**
 

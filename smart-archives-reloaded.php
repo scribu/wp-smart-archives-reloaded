@@ -2,7 +2,7 @@
 /*
 Plugin Name: Smart Archives Reloaded
 Version: 2.0a
-Description: An elegant and easy way to present your archives. (With help from <a href="http://www.conceptfusion.co.nz/">Simon Pritchard</a>)
+Description: An elegant and easy way to present your posts, grouped by month.
 Author: scribu
 Author URI: http://scribu.net
 Plugin URI: http://scribu.net/wordpress/smart-archives-reloaded
