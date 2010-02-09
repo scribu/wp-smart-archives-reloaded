@@ -4,7 +4,7 @@ Donate link: http://scribu.net/wordpress
 Tags: archive, post list
 Requires at least: 2.8
 Tested up to: 2.9.1
-Stable tag: 1.9.1
+Stable tag: 1.9.2
 
 Easily display posts grouped by month, in one or more elegant formats
 
