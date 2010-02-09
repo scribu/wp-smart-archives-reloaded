@@ -77,6 +77,9 @@ Read this: [Advanced Tweaking](http://scribu.net/wordpress/smart-archives-reload
 * fewer queries
 * more flexible generator class
 
+= 1.9.2 =
+* re-enabled cache
+
 = 1.9.1 =
 * updated .pot file
 * made generator class non-static

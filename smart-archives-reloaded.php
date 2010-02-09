@@ -163,11 +163,12 @@ class SAR_Core {
 
 		$css_url = add_query_arg('ver', '1.8', $plugin_url . "styles$css_dev.css");
 
-		wp_register_script('tools-tabs', $plugin_url . 'tools.tabs.min.js', array('jquery'), '1.0.4', true);
+		wp_print_scripts('jquery');
 
-		scbUtil::do_scripts('jquery');
-		if ( self::$fancy )
-			scbUtil::do_scripts('tools-tabs');
+		if ( self::$fancy ) {
+			wp_register_script('tools-tabs', $plugin_url . 'tools.tabs.min.js', array('jquery'), '1.0.4', true);
+			wp_print_scripts('tools-tabs');
+		}
 ?>
 <script type="text/javascript">
 jQuery(document).ready(function($) {
