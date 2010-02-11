@@ -1,7 +1,7 @@
 <?php
 
 class SAR_Settings extends scbAdminPage {
-	function __construct($file, $options) {
+	function setup(){
 		$this->textdomain = 'smart-archives-reloaded';
 
 		$this->args = array(
@@ -9,8 +9,6 @@ class SAR_Settings extends scbAdminPage {
 			'menu_title' => __('Smart Archives', $this->textdomain),
 			'page_slug' => 'smart-archives'
 		);
-
-		parent::__construct($file, $options);
 	}
 
 	// Page methods
