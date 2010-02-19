@@ -256,7 +256,7 @@ class SAR_Generator {
 		$months_long = $this->get_months();
 
 		$list = '';
-		foreach ( $this->get_years_with_posts() as $year ) {
+		foreach ( array_reverse($this->get_years_with_posts(), true) as $year ) {
 			for ( $i = 12; $i >= 1; $i-- ) {
 				if ( ! $current = $this->get_posts($year, $i) )
 					continue;
@@ -311,8 +311,10 @@ class SAR_Generator {
 		return $year_list;
 	}
 
-	protected function generate_month_list($year, $current_month = 0, $inline = false) {
+	protected function generate_month_list($year, $current_month = 0, $inline = false, $in_current_year = false) {
 		$month_names = $this->get_months($this->args->month_format);
+
+		$in_current_year = $year == get_query_var('year');
 
 		$month_list = '';
 		for ( $i = 1; $i <= 12; $i++ ) {
@@ -320,7 +322,7 @@ class SAR_Generator {
 
 			if ( $current = $this->get_posts($year, $i) ) {
 				$url = $this->args->anchors ? "#{$year}{$i}" : $current['link'];
-				$tmp = $this->a_link($url, $month, $i == $current_month);
+				$tmp = $this->a_link($url, $month, $in_current_year && $i == $current_month);
 			}
 			else {
 				$tmp = html('span class="empty-month"', $month);
