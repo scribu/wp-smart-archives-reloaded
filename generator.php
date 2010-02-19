@@ -4,51 +4,31 @@ class SAR_Generator {
 	protected $args;
 	protected $active_tags;
 
+	protected $where;
 	protected $months_with_posts;
-	protected $sorted_posts;
+	protected $columns;
 
 	public function generate($args) {
 		global $wpdb;
 	
 		$this->args = (object) $args;
 
-		$where = $this->get_where();
+		$this->set_where();
+		$this->set_limit();
+		$this->set_columns();
 
-		if ( ! $this->set_months_with_posts($where) )
+		if ( ! $this->set_months_with_posts() )
 			return false;
 
-		$this->load_post_list($where);
+		$this->load_post_list();
 
 		return call_user_func(array($this, 'generate_' . $this->args->format));
 	}
 
-	protected function load_post_list($where) {
+	protected function load_post_list() {
 		global $wpdb;
 
-		if ( $columns = $this->get_columns() ) {
-			$limit = $this->get_limit();
-
-			// Get post list for each month
-			foreach ( $this->get_months_with_posts() as $year => $months ) {
-				foreach ( $months as $month ) {
-					$query = $wpdb->prepare("
-						SELECT {$columns}
-						FROM {$wpdb->posts}
-						{$where}
-						AND YEAR(post_date) = {$year}
-						AND MONTH(post_date) = {$month}
-						ORDER BY post_date DESC
-						{$limit}
-					");
-
-					$this->sorted_posts[$year][$month] = array(
-						'posts' => $wpdb->get_results($query),
-						'link' => get_month_link($year, $month)
-					);
-				}
-			}
-		}
-		else {
+		if ( !$this->columns ) {
 			// fake it for generate_menu()
 			$current_year = $this->get_current_year();
 			foreach ( $this->get_months_with_posts($current_year) as $month )
@@ -59,7 +39,7 @@ class SAR_Generator {
 		}
 	}
 
-	protected function get_where() {
+	protected function set_where() {
 		global $wpdb;
 
 		$where = "
@@ -90,27 +70,27 @@ class SAR_Generator {
 			";
 		}
 
-		return $where;
+		$this->where = $where;
 	}
 
-	protected function get_limit() {
+	protected function set_limit() {
 		$limit = '';
 		if ( $posts_per_month = absint(@$this->args->posts_per_month) )
 			$limit = 'LIMIT ' . $posts_per_month;
 
-		return $limit;
+		$this->limit = $limit;
 	}
 
-	protected function set_months_with_posts($where) {
+	protected function set_months_with_posts() {
 		global $wpdb;
 
 		$rows = $wpdb->get_results("
 			SELECT DISTINCT YEAR(post_date) AS year, MONTH(post_date) AS month
 			FROM {$wpdb->posts}
-			{$where}
+			{$this->where}
 			ORDER BY year ASC, month ASC
 		");
-		
+
 		if ( empty($rows) )
 			return false;
 
@@ -123,14 +103,18 @@ class SAR_Generator {
 		return true;
 	}
 
-	protected function get_columns() {
-		if ( 'menu' == $this->args->format )
-			return false;
+	protected function set_columns() {
+		if ( 'menu' == $this->args->format ) {
+			$this->columns = false;
+			return;
+		}
 
 		$columns = array('ID', 'post_title');
 
-		if ( 'block' == $this->args->format )
-			return implode(',', $columns);
+		if ( 'block' == $this->args->format ) {
+			$this->columns = implode(',', $columns);
+			return;	
+		}
 
 		$column_map = array(
 			'post_excerpt' => array('%excerpt%'),
@@ -144,7 +128,7 @@ class SAR_Generator {
 			if ( count(array_intersect($tags, $active_tags)) )
 				$columns[] = $column;
 
-		return implode(',', $columns);
+		$this->columns = implode(',', $columns);
 	}
 
 	function get_active_tags() {
@@ -178,13 +162,21 @@ class SAR_Generator {
 	protected function get_years_with_posts() {
 		return array_keys($this->months_with_posts);
 	}
-	
-	protected function get_posts($year = 0, $month = 0) {
 
-		if ( ! $year && ! $month )
-			return $this->sorted_posts;
+	protected function get_posts($year, $month) {
+		global $wpdb;
 
-		return @$this->sorted_posts[$year][$month];
+		$query = $wpdb->prepare("
+			SELECT {$this->columns}
+			FROM {$wpdb->posts}
+			{$this->where}
+			AND YEAR(post_date) = {$year}
+			AND MONTH(post_date) = {$month}
+			ORDER BY post_date DESC
+			{$this->limit}
+		");
+
+		return $wpdb->get_results($query);
 	}
 
 
@@ -222,7 +214,7 @@ class SAR_Generator {
 			// Generate post lists
 			$list = '';
 			for ( $i = 1; $i <= 12; $i++ ) {
-				if ( ! $current = $this->get_posts($year, $i) )
+				if ( ! $posts = $this->get_posts($year, $i) )
 					continue;
 
 				// Append to list
@@ -230,11 +222,11 @@ class SAR_Generator {
 					"\n\t\t" . html('h2 class="month-heading"',
 						"$months_long[$i] $year "
 						.html('span class="month-archive-link"',
-							'('. html_link($current['link'], __('View complete archive page', 'smart-archives-reloaded')) .')'
+							'('. html_link(get_month_link($year, $i), __('View complete archive page', 'smart-archives-reloaded')) .')'
 						)
 					)
 					.html('ul class="archive-list"', 
-						$this->generate_post_list($current['posts'], "\n\t\t\t")
+						$this->generate_post_list($posts, "\n\t\t\t")
 					, "\n\t\t")
 				, "\n\t");
 			} // end month block
@@ -258,11 +250,11 @@ class SAR_Generator {
 		$list = '';
 		foreach ( array_reverse($this->get_years_with_posts(), true) as $year ) {
 			for ( $i = 12; $i >= 1; $i-- ) {
-				if ( ! $current = $this->get_posts($year, $i) )
+				if ( ! $posts = $this->get_posts($year, $i) )
 					continue;
 
 				// Get post links for current month
-				$post_list = $this->generate_post_list($current['posts'], "\n\t\t");
+				$post_list = $this->generate_post_list($posts, "\n\t\t");
 
 				// Set title format
 				if ( $this->args->anchors )
@@ -272,7 +264,7 @@ class SAR_Generator {
 
 				// Append to list
 				$list .= "\n\t" . html($el,
-					html_link($current['link'], $months_long[$i] . ' ' . $year)
+					html_link(get_month_link($year, $i), $months_long[$i] . ' ' . $year)
 				);
 
 				$list .= html('ul', $post_list, "\n\t");
@@ -320,8 +312,8 @@ class SAR_Generator {
 		for ( $i = 1; $i <= 12; $i++ ) {
 			$month = $month_names[$i];
 
-			if ( $current = $this->get_posts($year, $i) ) {
-				$url = $this->args->anchors ? "#{$year}{$i}" : $current['link'];
+			if ( in_array($i, $this->get_months_with_posts($year)) ) {
+				$url = $this->args->anchors ? "#{$year}{$i}" : get_month_link($year, $i);
 				$tmp = $this->a_link($url, $month, $in_current_year && $i == $current_month);
 			}
 			else {
