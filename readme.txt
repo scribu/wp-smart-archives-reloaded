@@ -1,7 +1,7 @@
 === Smart Archives Reloaded ===
 Contributors: scribu
 Donate link: http://scribu.net/wordpress
-Tags: archive, post list
+Tags: archive, archives, post list
 Requires at least: 2.8
 Tested up to: 2.9.1
 Stable tag: 1.9.2
