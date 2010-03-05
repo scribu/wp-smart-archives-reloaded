@@ -42,10 +42,6 @@
 	color: #000;
 }
 
-.month-heading {
-	margin-top: 10px
-}
-
 .month-list li {
 	padding: 3px 5px !important;
 }
@@ -53,10 +49,6 @@
 .month-list .current, .month-list .current a {
 	background: none;
 	color: #000;
-}
-
-#smart-archives-fancy a {
-	outline: none !important;
 }
 
 .archive-list li {
@@ -71,6 +63,11 @@
 	padding: 0;
 }
 
+/* Fancy */
+#smart-archives-fancy a {
+	outline: none !important;
+}
+
 .pane {
 	float: left;
 	clear: both;
@@ -79,7 +76,7 @@
 }
 
 .month-heading {
-	margin: 10px 0;
+	margin: 20px 0 10px;
 }
 
 span.month-archive-link {
