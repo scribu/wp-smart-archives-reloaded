@@ -47,35 +47,6 @@ function smart_archives_load_default_generator() {
 	SAR_Core::load_default_generator();
 }
 
-
-_sar_init();
-function _sar_init() {
-	// Load scbFramework
-	require_once dirname(__FILE__) . '/scb/load.php';
-
-	// Load translations
-	load_plugin_textdomain('smart-archives-reloaded', '', basename(dirname(__FILE__)) . '/lang');
-
-	$options = new scbOptions('smart-archives', __FILE__, array(
-		'format' => 'both',
-		'list_format' => '%post_link%',
-		'date_format' => 'F j, Y',
-		'posts_per_month' => false,
-		'include_cat' => array(),
-		'exclude_cat' => array(),
-		'anchors' => false,
-		'month_format' => 'short',
-		'cron' => true
-	));
-
-	SAR_Core::init($options);
-
-	if ( is_admin() ) {
-		require_once dirname(__FILE__) . '/admin.php';
-		new SAR_Settings(__FILE__, $options);
-	}
-}
-
 class SAR_Core {
 	const hook = 'smart_archives_update';
 	static $override_cron = false;
@@ -321,4 +292,33 @@ jQuery(document).ready(function($) {
 		return array_unique($ids);
 	}
 }
+
+function _sar_init() {
+	// Load scbFramework
+	require_once dirname(__FILE__) . '/scb/load.php';
+
+	// Load translations
+	load_plugin_textdomain('smart-archives-reloaded', '', basename(dirname(__FILE__)) . '/lang');
+
+	$options = new scbOptions('smart-archives', __FILE__, array(
+		'format' => 'both',
+		'list_format' => '%post_link%',
+		'date_format' => 'F j, Y',
+		'posts_per_month' => false,
+		'include_cat' => array(),
+		'exclude_cat' => array(),
+		'anchors' => false,
+		'month_format' => 'short',
+		'cron' => true
+	));
+
+	SAR_Core::init($options);
+
+	if ( is_admin() ) {
+		require_once dirname(__FILE__) . '/admin/admin.php';
+		new SAR_Settings(__FILE__, $options);
+	}
+}
+
+_sar_init();
 

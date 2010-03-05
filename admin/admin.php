@@ -15,7 +15,7 @@ class SAR_Settings extends scbAdminPage {
 	function page_head() {
 		$js_dev = defined('STYLE_DEBUG') && SCRIPT_DEBUG ? '.dev' : '';
 	
-		wp_enqueue_script('sar-admin', $this->plugin_url . "inc/admin$js_dev.js", array('jquery'), '1.9', true);
+		wp_enqueue_script('sar-admin', $this->plugin_url . "admin/admin$js_dev.js", array('jquery'), '1.9', true);
 		echo $this->css_wrap('h3 {margin-bottom: 0 !important}');
 	}
 
