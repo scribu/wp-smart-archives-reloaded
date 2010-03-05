@@ -14,7 +14,6 @@
 .month-list {
 	border-bottom: 2px solid #E8EDEE;
 	padding: 5px 3px !important;
-	margin-bottom: 10px !important;
 }
 
 .year-list li, .month-list li {
@@ -41,6 +40,10 @@
 .year-list .current {
 	background: url(img/archive-year-pointer.png) no-repeat center bottom;
 	color: #000;
+}
+
+.month-heading {
+	margin-top: 10px
 }
 
 .month-list li {
