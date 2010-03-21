@@ -316,7 +316,7 @@ function _sar_init() {
 
 	if ( is_admin() ) {
 		require_once dirname(__FILE__) . '/admin/admin.php';
-		new SAR_Settings(__FILE__, $options);
+		scbAdminPage::register('SAR_Settings', __FILE__, $options);
 	}
 }
 
