@@ -1,16 +1,19 @@
 <?php
 
+/*
+Plan:
+^ use WP_Query + Query_Decorator
+? hidden option: get all post in a year, or month
+*/
+
 class SAR_Generator {
 	protected $args;
 	protected $active_tags;
 
-	protected $where;
 	protected $months_with_posts;
 	protected $columns;
 
 	public function generate($args) {
-		global $wpdb;
-	
 		$this->args = (object) $args;
 
 		$this->set_where();
@@ -39,38 +42,20 @@ class SAR_Generator {
 		}
 	}
 
-	protected function set_where() {
-		global $wpdb;
-
-		$where = "
-			WHERE post_type = 'post'
-			AND post_status = 'publish'		
-		";
-
+	protected function set_query_args() {
 		if ( ! empty($this->args->exclude_cat) ) {
-			$where .= "AND ID NOT IN (";
 			$ids = $this->args->exclude_cat;
+			if ( is_array($ids) )
+				$ids = implode(',', $ids);
+
+			$this->query_args['cat'] = '-' . $ids;
 		} elseif ( ! empty($this->args->include_cat) ) {
-			$where .= "AND ID IN (\n";
 			$ids = $this->args->include_cat;
+			if ( is_array($ids) )
+				$ids = implode(',', $ids);
+
+			$this->query_args['cat'] = $ids;
 		}
-
-		if ( ! empty($ids) ) {
-			if ( ! is_array($ids) )
-				$ids = explode(',', $ids);
-
-			$ids = scbUtil::array_to_sql(array_map('absint', $ids));
-
-			$where .= "
-					SELECT r.object_id
-					FROM {$wpdb->term_relationships} r NATURAL JOIN {$wpdb->term_taxonomy} t
-					WHERE t.taxonomy = 'category'
-					AND t.term_id IN ($ids)
-				)
-			";
-		}
-
-		$this->where = $where;
 	}
 
 	protected function set_limit() {
@@ -164,21 +149,24 @@ class SAR_Generator {
 	}
 
 	protected function get_posts($year, $month) {
-		global $wpdb;
 
-		$query = $wpdb->prepare("
-			SELECT {$this->columns}
-			FROM {$wpdb->posts}
-			{$this->where}
-			AND YEAR(post_date) = {$year}
-			AND MONTH(post_date) = {$month}
-			ORDER BY post_date DESC
-			{$this->limit}
-		");
+		$args = array_merge($this->query_args, array(
+			'year' => $year,
+			'monthnum' => $month,
+			'showposts' => -1,
+			'suppress_filters' => false,
+		));
 
-		return $wpdb->get_results($query);
+		add_filter('posts_fields', array($this, 'posts_fields'));
+		$posts = get_posts($args);
+		remove_filter('posts_fields', array($this, 'posts_fields'));
+
+		return $posts;
 	}
 
+	function posts_fields() {
+		return $this->columns;
+	}
 
 // ____ MAIN TEMPLATES ____
 
@@ -290,7 +278,9 @@ class SAR_Generator {
 		return html("ul id='smart-archives-block'", $block, "\n");
 	}
 
-// ____ HELPER TEMPLATES ____
+
+//_____HELPER TEMPLATES_____
+
 
 	protected function generate_year_list($current_year = 0) {
 		$year_list = '';
@@ -378,7 +368,9 @@ class SAR_Generator {
 		return $array[$keys[count($keys)-1]];
 	}
 
-// ____ SUBSTITUTION TAGS ____
+
+//_____SUBSTITUTION TAGS_____
+
 
 	protected function substitute_post_link($post) {
 		return html_link(

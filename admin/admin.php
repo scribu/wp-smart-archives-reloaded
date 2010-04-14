@@ -1,7 +1,8 @@
 <?php
 
 class SAR_Settings extends scbAdminPage {
-	function setup(){
+
+	function setup() {
 		$this->textdomain = 'smart-archives-reloaded';
 
 		$this->args = array(
@@ -19,18 +20,47 @@ class SAR_Settings extends scbAdminPage {
 		echo $this->css_wrap('h3 {margin-bottom: 0 !important}');
 	}
 
-	function validate($new_options, $old_options) {
-		return SAR_Core::sanitize_args($new_options);
+	function validate($args) {
+		$args = wp_parse_args($args, $this->options->get_defaults());
+
+		// Category IDs
+		if ( isset($args['include_cat']) && !empty($args['include_cat']) ) {
+			$args['include_cat'] = self::parse_id_list($args['include_cat']);
+			$args['exclude_cat'] = array();
+		}
+		else {
+			$args['exclude_cat'] = self::parse_id_list($args['exclude_cat']);
+		}
+
+		// Anchors
+		if ( 'both' != $args['format'] )
+			$args['anchors'] = false;
+
+		// Block numeric
+		if ( array_key_exists('block_numeric', $args) ) {
+			if ( 'block' == $args['format'] && ! array_key_exists('month_format', $args) )
+				$args['month_format'] = $args['block_numeric'] ? 'numeric' : 'short';
+
+			unset($args['block_numeric']);
+		}
+
+		// List format
+		$args['list_format'] = trim($args['list_format']);
+
+		return $args;
 	}
 
-	function form_handler() {
-		if ( isset($_POST['action']) && $_POST['action'] == __('Clear', $this->textdomain) ) {
-			SAR_Core::$override_cron = true;
-			SAR_Core::update_cache();
-			$this->admin_msg(__('Cache <strong>cleared</strong>.', $this->textdomain));
-		} else {
-			parent::form_handler();
-		}
+	private function parse_id_list($list) {
+		$ids = array();
+
+		if ( !is_array($list) )
+			$list = preg_split('/[\s,]+/', $list);
+
+		foreach ( $list as $id )
+			if ( $id = absint($id) )
+				$ids[] = $id;
+
+		return array_unique($ids);
 	}
 
 	function page_content() {
@@ -101,22 +131,6 @@ class SAR_Settings extends scbAdminPage {
 				'desc' => __('The month links in the block will point to the month links in the list', $this->textdomain),
 				'type' => 'checkbox',
 				'name' => 'anchors',
-			),
-		))
-
-		.$this->_subsection(__('Cache control', $this->textdomain), 'cache', array(
-			array(
-				'title' => __('Use wp-cron', $this->textdomain),
-				'type' => 'checkbox',
-				'name' => 'cron'
-			),
-
-			array(
-				'title' => __('Clear cache', $this->textdomain),
-				'type' => 'submit',
-				'name' => 'action',
-				'value' => __('Clear', $this->textdomain),
-				'extra' => 'class="button no-ajax"',
 			),
 		));
 

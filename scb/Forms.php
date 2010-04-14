@@ -17,7 +17,7 @@ class scbForms {
 
 		$formdata = associative array with the formdata with which to fill the elements
 	*/
-	
+
 	protected static $args;
 	protected static $formdata = array();
 
@@ -289,7 +289,7 @@ class scbForms {
 	// Handle args for text inputs
 	private static function _input_single($args, $data) {
 		$args = wp_parse_args($args, array(
-			'value' => stripslashes($data),
+			'value' => $data,
 			'desc_pos' => 'after',
 			'extra' => array('class="regular-text"'),
 		));
@@ -386,7 +386,7 @@ class scbForms {
 		)), EXTR_SKIP);
 
 		if ( !$escaped )
-			$value = wp_htmledit_pre(stripslashes($value));
+			$value = esc_html($value);
 
 		$extra = self::validate_extra($extra, $name);
 

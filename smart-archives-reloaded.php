@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 2.0a2
+Version: 2.0a3 (very buggy)
 Description: An elegant and easy way to present your posts, grouped by month.
 Author: scribu
 Author URI: http://scribu.net
@@ -39,24 +39,19 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
  * date_format: string
  */
 function smart_archives($args = '') {
-	echo SAR_Core::load($args);
+	SAR_Core::generate($args);
 }
 
 /* If you want to extend the SAR_Generator class, call this function first */
 function smart_archives_load_default_generator() {
-	SAR_Core::load_default_generator();
+	require_once dirname(__FILE__) . '/generator.php';
 }
 
 class SAR_Core {
-	const hook = 'smart_archives_update';
-	static $override_cron = false;
-
 	private static $options;
 
 	private static $fancy = false;
 	private static $css = false;
-
-	private static $cache_dir;
 
 	// Substitution tags
 	static function get_available_tags() {
@@ -73,45 +68,17 @@ class SAR_Core {
 	static function init($options) {
 		self::$options = $options;
 
-		// Set cron hook
-		add_action(self::hook, array(__CLASS__, 'clear_cache'));
-
 		// Set shortcode
 		add_shortcode('smart_archives', array(__CLASS__, 'load'));
 
 		// Set fancy archive
 		add_action('wp_footer', array(__CLASS__, 'init_fancy'), 20);
 
-		// Cache invalidation
-		add_action('transition_post_status', array(__CLASS__, 'update_cache'), 10, 2);
-		add_action('deleted_post', array(__CLASS__, 'update_cache'), 10, 0);
-		add_action('wp_update_comment_count', array(__CLASS__, 'update_cache'), 10, 0);
-
 		// Install / uninstall
 		register_activation_hook(__FILE__, array(__CLASS__, 'upgrade'));
-		register_uninstall_hook(__FILE__, array(__CLASS__, 'clear_cache'));
-	}
-
-	static function update_cache($new_status = '', $old_status = '') {
-		$cond =
-			( 'publish' == $new_status || 'publish' == $old_status ) ||		// publish or unpublish
-			( func_num_args() == 0 );
-
-		if ( !$cond )
-			return;
-
-		if ( self::$options->cron && ! self::$override_cron ) {
-			wp_clear_scheduled_hook(self::hook);
-			wp_schedule_single_event(time(), self::hook);
-		} else {
-			do_action(self::hook);
-		}
 	}
 
 	static function upgrade() {
-		$wud = wp_upload_dir();
-		@unlink($wud['basedir'] . '/sar_cache.txt');
-		
 		$options = self::$options->get();
 
 		if ( isset($options['catID']) && empty($options['exclude_cat']) )
@@ -164,14 +131,8 @@ jQuery(document).ready(function($) {
 <?php
 	}
 
-	static function load($args = '') {
-		$args = self::validate_args($args);
-
-		$generator = '';
-		if ( isset($args['generator']) ) {
-			$generator = $args['generator'];
-			unset($args['generator']);
-		}
+	static function generate($args = '', $query = '') {
+		list($args, $query) = self::validate_args($args, $query);
 
 		if ( 'fancy' == $args['format'] )
 			self::$fancy = true;
@@ -179,23 +140,9 @@ jQuery(document).ready(function($) {
 		if ( in_array($args['format'], array('menu', 'fancy')) )
 			self::$css = true;
 
-		if ( 'menu' == $args['format'] )
-			return self::generate($args, $generator);
+		if ( isset($args['generator']) )
+			$generator = $args['generator'];
 
-		$file = self::get_cache_path(md5(@implode('', $args)));
-
-		if ( ! defined('SAR_DEBUG') )
-			$cache = @file_get_contents($file);
-
-		if ( empty($cache) ) {
-			$cache = self::generate($args, $generator);
-			@file_put_contents($file, $cache);
-		}
-
-		return $cache;
-	}
-
-	private function generate($args, $generator = '') {
 		if ( empty($generator) ) {
 			self::load_default_generator();
 			$generator = new SAR_Generator();
@@ -203,53 +150,10 @@ jQuery(document).ready(function($) {
 			$generator = new $generator;
 		}
 
-		return call_user_func(array($generator, 'generate'), $args);
+		call_user_func(array($generator, 'generate'), $args, $query);
 	}
 
-	public function load_default_generator() {
-		require_once dirname(__FILE__) . '/generator.php';	
-	}
-
-	static function clear_cache() {
-		$cache_dir = self::get_cache_path('', false);
-		$dir_handle = @opendir($cache_dir);
-
-		if ( FALSE == $dir_handle )
-			return;
-
-		while ( $file = readdir($dir_handle) )
-			if ( $file != "." && $file != ".." )
-				unlink(self::get_cache_path($file));
-
-		@closedir($dir_handle);
-		@rmdir($cache_dir);
-	}
-
-	static function get_cache_path($file = '', $create = true) {
-		// Set cache dir
-		if ( empty(self::$cache_dir) ) {
-			$wud = wp_upload_dir();
-			self::$cache_dir = $wud['basedir'] . '/sar_cache/';
-			if ( $create && !is_dir(self::$cache_dir) )
-				@mkdir(self::$cache_dir);
-		}
-
-		return self::$cache_dir . $file;
-	}
-
-	private static function validate_args($args) {
-		$args = wp_parse_args($args, self::$options->get());
-
-		$args = self::sanitize_args($args);
-
-		unset($args['cron']);
-
-		ksort($args);
-
-		return $args;
-	}
-
-	public static function sanitize_args($args) {
+	function validate_args($args = '', $query = '') {
 		$args = wp_parse_args($args, self::$options->get_defaults());
 
 		// Category IDs
@@ -276,20 +180,7 @@ jQuery(document).ready(function($) {
 		// List format
 		$args['list_format'] = trim($args['list_format']);
 
-		return $args;
-	}
-
-	private function parse_id_list($list) {
-		$ids = array();
-
-		if ( !is_array($list) )
-			$list = preg_split('/[\s,]+/', $list);
-
-		foreach ( $list as $id )
-			if ( $id = absint($id) )
-				$ids[] = $id;
-
-		return array_unique($ids);
+		return array($args, $query);
 	}
 }
 
@@ -309,7 +200,6 @@ function _sar_init() {
 		'exclude_cat' => array(),
 		'anchors' => false,
 		'month_format' => 'short',
-		'cron' => true
 	));
 
 	SAR_Core::init($options);
