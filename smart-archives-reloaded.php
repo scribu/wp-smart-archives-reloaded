@@ -59,16 +59,6 @@ class SAR_Core {
 		);
 	}
 
-	function get_active_tags($format) {
-		$active_tags = array();
-		foreach ( self::get_available_tags() as $tag )
-			if ( FALSE !== strpos($format, $tag) )
-				$active_tags[] = $tag;
-
-		return $active_tags;
-	}
-
-
 	static function init($options) {
 		self::$options = $options;
 
@@ -153,7 +143,7 @@ class SAR_Core {
 		// List format
 		$args['list_format'] = trim($args['list_format']);
 
-		return $args
+		return $args;
 	}
 
 	static function add_scripts() {

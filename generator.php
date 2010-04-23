@@ -220,14 +220,13 @@ class SAR_Generator {
 
 	protected function generate_post_list($posts, $indent) {
 
-		$active_tags = SAR_Core::get_active_tags($this->args->list_format);
-
 		$post_list = '';
 		foreach ( $posts as $post ) {
 			$list_item = $this->args->list_format;
 
-			foreach ( $active_tags as $tag )
-				$list_item = str_replace($tag, call_user_func(array($this, 'substitute_' . substr($tag, 1, -1)), $post), $list_item);
+			foreach ( SAR_Core::get_available_tags() as $tag )
+				if ( false !== strpos($this->args->list_format, $tag) )
+					$list_item = str_replace($tag, call_user_func(array($this, 'substitute_' . substr($tag, 1, -1)), $post), $list_item);
 
 			$post_list .= $indent . html('li', $list_item);
 		}
