@@ -21,33 +21,7 @@ class SAR_Settings extends scbAdminPage {
 	}
 
 	function validate($args) {
-		$args = wp_parse_args($args, $this->options->get_defaults());
-
-		// Category IDs
-		if ( isset($args['include_cat']) && !empty($args['include_cat']) ) {
-			$args['include_cat'] = self::parse_id_list($args['include_cat']);
-			$args['exclude_cat'] = array();
-		}
-		else {
-			$args['exclude_cat'] = self::parse_id_list($args['exclude_cat']);
-		}
-
-		// Anchors
-		if ( 'both' != $args['format'] )
-			$args['anchors'] = false;
-
-		// Block numeric
-		if ( array_key_exists('block_numeric', $args) ) {
-			if ( 'block' == $args['format'] && ! array_key_exists('month_format', $args) )
-				$args['month_format'] = $args['block_numeric'] ? 'numeric' : 'short';
-
-			unset($args['block_numeric']);
-		}
-
-		// List format
-		$args['list_format'] = trim($args['list_format']);
-
-		return $args;
+		return SAR_Core::validate_args($args);
 	}
 
 	private function parse_id_list($list) {

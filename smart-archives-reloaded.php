@@ -94,7 +94,7 @@ class SAR_Core {
 	static function generate($args = '', $qv = '') {
 		$args = wp_parse_args($args, self::$options->get());
 
-		list($args, $qv) = self::validate_args($args, $qv);
+		$args = self::validate_args($args);
 
 		// scripts
 		if ( 'fancy' == $args['format'] )
@@ -104,6 +104,9 @@ class SAR_Core {
 			self::$css = true;
 
 		// query vars
+		if ( empty($qv) )
+			$qv = array();
+		
 		$exclude_cat = array_pop_key($args, 'exclude_cat');
 		$include_cat = array_pop_key($args, 'include_cat');
 
@@ -123,11 +126,8 @@ class SAR_Core {
 		return $generator->generate($args, $qv);
 	}
 
-	function validate_args($args = '', $qv = '') {
+	function validate_args($args) {
 		$args = wp_parse_args($args, self::$options->get_defaults());
-
-		if ( empty($qv) )
-			$qv = array();
 
 		// Category IDs
 		if ( isset($args['include_cat']) && !empty($args['include_cat']) ) {
@@ -153,7 +153,7 @@ class SAR_Core {
 		// List format
 		$args['list_format'] = trim($args['list_format']);
 
-		return array($args, $qv);
+		return $args
 	}
 
 	static function add_scripts() {
