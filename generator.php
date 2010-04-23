@@ -1,11 +1,5 @@
 <?php
 
-/*
-Plan:
-^ use WP_Query + Query_Decorator
-? hidden option: get all post in a year, or month
-*/
-
 class SAR_Generator {
 	protected $args;
 	protected $active_tags;
@@ -13,49 +7,22 @@ class SAR_Generator {
 	protected $months_with_posts;
 	protected $columns;
 
-	public function generate($args) {
+	public function generate($args, $qv) {
+		$this->load_data($args, $qv);
+
 		$this->args = (object) $args;
-
-		$this->set_where();
-		$this->set_limit();
-		$this->set_columns();
-
-		if ( ! $this->set_months_with_posts() )
-			return false;
-
-		$this->load_post_list();
+		$this->query_vars = $qv;
 
 		return call_user_func(array($this, 'generate_' . $this->args->format));
 	}
 
-	protected function load_post_list() {
-		global $wpdb;
+	protected function load_data($args) {
+		$mvp = new SAR_Year_Query($args);
 
-		if ( !$this->columns ) {
-			// fake it for generate_menu()
-			$current_year = $this->get_current_year();
-			foreach ( $this->get_months_with_posts($current_year) as $month )
-				$this->sorted_posts[$current_year][$month] = array(
-					'posts' => true,
-					'link' => get_month_link($current_year, $month)
-				);
-		}
-	}
+		if ( empty($mvp->months_with_posts) )
+			return false;
 
-	protected function set_query_args() {
-		if ( ! empty($this->args->exclude_cat) ) {
-			$ids = $this->args->exclude_cat;
-			if ( is_array($ids) )
-				$ids = implode(',', $ids);
-
-			$this->query_args['cat'] = '-' . $ids;
-		} elseif ( ! empty($this->args->include_cat) ) {
-			$ids = $this->args->include_cat;
-			if ( is_array($ids) )
-				$ids = implode(',', $ids);
-
-			$this->query_args['cat'] = $ids;
-		}
+		$this->months_with_posts = $mvp->months_with_posts;
 	}
 
 	protected function set_limit() {
@@ -66,73 +33,11 @@ class SAR_Generator {
 		$this->limit = $limit;
 	}
 
-	protected function set_months_with_posts() {
-		global $wpdb;
-
-		$rows = $wpdb->get_results("
-			SELECT DISTINCT YEAR(post_date) AS year, MONTH(post_date) AS month
-			FROM {$wpdb->posts}
-			{$this->where}
-			ORDER BY year ASC, month ASC
-		");
-
-		if ( empty($rows) )
-			return false;
-
-		$months = array();
-		foreach ( $rows as $row )
-			$months[$row->year][] = $row->month;
-
-		$this->months_with_posts = $months;
-
-		return true;
-	}
-
-	protected function set_columns() {
-		if ( 'menu' == $this->args->format ) {
-			$this->columns = false;
-			return;
-		}
-
-		$columns = array('ID', 'post_title');
-
-		if ( 'block' == $this->args->format ) {
-			$this->columns = implode(',', $columns);
-			return;	
-		}
-
-		$column_map = array(
-			'post_excerpt' => array('%excerpt%'),
-			'post_author' => array('%author%', '%author_link%'),
-			'post_date' => array('%date%'),
-			'comment_count' => array('%comment_count%'),
-		);
-
-		$active_tags = $this->get_active_tags();
-		foreach ( $column_map as $column => $tags )
-			if ( count(array_intersect($tags, $active_tags)) )
-				$columns[] = $column;
-
-		$this->columns = implode(',', $columns);
-	}
-
-	function get_active_tags() {
-		if ( $this->active_tags )
-			return $this->active_tags;
-
-		$this->active_tags = array();
-		foreach ( SAR_Core::get_available_tags() as $tag )
-			if ( FALSE !== strpos($this->args->list_format, $tag) )
-				$this->active_tags[] = $tag;
-
-		return $this->active_tags;
-	}
-
 // Data access
 
 	protected function get_current_year() {
 		if ( ! $year = get_query_var('year') )
-			$year = $this->get_last_item($this->get_years_with_posts());
+			$year = end($this->get_years_with_posts());
 
 		return $year;
 	}
@@ -149,24 +54,25 @@ class SAR_Generator {
 	}
 
 	protected function get_posts($year, $month) {
-
-		$args = array_merge($this->query_args, array(
+		if ( !isset($this->months_with_posts[$year][$month]) )
+			return array();
+	
+		$qv = array_merge($this->query_vars, array(
 			'year' => $year,
 			'monthnum' => $month,
-			'showposts' => -1,
+			'nopaging' => true,
 			'suppress_filters' => false,
 		));
 
-		add_filter('posts_fields', array($this, 'posts_fields'));
-		$posts = get_posts($args);
-		remove_filter('posts_fields', array($this, 'posts_fields'));
+		$r = get_posts($qv);
 
-		return $posts;
+// should never happen
+if ( empty($r) )
+	debug($qv);
+
+		return $r;
 	}
 
-	function posts_fields() {
-		return $this->columns;
-	}
 
 // ____ MAIN TEMPLATES ____
 
@@ -281,7 +187,6 @@ class SAR_Generator {
 
 //_____HELPER TEMPLATES_____
 
-
 	protected function generate_year_list($current_year = 0) {
 		$year_list = '';
 		foreach ( $this->get_years_with_posts() as $year ) {
@@ -320,7 +225,8 @@ class SAR_Generator {
 	}
 
 	protected function generate_post_list($posts, $indent) {
-		$active_tags = $this->get_active_tags();
+
+		$active_tags = SAR_Core::get_active_tags($this->args->list_format);
 
 		$post_list = '';
 		foreach ( $posts as $post ) {
@@ -361,11 +267,6 @@ class SAR_Generator {
 		$el = $current ? 'a class="current"' : 'a';
 
 		return html($el . ' href="' . $link . '"', $title);
-	}
-
-	protected function get_last_item($array) {
-		$keys = array_keys($array);
-		return $array[$keys[count($keys)-1]];
 	}
 
 

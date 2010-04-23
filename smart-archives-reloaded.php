@@ -39,12 +39,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
  * date_format: string
  */
 function smart_archives($args = '') {
-	SAR_Core::generate($args);
-}
-
-/* If you want to extend the SAR_Generator class, call this function first */
-function smart_archives_load_default_generator() {
-	require_once dirname(__FILE__) . '/generator.php';
+	echo SAR_Core::generate($args);
 }
 
 class SAR_Core {
@@ -53,48 +48,120 @@ class SAR_Core {
 	private static $fancy = false;
 	private static $css = false;
 
-	// Substitution tags
 	static function get_available_tags() {
 		return array(
 			'%post_link%', 
 			'%date%',
 			'%excerpt%',
-			'%author_link%', '%author%', 
-			'%comment_count%', 
-			'%category_link%', '%category%', 
+			'%author_link%', '%author%',
+			'%comment_count%',
+			'%category_link%', '%category%',
 		);
 	}
+
+	function get_active_tags($format) {
+		$active_tags = array();
+		foreach ( self::get_available_tags() as $tag )
+			if ( FALSE !== strpos($format, $tag) )
+				$active_tags[] = $tag;
+
+		return $active_tags;
+	}
+
 
 	static function init($options) {
 		self::$options = $options;
 
-		// Set shortcode
-		add_shortcode('smart_archives', array(__CLASS__, 'load'));
+		add_shortcode('smart_archives', array(__CLASS__, 'generate'));
 
-		// Set fancy archive
-		add_action('wp_footer', array(__CLASS__, 'init_fancy'), 20);
+		add_action('wp_footer', array(__CLASS__, 'add_scripts'), 20);
 
-		// Install / uninstall
 		register_activation_hook(__FILE__, array(__CLASS__, 'upgrade'));
 	}
 
 	static function upgrade() {
 		$options = self::$options->get();
 
-		if ( isset($options['catID']) && empty($options['exclude_cat']) )
-			$options['exclude_cat'] = explode(' ', $options['catID']);
+		$catID = array_pop_key($options, 'catID');
 
-		unset($options['catID']);
+		if ( !empty($catID) && empty($options['exclude_cat']) )
+			$options['exclude_cat'] = explode(' ', $catID);
 
 		self::$options->update($options);
 	}
 
-	static function init_fancy() {
+
+	static function generate($args = '', $qv = '') {
+		$args = wp_parse_args($args, self::$options->get());
+
+		list($args, $qv) = self::validate_args($args, $qv);
+
+		// scripts
+		if ( 'fancy' == $args['format'] )
+			self::$fancy = true;
+
+		if ( in_array($args['format'], array('menu', 'fancy')) )
+			self::$css = true;
+
+		// query vars
+		$exclude_cat = array_pop_key($args, 'exclude_cat');
+		$include_cat = array_pop_key($args, 'include_cat');
+
+		if ( !empty($exclude_cat) )
+			$qv['category__not_in'] = $exclude_cat;
+		elseif ( !empty($include_cat) )
+			$qv['category__in'] = $include_cat;
+
+		// generator
+		$generator = array_pop_key($args, 'generator');
+
+		if ( empty($generator) )
+			$generator = new SAR_Generator();
+		elseif ( is_string($generator) )
+			$generator = new $generator;
+
+		return $generator->generate($args, $qv);
+	}
+
+	function validate_args($args = '', $qv = '') {
+		$args = wp_parse_args($args, self::$options->get_defaults());
+
+		if ( empty($qv) )
+			$qv = array();
+
+		// Category IDs
+		if ( isset($args['include_cat']) && !empty($args['include_cat']) ) {
+			$args['include_cat'] = wp_parse_id_list($args['include_cat']);
+			$args['exclude_cat'] = array();
+		}
+		else {
+			$args['exclude_cat'] = wp_parse_id_list($args['exclude_cat']);
+		}
+
+		// Anchors
+		if ( 'both' != $args['format'] )
+			$args['anchors'] = false;
+
+		// Block numeric
+		if ( array_key_exists('block_numeric', $args) ) {
+			if ( 'block' == $args['format'] && ! array_key_exists('month_format', $args) )
+				$args['month_format'] = $args['block_numeric'] ? 'numeric' : 'short';
+
+			unset($args['block_numeric']);
+		}
+
+		// List format
+		$args['list_format'] = trim($args['list_format']);
+
+		return array($args, $qv);
+	}
+
+	static function add_scripts() {
 		$add_css = apply_filters('smart_archives_load_default_styles', self::$css);
 
 		if ( !self::$fancy && !$add_css )
 			return;
-	
+
 		$css_dev = defined('STYLE_DEBUG') && STYLE_DEBUG ? '.dev' : '';
 
 		$plugin_url = plugin_dir_url(__FILE__) . 'inc/';
@@ -130,58 +197,6 @@ jQuery(document).ready(function($) {
 </script>
 <?php
 	}
-
-	static function generate($args = '', $query = '') {
-		list($args, $query) = self::validate_args($args, $query);
-
-		if ( 'fancy' == $args['format'] )
-			self::$fancy = true;
-
-		if ( in_array($args['format'], array('menu', 'fancy')) )
-			self::$css = true;
-
-		if ( isset($args['generator']) )
-			$generator = $args['generator'];
-
-		if ( empty($generator) ) {
-			self::load_default_generator();
-			$generator = new SAR_Generator();
-		} elseif ( is_string($generator) ) {
-			$generator = new $generator;
-		}
-
-		call_user_func(array($generator, 'generate'), $args, $query);
-	}
-
-	function validate_args($args = '', $query = '') {
-		$args = wp_parse_args($args, self::$options->get_defaults());
-
-		// Category IDs
-		if ( isset($args['include_cat']) && !empty($args['include_cat']) ) {
-			$args['include_cat'] = self::parse_id_list($args['include_cat']);
-			$args['exclude_cat'] = array();
-		}
-		else {
-			$args['exclude_cat'] = self::parse_id_list($args['exclude_cat']);
-		}
-
-		// Anchors
-		if ( 'both' != $args['format'] )
-			$args['anchors'] = false;
-
-		// Block numeric
-		if ( array_key_exists('block_numeric', $args) ) {
-			if ( 'block' == $args['format'] && ! array_key_exists('month_format', $args) )
-				$args['month_format'] = $args['block_numeric'] ? 'numeric' : 'short';
-
-			unset($args['block_numeric']);
-		}
-
-		// List format
-		$args['list_format'] = trim($args['list_format']);
-
-		return array($args, $query);
-	}
 }
 
 function _sar_init() {
@@ -202,6 +217,9 @@ function _sar_init() {
 		'month_format' => 'short',
 	));
 
+	require_once dirname(__FILE__) . '/query.php';
+	require_once dirname(__FILE__) . '/generator.php';
+
 	SAR_Core::init($options);
 
 	if ( is_admin() ) {
@@ -209,6 +227,29 @@ function _sar_init() {
 		scbAdminPage::register('SAR_Settings', __FILE__, $options);
 	}
 }
-
 _sar_init();
+
+
+// WP < 3.0
+if ( !function_exists('wp_parse_id_list') ) :
+function wp_parse_id_list( $list ) {
+	if ( !is_array($list) )
+		$list = preg_split('/[\s,]+/', $list);
+
+	return array_unique(array_map('absint', $list));
+}
+endif;
+
+
+if ( !function_exists('array_pop_key') ) :
+function array_pop_key($array, $key) {
+	if ( !isset($array[$key]) )
+		return null;
+
+	$value = $array[$key];
+	unset($array[$key]);
+
+	return $value;
+}
+endif;
 
