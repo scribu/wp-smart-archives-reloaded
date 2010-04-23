@@ -24,19 +24,6 @@ class SAR_Settings extends scbAdminPage {
 		return SAR_Core::validate_args($args);
 	}
 
-	private function parse_id_list($list) {
-		$ids = array();
-
-		if ( !is_array($list) )
-			$list = preg_split('/[\s,]+/', $list);
-
-		foreach ( $list as $id )
-			if ( $id = absint($id) )
-				$ids[] = $id;
-
-		return array_unique($ids);
-	}
-
 	function page_content() {
 		$tags = '';
 		foreach ( SAR_Core::get_available_tags() as $tag )
