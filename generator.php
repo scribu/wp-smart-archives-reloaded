@@ -54,9 +54,9 @@ class SAR_Generator {
 	}
 
 	protected function get_posts($year, $month) {
-		if ( !isset($this->months_with_posts[$year][$month]) )
+		if ( !in_array($month, $this->get_months_with_posts($year)) )
 			return array();
-	
+
 		$qv = array_merge($this->query_vars, array(
 			'year' => $year,
 			'monthnum' => $month,
@@ -64,13 +64,7 @@ class SAR_Generator {
 			'suppress_filters' => false,
 		));
 
-		$r = get_posts($qv);
-
-// should never happen
-if ( empty($r) )
-	debug($qv);
-
-		return $r;
+		return get_posts($qv);
 	}
 
 
