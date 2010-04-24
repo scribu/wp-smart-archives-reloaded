@@ -14,7 +14,7 @@ class SAR_Settings extends scbAdminPage {
 
 	// Page methods
 	function page_head() {
-		$js_dev = defined('STYLE_DEBUG') && SCRIPT_DEBUG ? '.dev' : '';
+		$js_dev = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '.dev' : '';
 	
 		wp_enqueue_script('sar-admin', $this->plugin_url . "admin/admin$js_dev.js", array('jquery'), '1.9', true);
 		echo $this->css_wrap('h3 {margin-bottom: 0 !important}');
@@ -29,7 +29,7 @@ class SAR_Settings extends scbAdminPage {
 		foreach ( SAR_Core::get_available_tags() as $tag )
 			$tags .= "\n\t" . html('li', html('em', $tag));
 
-		$default_date = __('Default', $this->textdomain) . ': F j, Y (' . date_i18n("F j, Y") . ')';
+		$default_date = __('Default', $this->textdomain) . ': ' . get_option('date_format') . ' (' . date_i18n(get_option('date_format')) . ')';
 
 		$output = $this->_subsection(__('General settings', $this->textdomain), 'general', array(
 			array(
@@ -76,7 +76,6 @@ class SAR_Settings extends scbAdminPage {
 
 			array(
 				'title' => __('Month names', $this->textdomain),
-//				'after' => html('p', __('How should the month links be displayed', $this->textdomain)),
 				'type' => 'radio',
 				'name' => 'month_format',
 				'value' => array('numeric', 'short', 'long'),
@@ -102,7 +101,7 @@ class SAR_Settings extends scbAdminPage {
 		return html("div id='$id'", 
 			"\n" . html('h3', $title)
 			."\n" . $this->table($rows)
-		, "\n");
+		);
 	}
 }
 

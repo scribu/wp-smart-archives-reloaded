@@ -29,14 +29,14 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 /**
  * Display the archives
  *
- * Available args:
+ * $args:
  * format: string, one of these: block | list | both | fancy
- * exclude_cat: array of category ids to exclude
- * include_cat: array of category ids to include
  * anchors: boolean
  * block_numeric: boolean
  * list_format: string
  * date_format: string
+ *
+ * $qv: see query_posts()
  */
 function smart_archives($args = '', $qv = '') {
 	echo SAR_Core::generate($args, $qv);
@@ -94,16 +94,17 @@ class SAR_Core {
 			self::$css = true;
 
 		// query vars
-		if ( empty($qv) )
-			$qv = array();
-
 		$map = array(
-			'posts_per_page' => 'posts_per_month',
 			'category__not_in' => 'exclude_cat',
 			'category__in' => 'include_cat',
 		);
+
+		$tmp = array();
 		foreach ( $map as $qv_key => $key )
-			$qv[$qv_key] = array_pop_key($args, $key);
+			if ( isset($args[$qv_key]) )
+				$tmp[$qv_key] = array_pop_key($args, $key);
+
+		$qv = wp_parse_args($qv, $tmp);
 
 		// generator
 		$generator = array_pop_key($args, 'generator');
@@ -195,9 +196,10 @@ function _sar_init() {
 	$options = new scbOptions('smart-archives', __FILE__, array(
 		'format' => 'both',
 		'list_format' => '%post_link%',
-		'date_format' => 'F j, Y',
+		'date_format' => get_option('date_format'),
 		'anchors' => false,
 		'month_format' => 'short',
+
 		'posts_per_month' => -1,
 		'include_cat' => array(),
 		'exclude_cat' => array(),

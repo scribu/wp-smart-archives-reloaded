@@ -28,10 +28,6 @@ class SAR_Generator {
 		return true;
 	}
 
-
-//_____DATA ACCESS_____
-
-
 	protected function get_current_year() {
 		if ( ! $year = get_query_var('year') )
 			$year = end($this->get_years_with_posts());
@@ -57,10 +53,13 @@ class SAR_Generator {
 		$qv = array_merge($this->query_vars, array(
 			'year' => $year,
 			'monthnum' => $month,
-			'suppress_filters' => false,
+			'caller_get_posts' => true,
+			'nopaging' => true,
 		));
 
-		return get_posts($qv);
+		$query = new SAR_Posts_Query($this->args->posts_per_month, $qv);
+
+		return $query->posts;
 	}
 
 
@@ -314,10 +313,32 @@ class SAR_Generator {
 }
 
 
+class SAR_Posts_Query extends scbQuery {
+	private $count;
+
+	function __construct($count, $qv) {
+		$this->count = (int) $count;
+
+		parent::__construct($qv);
+	}
+
+	function post_limits() {
+		if ( $this->count )
+			return "LIMIT $this->count";
+
+		return '';
+	}
+
+	final public function __get($key) {
+		return $this->wp_query->$key;
+	}
+}
+
 class SAR_Year_Query extends scbQuery {
 
 	function __construct($qv) {
 		$qv = array_merge($qv, array(
+			'caller_get_posts' => true,
 			'nopaging' => true,
 			'cache_results' => false,
 		));
