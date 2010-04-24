@@ -16,8 +16,8 @@ class SAR_Generator {
 		return call_user_func(array($this, 'generate_' . $this->args->format));
 	}
 
-	protected function load_data($args) {
-		$mvp = new SAR_Year_Query($args);
+	protected function load_data($args, $qv) {
+		$mvp = new SAR_Year_Query($qv);
 
 		if ( empty($mvp->months_with_posts) )
 			return false;

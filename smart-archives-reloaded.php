@@ -2,7 +2,7 @@
 /*
 Plugin Name: Smart Archives Reloaded
 Version: 2.0a4
-Description: An elegant and easy way to present your posts, grouped by month.
+Description: An elegant and easy way to present your posts, grouped by year and month.
 Author: scribu
 Author URI: http://scribu.net
 Plugin URI: http://scribu.net/wordpress/smart-archives-reloaded
@@ -96,14 +96,9 @@ class SAR_Core {
 		// query vars
 		if ( empty($qv) )
 			$qv = array();
-		
-		$exclude_cat = array_pop_key($args, 'exclude_cat');
-		$include_cat = array_pop_key($args, 'include_cat');
 
-		if ( !empty($exclude_cat) )
-			$qv['category__not_in'] = $exclude_cat;
-		elseif ( !empty($include_cat) )
-			$qv['category__in'] = $include_cat;
+		foreach ( array('category__not_in' => 'exclude_cat', 'category__in' => 'include_cat') as $qv_key => $key )
+			$qv[$qv_key] = array_pop_key($args, $key);
 
 		// generator
 		$generator = array_pop_key($args, 'generator');
@@ -120,13 +115,9 @@ class SAR_Core {
 		$args = wp_parse_args($args, self::$options->get_defaults());
 
 		// Category IDs
-		if ( isset($args['include_cat']) && !empty($args['include_cat']) ) {
-			$args['include_cat'] = wp_parse_id_list($args['include_cat']);
-			$args['exclude_cat'] = array();
-		}
-		else {
-			$args['exclude_cat'] = wp_parse_id_list($args['exclude_cat']);
-		}
+		foreach ( array('exclude_cat', 'include_cat') as $key )
+			if ( !empty($args[$key]) )
+				$args[$key] = wp_parse_id_list($args[$key]);
 
 		// Anchors
 		if ( 'both' != $args['format'] )

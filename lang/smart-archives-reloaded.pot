@@ -1,166 +1,145 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR scribu
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Translation of the WordPress plugin Smart Archives Reloaded 2.0a4 by scribu.
+# Copyright (C) 2010 scribu
+# This file is distributed under the same license as the Smart Archives Reloaded package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Smart Archives Reloaded 2.0a\n"
+"Project-Id-Version: Smart Archives Reloaded 2.0a4\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/smart-archives-reloaded\n"
-"POT-Creation-Date: 2010-01-29 14:12+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2010-04-24 13:19+0300\n"
+"PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: admin.php:8
+#: admin/admin.php:9
 msgid "Smart Archives Settings"
 msgstr ""
 
-#: admin.php:9
+#: admin/admin.php:10
 msgid "Smart Archives"
 msgstr ""
 
-#: admin.php:29 admin.php:120
-msgid "Clear"
-msgstr ""
-
-#: admin.php:32
-msgid "Cache <strong>cleared</strong>."
-msgstr ""
-
-#: admin.php:43
+#: admin/admin.php:32
 msgid "Default"
 msgstr ""
 
-#: admin.php:45
+#: admin/admin.php:34
 msgid "General settings"
 msgstr ""
 
-#: admin.php:47
+#: admin/admin.php:36
 msgid "Exclude Categories by ID"
 msgstr ""
 
-#: admin.php:48
+#: admin/admin.php:37
 msgid "(comma separated)"
 msgstr ""
 
-#: admin.php:55
+#: admin/admin.php:44
 msgid "Format"
 msgstr ""
 
-#: admin.php:60
+#: admin/admin.php:49
 msgid "block"
 msgstr ""
 
-#: admin.php:61
+#: admin/admin.php:50
 msgid "list"
 msgstr ""
 
-#: admin.php:62
+#: admin/admin.php:51
 msgid "both"
 msgstr ""
 
-#: admin.php:63
+#: admin/admin.php:52
 msgid "fancy"
 msgstr ""
 
-#: admin.php:68
+#: admin/admin.php:57
 msgid "Specific settings"
 msgstr ""
 
-#: admin.php:70
+#: admin/admin.php:59
 msgid "List format"
 msgstr ""
 
-#: admin.php:71
+#: admin/admin.php:60
 msgid "Available substitution tags"
 msgstr ""
 
-#: admin.php:78
+#: admin/admin.php:67
 #, php-format
 msgid "%s format"
 msgstr ""
 
-#: admin.php:81
+#: admin/admin.php:70
 msgid ""
 "See available date formatting characters <a href=\"http://php.net/date\" "
 "target=\"_blank\">here</a>."
 msgstr ""
 
-#: admin.php:89
+#: admin/admin.php:78
 msgid "Month names"
 msgstr ""
 
-#: admin.php:95
+#: admin/admin.php:84
 msgid "numeric"
 msgstr ""
 
-#: admin.php:96
+#: admin/admin.php:85
 msgid "short"
 msgstr ""
 
-#: admin.php:97
+#: admin/admin.php:86
 msgid "long"
 msgstr ""
 
-#: admin.php:102
+#: admin/admin.php:91
 msgid "Use anchor links in block"
 msgstr ""
 
-#: admin.php:103
+#: admin/admin.php:92
 msgid "The month links in the block will point to the month links in the list"
 msgstr ""
 
-#: admin.php:109
-msgid "Cache control"
-msgstr ""
-
-#: admin.php:111
-msgid "Use wp-cron"
-msgstr ""
-
-#: admin.php:117
-msgid "Clear cache"
-msgstr ""
-
-#: generator.php:221
+#: generator.php:113
 msgid "View complete archive page"
 msgstr ""
 
-#: scb/AdminPage.php:101
-msgid "Settings <strong>saved</strong>."
-msgstr ""
-
-#: scb/AdminPage.php:112 scb/AdminPage.php:123
+#: scb/AdminPage.php:165 scb/AdminPage.php:176
 msgid "Save Changes"
 msgstr ""
 
-#: scb/AdminPage.php:329
+#: scb/AdminPage.php:279
+msgid "Settings <strong>saved</strong>."
+msgstr ""
+
+#: scb/AdminPage.php:337
 msgid "Settings"
 msgstr ""
 
-#. Plugin Name of an extension
+#. Plugin Name of the plugin/theme
 msgid "Smart Archives Reloaded"
 msgstr ""
 
-#. Plugin URI of an extension
+#. Plugin URI of the plugin/theme
 msgid "http://scribu.net/wordpress/smart-archives-reloaded"
 msgstr ""
 
-#. Description of an extension
+#. Description of the plugin/theme
 msgid ""
-"An elegant and easy way to present your archives. (With help from <a href="
-"\"http://www.conceptfusion.co.nz/\">Simon Pritchard</a>)"
+"An elegant and easy way to present your posts, grouped by year and month."
 msgstr ""
 
-#. Author of an extension
+#. Author of the plugin/theme
 msgid "scribu"
 msgstr ""
 
-#. Author URI of an extension
+#. Author URI of the plugin/theme
 msgid "http://scribu.net"
 msgstr ""
