@@ -38,8 +38,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
  * list_format: string
  * date_format: string
  */
-function smart_archives($args = '') {
-	echo SAR_Core::generate($args);
+function smart_archives($args = '', $qv = '') {
+	echo SAR_Core::generate($args, $qv);
 }
 
 class SAR_Core {

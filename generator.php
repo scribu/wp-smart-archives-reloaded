@@ -8,7 +8,8 @@ class SAR_Generator {
 	protected $columns;
 
 	public function generate($args, $qv) {
-		$this->load_data($args, $qv);
+		if ( !$this->load_data($args, $qv) )
+			return '';
 
 		$this->args = (object) $args;
 		$this->query_vars = $qv;
@@ -23,6 +24,8 @@ class SAR_Generator {
 			return false;
 
 		$this->months_with_posts = $mvp->months_with_posts;
+
+		return true;
 	}
 
 	protected function set_limit() {
@@ -339,5 +342,4 @@ class SAR_Year_Query extends scbQuery {
 		return 'year ASC, month ASC';
 	}
 }
-
 
