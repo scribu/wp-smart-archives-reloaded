@@ -97,7 +97,12 @@ class SAR_Core {
 		if ( empty($qv) )
 			$qv = array();
 
-		foreach ( array('category__not_in' => 'exclude_cat', 'category__in' => 'include_cat') as $qv_key => $key )
+		$map = array(
+			'posts_per_page' => 'posts_per_month',
+			'category__not_in' => 'exclude_cat',
+			'category__in' => 'include_cat',
+		);
+		foreach ( $map as $qv_key => $key )
 			$qv[$qv_key] = array_pop_key($args, $key);
 
 		// generator
@@ -191,11 +196,11 @@ function _sar_init() {
 		'format' => 'both',
 		'list_format' => '%post_link%',
 		'date_format' => 'F j, Y',
-		'posts_per_month' => false,
-		'include_cat' => array(),
-		'exclude_cat' => array(),
 		'anchors' => false,
 		'month_format' => 'short',
+		'posts_per_month' => -1,
+		'include_cat' => array(),
+		'exclude_cat' => array(),
 	));
 
 	require_once dirname(__FILE__) . '/generator.php';

@@ -60,11 +60,6 @@ class SAR_Generator {
 			'suppress_filters' => false,
 		));
 
-		if ( isset($this->args->posts_per_month) )
-			$qv['posts_per_page'] = $this->args->posts_per_month;
-		else
-			$qv['posts_per_page'] = -1;
-
 		return get_posts($qv);
 	}
 
