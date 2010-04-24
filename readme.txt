@@ -6,11 +6,11 @@ Requires at least: 2.8
 Tested up to: 3.0
 Stable tag: 1.9.2
 
-Easily display posts grouped by month, in one or more elegant formats
+Easily display posts grouped by year and month, in one or more elegant formats
 
 == Description ==
 
-Smart Archives Reloaded allows you to display a list of posts grouped by month. It also provides several interesting navigation elements.
+Smart Archives Reloaded allows you to display a list of posts grouped by year and month. It also provides several interesting navigation elements.
 
 **Format list:**
 

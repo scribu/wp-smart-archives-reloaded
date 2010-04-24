@@ -69,13 +69,15 @@ class SAR_Generator {
 
 	// The "menu"
 	protected function generate_menu() {
-		$year_list = html('ul class="year-list"', 
+		$year_list = 
+		html('ul class="year-list"', 
 			$this->generate_year_list(get_query_var('year'))
-		, "\n");
+		);
 
-		$month_list = html('ul class="month-list"',
+		$month_list = 
+		html('ul class="month-list"',
 			$this->generate_month_list($this->get_current_year(), get_query_var('monthnum'))
-		, "\n");
+		);
 
 		return html('div id="smart-archives-menu"', $year_list . $month_list, "\n");
 	}
@@ -84,27 +86,30 @@ class SAR_Generator {
 	protected function generate_fancy() {
 		$months_long = $this->get_months();
 
-		$year_list = html("ul class='tabs year-list'",
+		$year_list = 
+		html("ul class='tabs year-list'",
 			$this->generate_year_list()
-		, "\n");
+		);
 
 		$block = '';
 
 		foreach ( $this->get_years_with_posts() as $year ) {
 			// Generate top panes
-			$months = html("ul id='month-list-$year' class='tabs month-list'", 
+			$months =
+			html("ul id='month-list-$year' class='tabs month-list'",
 				$this->generate_month_list($year)
-			, "\n\t");
+			);
 
 			// Generate post lists
 			$list = '';
 			for ( $i = 1; $i <= 12; $i++ ) {
-				if ( ! $posts = $this->get_posts($year, $i) )
+				if ( !$posts = $this->get_posts($year, $i) )
 					continue;
 
 				// Append to list
-				$list .= html('div class="pane"',
-					"\n\t\t" . html('h2 class="month-heading"',
+				$list .= 
+				html('div class="pane"',
+					 html('h2 class="month-heading"',
 						"$months_long[$i] $year "
 						.html('span class="month-archive-link"',
 							'('. html_link(get_month_link($year, $i), __('View complete archive page', 'smart-archives-reloaded')) .')'
@@ -112,14 +117,13 @@ class SAR_Generator {
 					)
 					.html('ul class="archive-list"', 
 						$this->generate_post_list($posts, "\n\t\t\t")
-					, "\n\t\t")
-				, "\n\t");
+					)
+				);
 			} // end month block
 
-			$block .= html('div class="pane"', $months . $list, "\n");
+			$block .= html('div class="pane"', $months . $list);
 		} // end year block
 
-		// Wrap it up
 		return html('div id="smart-archives-fancy"', $year_list . $block);
 	}
 
@@ -148,16 +152,16 @@ class SAR_Generator {
 					$el = "h2";
 
 				// Append to list
-				$list .= "\n\t" . html($el,
+				$list .= 
+				html($el,
 					html_link(get_month_link($year, $i), $months_long[$i] . ' ' . $year)
 				);
 
-				$list .= html('ul', $post_list, "\n\t");
+				$list .= html('ul', $post_list);
 			} // end month block
 		} // end year block
 
-		// Wrap it up
-		return html('div id="smart-archives-list"', $list, "\n");
+		return html('div id="smart-archives-list"', $list);
 	}
 
 	// The block
@@ -168,11 +172,10 @@ class SAR_Generator {
 
 			$month_list = $this->generate_month_list($year, 0, true);
 
-			$block .= "\n\t" . html('li', $year_link . $month_list);
+			$block .= html('li', $year_link . $month_list);
 		}
 
-		// Wrap it up
-		return html("ul id='smart-archives-block'", $block, "\n");
+		return html("ul id='smart-archives-block'", $block);
 	}
 
 
@@ -217,7 +220,6 @@ class SAR_Generator {
 	}
 
 	protected function generate_post_list($posts, $indent) {
-
 		$post_list = '';
 		foreach ( $posts as $post ) {
 			$list_item = $this->args->list_format;
