@@ -2,9 +2,9 @@
 Contributors: scribu
 Donate link: http://scribu.net/wordpress
 Tags: archive, archives, post list
-Requires at least: 2.8
+Requires at least: 2.9
 Tested up to: 3.0
-Stable tag: 1.9.2
+Stable tag: trunk
 
 Easily display posts grouped by year and month, in one or more elegant formats
 
@@ -75,8 +75,9 @@ Read this: [Advanced Tweaking](http://scribu.net/wordpress/smart-archives-reload
 = 2.0 =
 * added %excerpt% tag
 * fewer queries
-* more flexible generator class
+* advanced post selection
 * removed caching engine
+* [more info](http://scribu.net/wordpress/smart-archives-reloaded/sar-2-0.html)
 
 = 1.9.2 =
 * re-enabled cache

@@ -288,7 +288,7 @@ class SAR_Generator {
 	}
 
 	protected function substitute_excerpt($post) {
-		return $post->post_excerpt;
+		return apply_filters('get_the_excerpt', $post->post_excerpt);
 	}
 
 	protected function substitute_date($post) {

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 2.0b
+Version: 2.0
 Description: An elegant and easy way to present your posts, grouped by year and month.
 Author: scribu
 Author URI: http://scribu.net
@@ -9,7 +9,7 @@ Plugin URI: http://scribu.net/wordpress/smart-archives-reloaded
 Text Domain: smart-archives-reloaded
 Domain Path: /lang
 
-Copyright (C) 2009 scribu.net (scribu AT gmail DOT com)
+Copyright (C) 2010 scribu (scribu AT gmail DOT com)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
