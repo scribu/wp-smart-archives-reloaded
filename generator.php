@@ -28,15 +28,9 @@ class SAR_Generator {
 		return true;
 	}
 
-	protected function set_limit() {
-		$limit = '';
-		if ( $posts_per_month = absint(@$this->args->posts_per_month) )
-			$limit = 'LIMIT ' . $posts_per_month;
 
-		$this->limit = $limit;
-	}
+//_____DATA ACCESS_____
 
-// Data access
 
 	protected function get_current_year() {
 		if ( ! $year = get_query_var('year') )
@@ -63,15 +57,20 @@ class SAR_Generator {
 		$qv = array_merge($this->query_vars, array(
 			'year' => $year,
 			'monthnum' => $month,
-			'nopaging' => true,
 			'suppress_filters' => false,
 		));
+
+		if ( isset($this->args->posts_per_month) )
+			$qv['posts_per_page'] = $this->args->posts_per_month;
+		else
+			$qv['posts_per_page'] = -1;
 
 		return get_posts($qv);
 	}
 
 
-// ____ MAIN TEMPLATES ____
+//_____MAIN TEMPLATES_____
+
 
 	// The "menu"
 	protected function generate_menu() {
@@ -183,6 +182,7 @@ class SAR_Generator {
 
 
 //_____HELPER TEMPLATES_____
+
 
 	protected function generate_year_list($current_year = 0) {
 		$year_list = '';
