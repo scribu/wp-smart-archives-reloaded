@@ -198,7 +198,6 @@ function _sar_init() {
 		'month_format' => 'short',
 	));
 
-	require_once dirname(__FILE__) . '/query.php';
 	require_once dirname(__FILE__) . '/generator.php';
 
 	SAR_Core::init($options);

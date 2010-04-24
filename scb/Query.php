@@ -1,32 +1,7 @@
 <?php
 
-class SAR_Year_Query extends Query_Decorator {
-
-	function __construct($qv) {
-		$qv = array_merge($qv, array(
-			'nopaging' => true,
-			'cache_results' => false,
-		));
-
-		parent::__construct($qv);
-
-		$months = array();
-		foreach ( $this->wp_query->posts as $row )
-			$months[$row->year][] = $row->month;
-
-		$this->months_with_posts = $months;
-	}
-
-	function posts_fields() {
-		return 'DISTINCT YEAR(post_date) AS year, MONTH(post_date) AS month';
-	}
-
-	function posts_orderby() {
-		return 'year ASC, month ASC';
-	}
-}
-
-class Query_Decorator {
+// A decorator for the WP_Query class
+class scbQuery {
 	protected $wp_query;
 
 	public function __construct($qv = '', $debug = false) {
@@ -85,7 +60,7 @@ class Query_Decorator {
 	private function _find_filters() {
 		$filters = array();
 
-		foreach ( _get_public_methods($this) as $method )
+		foreach ( _scb_get_public_methods($this) as $method )
 			if ( '_' != substr($method, 0, 1) )
 				$filters[] = $method;
 
@@ -94,7 +69,7 @@ class Query_Decorator {
 }
 
 // Current scope is lost while calling external function
-function _get_public_methods($class) {
+function _scb_get_public_methods($class) {
 	return get_class_methods($class);
 }
 

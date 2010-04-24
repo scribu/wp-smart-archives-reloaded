@@ -313,3 +313,31 @@ class SAR_Generator {
 	}
 }
 
+
+class SAR_Year_Query extends scbQuery {
+
+	function __construct($qv) {
+		$qv = array_merge($qv, array(
+			'nopaging' => true,
+			'cache_results' => false,
+		));
+
+		parent::__construct($qv);
+
+		$months = array();
+		foreach ( $this->wp_query->posts as $row )
+			$months[$row->year][] = $row->month;
+
+		$this->months_with_posts = $months;
+	}
+
+	function posts_fields() {
+		return 'DISTINCT YEAR(post_date) AS year, MONTH(post_date) AS month';
+	}
+
+	function posts_orderby() {
+		return 'year ASC, month ASC';
+	}
+}
+
+
