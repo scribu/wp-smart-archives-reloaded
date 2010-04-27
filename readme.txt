@@ -73,6 +73,9 @@ Read this: [Advanced Tweaking](http://scribu.net/wordpress/smart-archives-reload
 
 == Changelog ==
 
+= 2.0.1 =
+* fix category exclusion
+
 = 2.0 =
 * added %excerpt% tag
 * fewer queries

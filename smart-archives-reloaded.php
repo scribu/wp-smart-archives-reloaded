@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 2.0
+Version: 2.0.1
 Description: An elegant and easy way to present your posts, grouped by year and month.
 Author: scribu
 Author URI: http://scribu.net
@@ -101,7 +101,7 @@ class SAR_Core {
 
 		$tmp = array();
 		foreach ( $map as $qv_key => $key )
-			if ( isset($args[$qv_key]) )
+			if ( isset($args[$key]) )
 				$tmp[$qv_key] = array_pop_key($args, $key);
 
 		$qv = wp_parse_args($qv, $tmp);
