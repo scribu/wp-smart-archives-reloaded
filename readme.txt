@@ -49,11 +49,12 @@ Alternatively, you can add `<?php smart_archives(); ?>` anywhere in your theme, 
 
 == Frequently Asked Questions ==
 
-= "Parse error: syntax error, unexpected T_CLASS..." Help! =
+= Error on activation: "Parse error: syntax error, unexpected..." =
 
-Make sure your new host is running PHP 5. Add this line to wp-config.php:
+Make sure your host is running PHP 5. The only foolproof way to do this is to add this line to wp-config.php:
 
 `var_dump(PHP_VERSION);`
+<br>
 
 = Fancy archive not working =
 
