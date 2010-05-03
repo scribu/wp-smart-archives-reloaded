@@ -4,7 +4,7 @@ Donate link: http://scribu.net/wordpress
 Tags: archive, archives, post list
 Requires at least: 2.9
 Tested up to: 3.0
-Stable tag: trunk
+Stable tag: 2.0.1
 
 Easily display posts grouped by year and month, in one or more elegant formats
 
