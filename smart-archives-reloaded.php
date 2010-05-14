@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 2.1a
+Version: 2.1-alpha
 Description: An elegant and easy way to present your posts, grouped by year and month.
 Author: scribu
 Author URI: http://scribu.net
@@ -186,12 +186,10 @@ jQuery(document).ready(function($) {
 	}
 }
 
-function _sar_init() {
-	// Load scbFramework
-	require_once dirname(__FILE__) . '/scb/load.php';
+require_once dirname(__FILE__) . '/scb/load.php';
 
-	// Load translations
-	load_plugin_textdomain('smart-archives-reloaded', '', basename(dirname(__FILE__)) . '/lang');
+function _sar_init() {
+	load_plugin_textdomain('smart-archives-reloaded', '', dirname(plugin_basename(__FILE__)) . '/lang');
 
 	$options = new scbOptions('smart-archives', __FILE__, array(
 		'format' => 'both',
@@ -214,7 +212,7 @@ function _sar_init() {
 		scbAdminPage::register('SAR_Settings', __FILE__, $options);
 	}
 }
-_sar_init();
+scb_init('_sar_init');
 
 
 // WP < 3.0
