@@ -92,7 +92,7 @@ class SAR_Generator {
 
 		$block = '';
 
-		foreach ( $this->get_years_with_posts() as $year ) {
+		foreach ( array_reverse($this->get_years_with_posts(), true) as $year ) {
 			// Generate top panes
 			$months =
 			html("ul id='month-list-$year' class='tabs month-list'",
@@ -136,7 +136,7 @@ class SAR_Generator {
 		$months_long = $this->get_months();
 
 		$list = '';
-		foreach ( array_reverse($this->get_years_with_posts(), true) as $year ) {
+		foreach ( $this->get_years_with_posts() as $year ) {
 			for ( $i = 12; $i >= 1; $i-- ) {
 				if ( ! $posts = $this->get_posts($year, $i) )
 					continue;
@@ -357,7 +357,7 @@ class SAR_Year_Query extends scbQuery {
 	}
 
 	function posts_orderby() {
-		return 'year ASC, month ASC';
+		return 'year DESC, month ASC';
 	}
 }
 
