@@ -73,6 +73,8 @@ Read this: [Advanced Tweaking](http://scribu.net/wordpress/smart-archives-reload
 * Russian - [Fat Cow](http://www.fatcow.com)
 * Uzbek - [Alexandra Bolshova](http://comfi.com)
 
+If you want to translate this plugin, please read [this](http://scribu.net/wordpress/translating-plugins.html).
+
 == Changelog ==
 
 = 2.0.1 =
