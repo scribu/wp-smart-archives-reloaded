@@ -25,18 +25,6 @@ Smart Archives Reloaded allows you to display a list of posts grouped by year an
 * [Justin Blanton](http://justinblanton.com), for the original [Smart Archives](http://justinblanton.com/projects/smartarchives/) plugin
 * [Simon Pritchard](http://www.conceptfusion.co.nz/), for the fancy format
 
-**Translations:**
-
-* Belarusian - [ilyuha](http://antsar.info/)
-* Chinese - [Yorick Chen](http://www.pihai.net/technology/smart-archives-reloaded-chinese-translation.html)
-* Danish - jos
-* Dutch - [Lourens Rolograaf](http://rolograaf.nl)
-* French - [Référenceur Freelance](http://www.referenceurfreelance.com), [Li-An](http://www.li-an.fr)
-* German - [Cornelius Schiffer](http://schiffr.de/)
-* Italian - [Gianni Diurno](http://gidibao.net/)
-* Russian - [Fat Cow](http://www.fatcow.com)
-* Uzbek - [Alexandra Bolshova](http://comfi.com)
-
 == Installation ==
 
 The plugin can be installed in 3 easy steps:
@@ -72,6 +60,18 @@ Read this: [Advanced Tweaking](http://scribu.net/wordpress/smart-archives-reload
 
 1. A fancy archive
 2. The Settings Page
+
+== Translations ==
+
+* Belarusian - [ilyuha](http://antsar.info/)
+* Chinese - [Yorick Chen](http://www.pihai.net/technology/smart-archives-reloaded-chinese-translation.html)
+* Danish - jos
+* Dutch - [Lourens Rolograaf](http://rolograaf.nl)
+* French - [Référenceur Freelance](http://www.referenceurfreelance.com), [Li-An](http://www.li-an.fr)
+* German - [Cornelius Schiffer](http://schiffr.de/)
+* Italian - [Gianni Diurno](http://gidibao.net/)
+* Russian - [Fat Cow](http://www.fatcow.com)
+* Uzbek - [Alexandra Bolshova](http://comfi.com)
 
 == Changelog ==
 
