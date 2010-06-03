@@ -1,17 +1,5 @@
 <?php
 
-/**
- * Display the archives
- *
- * $args:
- * format: string, one of these: block | list | both | fancy
- * anchors: boolean
- * block_numeric: boolean
- * list_format: string
- * date_format: string
- *
- * $qv: see query_posts()
- */
 function smart_archives($args = '', $qv = '') {
 	echo SAR_Core::generate($args, $qv);
 }

@@ -47,6 +47,8 @@ The plugin can be installed in 3 easy steps:
 
 Alternatively, you can add `<?php smart_archives(); ?>` anywhere in your theme, where you want the archives displayed.
 
+See http://scribu.net/wordpress/smart-archives-reloaded for more usage examples.
+
 == Frequently Asked Questions ==
 
 = Error on activation: "Parse error: syntax error, unexpected..." =
