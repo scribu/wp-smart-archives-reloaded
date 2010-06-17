@@ -106,7 +106,7 @@ class SAR_Generator {
 
 			// Generate post lists
 			$list = '';
-			for ( $i = 1; $i <= 12; $i++ ) {
+			foreach ( range(1, 12) as $i ) {
 				if ( !$posts = $this->get_posts($year, $i) )
 					continue;
 
