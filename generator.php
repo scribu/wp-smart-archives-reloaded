@@ -29,8 +29,8 @@ class SAR_Generator {
 	}
 
 	protected function get_current_year() {
-		if ( ! $year = get_query_var('year') )
-			$year = end($this->get_years_with_posts());
+		if ( !$year = get_query_var('year') )
+			$year = end($this->get_years_with_posts('desc'));
 
 		return $year;
 	}
@@ -42,8 +42,13 @@ class SAR_Generator {
 		return $this->months_with_posts;
 	}
 
-	protected function get_years_with_posts() {
-		return array_keys($this->months_with_posts);
+	protected function get_years_with_posts($order) {
+		$years = array_keys($this->months_with_posts);
+
+		if ( 'desc' != $order )
+			$years = array_reverse($years);
+
+		return $years;
 	}
 
 	protected function get_posts($year, $month) {
@@ -92,7 +97,7 @@ class SAR_Generator {
 
 		$block = '';
 
-		foreach ( array_reverse($this->get_years_with_posts(), true) as $year ) {
+		foreach ( $this->get_years_with_posts('asc') as $year ) {
 			// Generate top panes
 			$months =
 			html("ul id='month-list-$year' class='tabs month-list'",
@@ -136,8 +141,8 @@ class SAR_Generator {
 		$months_long = $this->get_months();
 
 		$list = '';
-		foreach ( $this->get_years_with_posts() as $year ) {
-			for ( $i = 12; $i >= 1; $i-- ) {
+		foreach ( $this->get_years_with_posts('desc') as $year ) {
+			foreach ( range(12, 1) as $i ) {
 				if ( ! $posts = $this->get_posts($year, $i) )
 					continue;
 
@@ -166,7 +171,7 @@ class SAR_Generator {
 	// The block
 	protected function generate_block() {
 		$block = '';
-		foreach ( $this->get_years_with_posts() as $year ) {
+		foreach ( $this->get_years_with_posts('desc') as $year ) {
 			$year_link = html('strong', html_link(get_year_link($year), $year) . ':');
 
 			$month_list = $this->generate_month_list($year, 0, true);
@@ -183,8 +188,9 @@ class SAR_Generator {
 
 	protected function generate_year_list($current_year = 0) {
 		$year_list = '';
-		foreach ( $this->get_years_with_posts() as $year ) {
-			$year_list .= "\n\t" . html('li',
+		foreach ( $this->get_years_with_posts('desc') as $year ) {
+			$year_list .= 
+			html('li',
 				$this->a_link(get_year_link($year), $year, $year == $current_year)
 			);
 		}
