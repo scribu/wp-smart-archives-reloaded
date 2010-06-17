@@ -204,7 +204,7 @@ class SAR_Generator {
 		$in_current_year = $year == get_query_var('year');
 
 		$month_list = '';
-		for ( $i = 1; $i <= 12; $i++ ) {
+		foreach ( range(1, 12) as $i ) {
 			$month = $month_names[$i];
 
 			if ( in_array($i, $this->get_months_with_posts($year)) ) {
@@ -244,7 +244,7 @@ class SAR_Generator {
 		global $wp_locale;
 
 		$months = array();
-		for ( $i = 1; $i <= 12; $i++ ) {
+		foreach ( range(1, 12) as $i ) {
 			if ( 'numeric' == $format ) {
 				$months[$i] = zeroise($i, 2);
 				continue;
