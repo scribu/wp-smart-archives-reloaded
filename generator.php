@@ -30,7 +30,7 @@ class SAR_Generator {
 
 	protected function get_current_year() {
 		if ( !$year = get_query_var('year') )
-			$year = end($this->get_years_with_posts('desc'));
+			$year = reset($this->get_years_with_posts('desc'));
 
 		return $year;
 	}
