@@ -1,0 +1,143 @@
+# Translation of the WordPress plugin Smart Archives Reloaded 2.0a4 by scribu.
+# Copyright (C) 2010 scribu
+# This file is distributed under the same license as the Smart Archives Reloaded package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Smart Archives Reloaded 2.0a4\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/smart-archives-reloaded\n"
+"POT-Creation-Date: 2010-04-24 13:19+0300\n"
+"PO-Revision-Date: 2010-06-10 17:06+0700\n"
+"Last-Translator: Ryan Riatno <ryan@ryanriatno.com>\n"
+"Language-Team: Ryan Riatno <ryan@ryanriatno.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: admin/admin.php:9
+msgid "Smart Archives Settings"
+msgstr "Pengaturan Index Website"
+
+#: admin/admin.php:10
+msgid "Smart Archives"
+msgstr "Index Website"
+
+#: admin/admin.php:32
+msgid "Default"
+msgstr "Default"
+
+#: admin/admin.php:34
+msgid "General settings"
+msgstr "Pengaturan Umum"
+
+#: admin/admin.php:36
+msgid "Exclude Categories by ID"
+msgstr "Abaikan Kategori berdasarkan ID"
+
+#: admin/admin.php:37
+msgid "(comma separated)"
+msgstr "(dipisahkan oleh koma)"
+
+#: admin/admin.php:44
+msgid "Format"
+msgstr "Format"
+
+#: admin/admin.php:49
+msgid "block"
+msgstr "letak"
+
+#: admin/admin.php:50
+msgid "list"
+msgstr "daftar"
+
+#: admin/admin.php:51
+msgid "both"
+msgstr "keduanya"
+
+#: admin/admin.php:52
+msgid "fancy"
+msgstr "fancy"
+
+#: admin/admin.php:57
+msgid "Specific settings"
+msgstr "Pengaturan Khusus"
+
+#: admin/admin.php:59
+msgid "List format"
+msgstr "Daftar Format"
+
+#: admin/admin.php:60
+msgid "Available substitution tags"
+msgstr "Tags Pengganti yang tersedia"
+
+#: admin/admin.php:67
+#, php-format
+msgid "%s format"
+msgstr "% format"
+
+#: admin/admin.php:70
+msgid "See available date formatting characters <a href=\"http://php.net/date\" target=\"_blank\">here</a>."
+msgstr "Lihat karakter format waktu yang tersedia <a href=\"http://php.net/date\" target=\"_blank\">here</a>."
+
+#: admin/admin.php:78
+msgid "Month names"
+msgstr "Nama Bulan"
+
+#: admin/admin.php:84
+msgid "numeric"
+msgstr "numerik"
+
+#: admin/admin.php:85
+msgid "short"
+msgstr "pendek"
+
+#: admin/admin.php:86
+msgid "long"
+msgstr "panjang"
+
+#: admin/admin.php:91
+msgid "Use anchor links in block"
+msgstr "Gunakan jangkar tautan di dalam letak"
+
+#: admin/admin.php:92
+msgid "The month links in the block will point to the month links in the list"
+msgstr "Gunakan link dalam letak akan menuju tautan bulan ke dalam daftar "
+
+#: generator.php:113
+msgid "View complete archive page"
+msgstr "Lihat arsip selengkapnya"
+
+#: scb/AdminPage.php:165
+#: scb/AdminPage.php:176
+msgid "Save Changes"
+msgstr "Simpan Perubahan"
+
+#: scb/AdminPage.php:279
+msgid "Settings <strong>saved</strong>."
+msgstr "Pengaturan <strong>disimpan</strong>."
+
+#: scb/AdminPage.php:337
+msgid "Settings"
+msgstr "Pengaturan"
+
+#. Plugin Name of the plugin/theme
+msgid "Smart Archives Reloaded"
+msgstr "Index Website"
+
+#. Plugin URI of the plugin/theme
+msgid "http://scribu.net/wordpress/smart-archives-reloaded"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "An elegant and easy way to present your posts, grouped by year and month."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "scribu"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://scribu.net"
+msgstr ""
+
