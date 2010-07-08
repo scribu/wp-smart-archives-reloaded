@@ -1,0 +1,176 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Smart Archives Reloaded\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/smart-archives-reloaded\n"
+"POT-Creation-Date: 2010-04-24 13:19+0300\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Ashish Jha <ashish@outshinesolutions.com>\n"
+"Language-Team: Outshinhe Solutions <ashish@outshinesolutions.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Hindi\n"
+"X-Poedit-Country: INDIA\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: admin/admin.php:9
+msgid "Smart Archives Settings"
+msgstr "स्मार्ट सेटिंग्स अभिलेखागार "
+
+#: admin/admin.php:10
+msgid "Smart Archives"
+msgstr "स्मार्ट अभिलेखागार "
+
+#: admin/admin.php:32
+msgid "Default"
+msgstr "डिफ़ॉल्ट"
+
+#: admin/admin.php:34
+msgid "General settings"
+msgstr "सामान्य सेटिंग्स"
+
+#: admin/admin.php:36
+msgid "Exclude Categories by ID"
+msgstr "अपवर्जित श्रेणियाँ आईडी द्वारा "
+
+#: admin/admin.php:37
+msgid "(comma separated)"
+msgstr "(अल्पविराम विभाजित)"
+
+#: admin/admin.php:44
+msgid "Format"
+msgstr "प्रारूप"
+
+#: admin/admin.php:49
+msgid "block"
+msgstr "खंड"
+
+#: admin/admin.php:50
+msgid "list"
+msgstr "सूची"
+
+#: admin/admin.php:51
+msgid "both"
+msgstr "दोनों"
+
+#: admin/admin.php:52
+msgid "fancy"
+msgstr "रुचिकर"
+
+#: admin/admin.php:57
+msgid "Specific settings"
+msgstr "विशिष्ट रूपरेखाओं"
+
+#: admin/admin.php:59
+msgid "List format"
+msgstr "सूची प्रारूप"
+
+#: admin/admin.php:60
+msgid "Available substitution tags"
+msgstr "उपलब्ध प्रतिस्थापन टैग"
+
+#: admin/admin.php:67
+#, php-format
+msgid "%s format"
+msgstr "प्रारूप %s"
+
+#: admin/admin.php:70
+msgid "See available date formatting characters <a href=\"http://php.net/date\" target=\"_blank\">here</a>."
+msgstr "उपलब्ध वर्ण स्वरूपण तारीख  देख़े  <a href=\"http://php.net/date\" target=\"_blank\">यहां</a>."
+
+#: admin/admin.php:78
+msgid "Month names"
+msgstr "महीनों के नाम"
+
+#: admin/admin.php:84
+msgid "numeric"
+msgstr "सांख्यिक"
+
+#: admin/admin.php:85
+msgid "short"
+msgstr "सारांश"
+
+#: admin/admin.php:86
+msgid "long"
+msgstr "दीर्घ"
+
+#: admin/admin.php:91
+msgid "Use anchor links in block"
+msgstr "ब्लॉक में लिंक लंगर उपयोग करे "
+
+#: admin/admin.php:92
+msgid "The month links in the block will point to the month links in the list"
+msgstr "ब्लॉक में माह लिंक सूची में माह लिंक को इंगित करेंगे"
+
+#: generator.php:113
+msgid "View complete archive page"
+msgstr "दृश्य पूरा संग्रह पृष्ठ"
+
+#: scb/AdminPage.php:165
+#: scb/AdminPage.php:176
+msgid "Save Changes"
+msgstr "परिवर्तन सहेजें "
+
+#: scb/AdminPage.php:279
+msgid "Settings <strong>saved</strong>."
+msgstr "सेटिंग्स <strong>संचय</strong>."
+
+#: scb/AdminPage.php:337
+msgid "Settings"
+msgstr "सेटिंग्स "
+
+#. Plugin Name of the plugin/theme
+msgid "Smart Archives Reloaded"
+msgstr "स्मार्ट अर्चिवेस रेलोअदेद "
+
+#. Plugin URI of the plugin/theme
+msgid "http://scribu.net/wordpress/smart-archives-reloaded"
+msgstr "http://scribu.net/wordpress/smart-archives-reloaded"
+
+#. Description of the plugin/theme
+msgid "An elegant and easy way to present your posts, grouped by year and month."
+msgstr "एक सुंदर और आसान  तरीका अपने पोस्ट  को वर्ष और महीने के आधार पर समूहीकृत करने के लिए"
+
+#. Author of the plugin/theme
+msgid "scribu"
+msgstr "स्क्रिबू "
+
+#. Author URI of the plugin/theme
+msgid "http://scribu.net"
+msgstr "http://scribu.net"
+
+#~ msgid "Clear"
+#~ msgstr "Golește"
+
+#~ msgid "Cache <strong>cleared</strong>."
+#~ msgstr "Cache-ul a fost <strong>golit</strong>."
+
+#~ msgid "Numeric months in block"
+#~ msgstr "Luni sub formă numerică în bloc"
+
+#~ msgid "The month links in the block will be shown as numbers"
+#~ msgstr "Lunile din bloc vor fi afișate numeric"
+
+#~ msgid "Cache control"
+#~ msgstr "Control cache"
+
+#~ msgid "Use wp-cron"
+#~ msgstr "Folosește wp-cron"
+
+#~ msgid "Clear cache"
+#~ msgstr "Golește cache-ul"
+
+#~ msgid "Cache cleared."
+#~ msgstr "Cache-ul a fost golit"
+
+#~ msgid "Install now"
+#~ msgstr "Instalează acum"
+
+#~ msgid "Updates the archives in the background"
+#~ msgstr "Actualizează arhivele în fundal"
+
+#~ msgid "%date% format"
+#~ msgstr "Format %date%"
+
+#~ msgid "Uncheck this if your archive isn't being updated"
+#~ msgstr "Deselectează asta dacă arhiva nu este actualizată"
