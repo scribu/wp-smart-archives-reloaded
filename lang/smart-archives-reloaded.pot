@@ -1,4 +1,4 @@
-# Translation of the WordPress plugin Smart Archives Reloaded 2.0a4 by scribu.
+# Translation of the WordPress plugin Smart Archives Reloaded 2.1-alpha by scribu.
 # Copyright (C) 2010 scribu
 # This file is distributed under the same license as the Smart Archives Reloaded package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Smart Archives Reloaded 2.0a4\n"
+"Project-Id-Version: Smart Archives Reloaded 2.1-alpha\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/smart-archives-reloaded\n"
-"POT-Creation-Date: 2010-04-24 13:19+0300\n"
+"POT-Creation-Date: 2010-07-09 02:11+0300\n"
 "PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,7 +37,7 @@ msgid "Exclude Categories by ID"
 msgstr ""
 
 #: admin/admin.php:37
-msgid "(comma separated)"
+msgid "( comma separated )"
 msgstr ""
 
 #: admin/admin.php:44
@@ -87,39 +87,39 @@ msgstr ""
 msgid "Month names"
 msgstr ""
 
-#: admin/admin.php:84
+#: admin/admin.php:83
 msgid "numeric"
 msgstr ""
 
-#: admin/admin.php:85
+#: admin/admin.php:84
 msgid "short"
 msgstr ""
 
-#: admin/admin.php:86
+#: admin/admin.php:85
 msgid "long"
 msgstr ""
 
-#: admin/admin.php:91
+#: admin/admin.php:90
 msgid "Use anchor links in block"
 msgstr ""
 
-#: admin/admin.php:92
+#: admin/admin.php:91
 msgid "The month links in the block will point to the month links in the list"
 msgstr ""
 
-#: generator.php:113
+#: generator.php:119
 msgid "View complete archive page"
 msgstr ""
 
-#: scb/AdminPage.php:165 scb/AdminPage.php:176
-msgid "Save Changes"
-msgstr ""
-
-#: scb/AdminPage.php:279
+#: scb/AdminPage.php:167
 msgid "Settings <strong>saved</strong>."
 msgstr ""
 
-#: scb/AdminPage.php:337
+#: scb/AdminPage.php:179 scb/AdminPage.php:189
+msgid "Save Changes"
+msgstr ""
+
+#: scb/AdminPage.php:371
 msgid "Settings"
 msgstr ""
 
