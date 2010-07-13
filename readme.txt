@@ -77,6 +77,9 @@ If you want to translate this plugin, please read [this](http://scribu.net/wordp
 
 == Changelog ==
 
+= 2.1 =
+* fixed year order in block
+
 = 2.0.1 =
 * fix category exclusion
 
