@@ -161,18 +161,6 @@ jQuery( document ).ready( function( $ ) {
 	}
 }
 
-
-// WP < 3.0
-if ( !function_exists( 'wp_parse_id_list' ) ) :
-function wp_parse_id_list( $list ) {
-	if ( !is_array( $list ) )
-		$list = preg_split( '/[\s,]+/', $list );
-
-	return array_unique( array_map( 'absint', $list ) );
-}
-endif;
-
-
 if ( !function_exists( 'array_pop_key' ) ) :
 function array_pop_key( $array, $key ) {
 	if ( !isset( $array[$key] ) )

@@ -81,7 +81,7 @@ If you want to translate this plugin, please read [this](http://scribu.net/wordp
 * fixed year order in block
 
 = 2.0.1 =
-* fix category exclusion
+* fixed category exclusion
 
 = 2.0 =
 * added %excerpt% tag

@@ -8,7 +8,7 @@ class SAR_Generator {
 	protected $columns;
 
 	public function generate( $args, $qv ) {
-		if ( !$this->load_data( $args, $qv ) )
+		if ( !$this->load_data( $qv ) )
 			return '';
 
 		$this->args = (object) $args;
@@ -17,15 +17,34 @@ class SAR_Generator {
 		return call_user_func( array( $this, 'generate_' . $this->args->format ) );
 	}
 
-	protected function load_data( $args, $qv ) {
-		$mvp = new SAR_Year_Query( $qv );
+	protected function load_data( $qv ) {
+		$qv = array_merge( $qv, array(
+			'caller_get_posts' => true,
+			'nopaging' => true,
+			'cache_results' => false,
+			'suppress_filters' => false,
+		) );
 
-		if ( empty( $mvp->months_with_posts ) )
+		new scbQueryManipulation( array( __CLASS__, 'query_manipulation' ) );
+		$rows = get_posts( $qv );
+
+		if ( empty( $rows ) )
 			return false;
 
-		$this->months_with_posts = $mvp->months_with_posts;
+		$months = array();
+		foreach ( $rows as $row )
+			$months[$row->year][] = $row->month;
+
+		$this->months_with_posts = $months;
 
 		return true;
+	}
+
+	function query_manipulation( $bits, $wp_query ) {
+		$bits['fields'] = 'DISTINCT YEAR( post_date ) AS year, MONTH( post_date ) AS month';
+		$bits['orderby'] = 'year DESC, month ASC';
+	
+		return $bits;
 	}
 
 	protected function get_current_year() {
@@ -59,12 +78,14 @@ class SAR_Generator {
 			'year' => $year,
 			'monthnum' => $month,
 			'caller_get_posts' => true,
-			'nopaging' => true,
 		) );
 
-		$query = new SAR_Posts_Query( $this->args->posts_per_month, $qv );
+		if ( $this->args->posts_per_month )
+			$qv['posts_per_page'] = $this->args->posts_per_month;
+		else
+			$qv['nopaging'] = true;
 
-		return $query->posts;
+		return get_posts( $qv );
 	}
 
 
@@ -315,55 +336,6 @@ class SAR_Generator {
 			$categorylist[] = $category->cat_name;
 
 		return implode( ', ', $categorylist );
-	}
-}
-
-
-class SAR_Posts_Query extends scbQuery {
-	private $count;
-
-	function __construct( $count, $qv ) {
-		$this->count = (int) $count;
-
-		parent::__construct( $qv );
-	}
-
-	function post_limits() {
-		if ( $this->count )
-			return "LIMIT $this->count";
-
-		return '';
-	}
-
-	final public function __get( $key ) {
-		return $this->wp_query->$key;
-	}
-}
-
-class SAR_Year_Query extends scbQuery {
-
-	function __construct( $qv ) {
-		$qv = array_merge( $qv, array(
-			'caller_get_posts' => true,
-			'nopaging' => true,
-			'cache_results' => false,
-		) );
-
-		parent::__construct( $qv );
-
-		$months = array();
-		foreach ( $this->wp_query->posts as $row )
-			$months[$row->year][] = $row->month;
-
-		$this->months_with_posts = $months;
-	}
-
-	function posts_fields() {
-		return 'DISTINCT YEAR( post_date ) AS year, MONTH( post_date ) AS month';
-	}
-
-	function posts_orderby() {
-		return 'year DESC, month ASC';
 	}
 }
 
