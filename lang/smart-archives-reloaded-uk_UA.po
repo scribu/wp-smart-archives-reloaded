@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/smart-archives-reloaded\n"
-"POT-Creation-Date: 2010-07-09 02:11+0300\n"
+"POT-Creation-Date: 2010-07-31 20:18+0300\n"
 "PO-Revision-Date: \n"
 "Last-Translator: scribu <scribu@gmail.com>\n"
 "Language-Team: \n"
@@ -31,8 +31,8 @@ msgid "Exclude Categories by ID"
 msgstr "Виключіть Категорії відповідно до ID"
 
 #: admin/admin.php:37
-msgid "( comma separated )"
-msgstr "( Відокремлене місце )"
+msgid "(comma separated)"
+msgstr "(Відокремлене місце)"
 
 #: admin/admin.php:44
 msgid "Format"
@@ -100,7 +100,7 @@ msgstr "Використовуйте анкори посилання в блоц
 msgid "The month links in the block will point to the month links in the list"
 msgstr "Місяць посилання в блоці буде вказувати на місяць посилання в списку"
 
-#: generator.php:119
+#: generator.php:140
 msgid "View complete archive page"
 msgstr ""
 

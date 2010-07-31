@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Smart Archives Reloaded 2.1-alpha\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/smart-archives-reloaded\n"
-"POT-Creation-Date: 2010-07-09 02:11+0300\n"
+"POT-Creation-Date: 2010-07-31 20:18+0300\n"
 "PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,7 +37,7 @@ msgid "Exclude Categories by ID"
 msgstr ""
 
 #: admin/admin.php:37
-msgid "( comma separated )"
+msgid "(comma separated)"
 msgstr ""
 
 #: admin/admin.php:44
@@ -107,7 +107,7 @@ msgstr ""
 msgid "The month links in the block will point to the month links in the list"
 msgstr ""
 
-#: generator.php:119
+#: generator.php:140
 msgid "View complete archive page"
 msgstr ""
 
