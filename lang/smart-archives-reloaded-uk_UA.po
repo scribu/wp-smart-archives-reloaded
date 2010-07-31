@@ -1,0 +1,148 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/smart-archives-reloaded\n"
+"POT-Creation-Date: 2010-07-09 02:11+0300\n"
+"PO-Revision-Date: \n"
+"Last-Translator: scribu <scribu@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: admin/admin.php:9
+msgid "Smart Archives Settings"
+msgstr "Налаштування¸ Smart Archives"
+
+#: admin/admin.php:10
+msgid "Smart Archives"
+msgstr "Smart Archives"
+
+#: admin/admin.php:32
+msgid "Default"
+msgstr ""
+
+#: admin/admin.php:34
+msgid "General settings"
+msgstr ""
+
+#: admin/admin.php:36
+msgid "Exclude Categories by ID"
+msgstr "Виключіть Категорії відповідно до ID"
+
+#: admin/admin.php:37
+msgid "( comma separated )"
+msgstr "( Відокремлене місце )"
+
+#: admin/admin.php:44
+msgid "Format"
+msgstr "Формат"
+
+#: admin/admin.php:49
+msgid "block"
+msgstr "блок"
+
+#: admin/admin.php:50
+msgid "list"
+msgstr "лист"
+
+#: admin/admin.php:51
+msgid "both"
+msgstr "оба"
+
+#: admin/admin.php:52
+msgid "fancy"
+msgstr ""
+
+#: admin/admin.php:57
+#, fuzzy
+msgid "Specific settings"
+msgstr "Налаштування"
+
+#: admin/admin.php:59
+msgid "List format"
+msgstr ""
+
+#: admin/admin.php:60
+msgid "Available substitution tags"
+msgstr ""
+
+#: admin/admin.php:67
+#, php-format
+msgid "%s format"
+msgstr "%s Формат"
+
+#: admin/admin.php:70
+msgid "See available date formatting characters <a href=\"http://php.net/date\" target=\"_blank\">here</a>."
+msgstr ""
+
+#: admin/admin.php:78
+msgid "Month names"
+msgstr ""
+
+#: admin/admin.php:83
+msgid "numeric"
+msgstr ""
+
+#: admin/admin.php:84
+msgid "short"
+msgstr ""
+
+#: admin/admin.php:85
+msgid "long"
+msgstr ""
+
+#: admin/admin.php:90
+msgid "Use anchor links in block"
+msgstr "Використовуйте анкори посилання в блоці"
+
+#: admin/admin.php:91
+msgid "The month links in the block will point to the month links in the list"
+msgstr "Місяць посилання в блоці буде вказувати на місяць посилання в списку"
+
+#: generator.php:119
+msgid "View complete archive page"
+msgstr ""
+
+#: scb/AdminPage.php:167
+msgid "Settings <strong>saved</strong>."
+msgstr "Налаштування <strong> зберегти </ STRONG>."
+
+#: scb/AdminPage.php:179
+#: scb/AdminPage.php:189
+msgid "Save Changes"
+msgstr "Зберегти зміни"
+
+#: scb/AdminPage.php:371
+msgid "Settings"
+msgstr "Налаштування"
+
+#. Plugin Name of the plugin/theme
+msgid "Smart Archives Reloaded"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://scribu.net/wordpress/smart-archives-reloaded"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "An elegant and easy way to present your posts, grouped by year and month."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "scribu"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://scribu.net"
+msgstr ""
+
+#~ msgid "Numeric months in block"
+#~ msgstr "Числові місяці в блоці"
+#~ msgid "The month links in the block will be shown as numbers"
+#~ msgstr "Зв'язки місяця в блоці покажуть як числа"
+#~ msgid "Use wp-cron"
+#~ msgstr "Використання  wp-cron"
+#~ msgid "(Uncheck this if your archive isn't being updated)"
+#~ msgstr "(Зніміть цей прапорець, якщо ваш архів не оновлюється)"
+
