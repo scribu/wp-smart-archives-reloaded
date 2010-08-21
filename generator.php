@@ -195,7 +195,7 @@ class SAR_Generator {
 		foreach ( $this->get_years_with_posts( 'desc' ) as $year ) {
 			$year_link = html( 'strong', html_link( get_year_link( $year ), $year ) . ':' );
 
-			$month_list = $this->generate_month_list( $year, 0, true );
+			$month_list = $this->generate_month_list( $year, get_query_var( 'monthnum' ), true );
 
 			$block .= html( 'li', $year_link . $month_list );
 		}
@@ -219,10 +219,10 @@ class SAR_Generator {
 		return $year_list;
 	}
 
-	protected function generate_month_list( $year, $current_month = 0, $inline = false, $in_current_year = false ) {
+	protected function generate_month_list( $year, $current_month = 0, $inline = false ) {
 		$month_names = $this->get_months( $this->args->month_format );
 
-		$in_current_year = $year == get_query_var( 'year' );
+		$in_current_year = ( get_query_var( 'year' ) == $year );
 
 		$month_list = '';
 		foreach ( range( 1, 12 ) as $i ) {
