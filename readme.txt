@@ -4,7 +4,7 @@ Donate link: http://scribu.net/wordpress
 Tags: archive, archives, post list
 Requires at least: 2.9
 Tested up to: 3.0
-Stable tag: 2.0.1
+Stable tag: trunk
 
 Easily display posts grouped by year and month, in one or more elegant formats
 
@@ -79,8 +79,10 @@ If you want to translate this plugin, please read [this](http://scribu.net/wordp
 
 == Changelog ==
 
-= 2.1 =
+= 2.0.2 =
 * fixed year order in block
+* highlighted current month in block
+* updated scbFramework
 
 = 2.0.1 =
 * fixed category exclusion
