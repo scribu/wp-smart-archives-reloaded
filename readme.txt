@@ -81,6 +81,7 @@ If you want to translate this plugin, please read [this](http://scribu.net/wordp
 
 = 2.0.3 =
 * fixed year order in menu & fancy modes
+* improved memory usage
 
 = 2.0.2 =
 * fixed year order in block
