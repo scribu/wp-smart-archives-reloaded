@@ -4,7 +4,7 @@ Donate link: http://scribu.net/wordpress
 Tags: archive, archives, post list
 Requires at least: 2.9
 Tested up to: 3.0
-Stable tag: 2.0.1
+Stable tag: trunk
 
 Easily display posts grouped by year and month, in one or more elegant formats
 
@@ -78,6 +78,9 @@ Read this: [Advanced Tweaking](http://scribu.net/wordpress/smart-archives-reload
 If you want to translate this plugin, please read [this](http://scribu.net/wordpress/translating-plugins.html).
 
 == Changelog ==
+
+= 2.0.3 =
+* fixed year order in menu & fancy modes
 
 = 2.0.2 =
 * fixed year order in block
