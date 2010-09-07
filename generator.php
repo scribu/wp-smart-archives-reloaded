@@ -209,7 +209,7 @@ class SAR_Generator {
 
 	protected function generate_year_list( $current_year = 0 ) {
 		$year_list = '';
-		foreach ( $this->get_years_with_posts( 'desc' ) as $year ) {
+		foreach ( $this->get_years_with_posts( 'asc' ) as $year ) {
 			$year_list .=
 			html( 'li',
 				$this->a_link( get_year_link( $year ), $year, $year == $current_year )
