@@ -78,6 +78,8 @@ class SAR_Generator {
 			'year' => $year,
 			'monthnum' => $month,
 			'caller_get_posts' => true,
+			'cache_results' => false,
+			'no_found_rows' => true,
 		) );
 
 		if ( $this->args->posts_per_month )
@@ -117,7 +119,6 @@ class SAR_Generator {
 		);
 
 		$block = '';
-
 		foreach ( $this->get_years_with_posts( 'asc' ) as $year ) {
 			// Generate top panes
 			$months =
@@ -128,7 +129,9 @@ class SAR_Generator {
 			// Generate post lists
 			$list = '';
 			foreach ( range( 1, 12 ) as $i ) {
-				if ( !$posts = $this->get_posts( $year, $i ) )
+				$post_list = $this->generate_post_list( $year, $i, "\n\t\t" );
+
+				if ( !$post_list )
 					continue;
 
 				// Append to list
@@ -140,9 +143,7 @@ class SAR_Generator {
 							'( '. html_link( get_month_link( $year, $i ), __( 'View complete archive page', 'smart-archives-reloaded' ) ) .' )'
 						)
 					)
-					.html( 'ul class="archive-list"',
-						$this->generate_post_list( $posts, "\n\t\t\t" )
-					)
+					.html( 'ul class="archive-list"', $post_list )
 				);
 			} // end month block
 
@@ -164,11 +165,11 @@ class SAR_Generator {
 		$list = '';
 		foreach ( $this->get_years_with_posts( 'desc' ) as $year ) {
 			foreach ( range( 12, 1 ) as $i ) {
-				if ( ! $posts = $this->get_posts( $year, $i ) )
-					continue;
-
 				// Get post links for current month
-				$post_list = $this->generate_post_list( $posts, "\n\t\t" );
+				$post_list = $this->generate_post_list( $year, $i, "\n\t\t" );
+
+				if ( !$post_list )
+					continue;
 
 				// Set title format
 				if ( $this->args->anchors )
@@ -245,7 +246,12 @@ class SAR_Generator {
 		return $month_list;
 	}
 
-	protected function generate_post_list( $posts, $indent ) {
+	protected function generate_post_list( $year, $i, $indent ) {
+		$posts = $this->get_posts( $year, $i );
+
+		if ( empty( $posts ) )
+			return false;
+
 		$post_list = '';
 		foreach ( $posts as $post ) {
 			$list_item = $this->args->list_format;
