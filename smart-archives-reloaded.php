@@ -31,8 +31,8 @@ require dirname( __FILE__ ) . '/scb/load.php';
 function _sar_init() {
 	load_plugin_textdomain( 'smart-archives-reloaded', '', dirname( plugin_basename( __FILE__ ) ) . '/lang' );
 
-	require dirname( __FILE__ ) . '/core.php';
-	require dirname( __FILE__ ) . '/generator.php';
+	require_once dirname( __FILE__ ) . '/core.php';
+	require_once dirname( __FILE__ ) . '/generator.php';
 
 	$options = new scbOptions( 'smart-archives', __FILE__, array(
 		'format' => 'both',
