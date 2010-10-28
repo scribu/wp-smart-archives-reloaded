@@ -1,0 +1,143 @@
+# Translation of the WordPress plugin Smart Archives Reloaded 2.1-alpha by scribu.
+# Copyright (C) 2010 scribu
+# This file is distributed under the same license as the Smart Archives Reloaded package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Smart Archives Reloaded 2.1-alpha\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/smart-archives-reloaded\n"
+"POT-Creation-Date: 2010-10-28 11:23+0200\n"
+"PO-Revision-Date: 2010-10-28 17:35+0200\n"
+"Last-Translator: scribu <mail@scribu.net>\n"
+"Language-Team: Jorge J. Macia <jmac@projectfarm.es>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: admin/admin.php:9
+msgid "Smart Archives Settings"
+msgstr "Preferencias de Smart Archives"
+
+#: admin/admin.php:10
+msgid "Smart Archives"
+msgstr ""
+
+#: admin/admin.php:32
+msgid "Default"
+msgstr "Por omisión"
+
+#: admin/admin.php:34
+msgid "General settings"
+msgstr "Preferencias generales"
+
+#: admin/admin.php:36
+msgid "Exclude Categories by ID"
+msgstr "Excluir Categorias por ID"
+
+#: admin/admin.php:37
+msgid "(comma separated)"
+msgstr "(separadas por comas)"
+
+#: admin/admin.php:44
+msgid "Format"
+msgstr "Formato"
+
+#: admin/admin.php:49
+msgid "block"
+msgstr "bloque"
+
+#: admin/admin.php:50
+msgid "list"
+msgstr "lista"
+
+#: admin/admin.php:51
+msgid "both"
+msgstr "ambos"
+
+#: admin/admin.php:52
+msgid "fancy"
+msgstr "extravagante"
+
+#: admin/admin.php:57
+msgid "Specific settings"
+msgstr "Preferencias específicas"
+
+#: admin/admin.php:59
+msgid "List format"
+msgstr "Formato de Lista"
+
+#: admin/admin.php:60
+msgid "Available substitution tags"
+msgstr "Etiquetas de substitución disponibles"
+
+#: admin/admin.php:67
+#, php-format
+msgid "%s format"
+msgstr "formato de %s"
+
+#: admin/admin.php:70
+msgid "See available date formatting characters <a href=\"http://php.net/date\" target=\"_blank\">here</a>."
+msgstr "Ver carácteres de formato de fecha disponibles <a href=\"http://php.net/date\" target=\"_blank\">aquí</a>."
+
+#: admin/admin.php:78
+msgid "Month names"
+msgstr "Nombres de meses"
+
+#: admin/admin.php:83
+msgid "numeric"
+msgstr "números"
+
+#: admin/admin.php:84
+msgid "short"
+msgstr "cortos"
+
+#: admin/admin.php:85
+msgid "long"
+msgstr "largos"
+
+#: admin/admin.php:90
+msgid "Use anchor links in block"
+msgstr "Usar enlaces de anclaje en bloque"
+
+#: admin/admin.php:91
+msgid "The month links in the block will point to the month links in the list"
+msgstr "Los enlaces al mes en el bloque apuntarán a los enlaces al mes en la lista"
+
+#: generator.php:140
+msgid "View complete archive page"
+msgstr "Ver todo el archivo"
+
+#: scb/AdminPage.php:167
+msgid "Settings <strong>saved</strong>."
+msgstr "Preferencias <strong>guardadas</strong>."
+
+#: scb/AdminPage.php:179
+#: scb/AdminPage.php:189
+msgid "Save Changes"
+msgstr "Guardar Cambios"
+
+#: scb/AdminPage.php:371
+msgid "Settings"
+msgstr "Preferencias"
+
+#. Plugin Name of the plugin/theme
+msgid "Smart Archives Reloaded"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://scribu.net/wordpress/smart-archives-reloaded"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "An elegant and easy way to present your posts, grouped by year and month."
+msgstr "Un modo simple y elegante de presentar sus posts, agrupados por año y mes."
+
+#. Author of the plugin/theme
+msgid "scribu"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://scribu.net"
+msgstr ""
+
