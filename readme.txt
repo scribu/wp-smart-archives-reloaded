@@ -79,6 +79,9 @@ If you want to translate this plugin, please read [this](http://scribu.net/wordp
 
 == Changelog ==
 
+= 2.0.4 =
+* fix menu when on date archives
+
 = 2.0.3 =
 * fixed year order in menu & fancy modes
 * improved memory usage

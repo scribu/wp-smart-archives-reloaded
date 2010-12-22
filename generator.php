@@ -25,6 +25,8 @@ class SAR_Generator {
 			'suppress_filters' => false,
 		) );
 
+		unset( $qv['year'], $qv['monthnum'] );
+
 		new scbQueryManipulation( array( __CLASS__, 'query_manipulation' ) );
 		$rows = get_posts( $qv );
 
@@ -43,7 +45,7 @@ class SAR_Generator {
 	function query_manipulation( $bits, $wp_query ) {
 		$bits['fields'] = 'DISTINCT YEAR( post_date ) AS year, MONTH( post_date ) AS month';
 		$bits['orderby'] = 'year DESC, month ASC';
-	
+
 		return $bits;
 	}
 
