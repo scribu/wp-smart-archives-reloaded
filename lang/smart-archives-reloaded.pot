@@ -1,17 +1,18 @@
-# Translation of the WordPress plugin Smart Archives Reloaded 2.1-alpha by scribu.
-# Copyright (C) 2010 scribu
+# Translation of the WordPress plugin Smart Archives Reloaded 2.0.4-alpha by scribu.
+# Copyright (C) 2011 scribu
 # This file is distributed under the same license as the Smart Archives Reloaded package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Smart Archives Reloaded 2.1-alpha\n"
+"Project-Id-Version: Smart Archives Reloaded 2.0.4-alpha\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/smart-archives-reloaded\n"
-"POT-Creation-Date: 2010-07-31 20:18+0300\n"
-"PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2011-04-07 00:36+0300\n"
+"PO-Revision-Date: 2011-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -107,19 +108,19 @@ msgstr ""
 msgid "The month links in the block will point to the month links in the list"
 msgstr ""
 
-#: generator.php:140
+#: generator.php:145
 msgid "View complete archive page"
 msgstr ""
 
-#: scb/AdminPage.php:167
+#: scb/AdminPage.php:165
 msgid "Settings <strong>saved</strong>."
 msgstr ""
 
-#: scb/AdminPage.php:179 scb/AdminPage.php:189
+#: scb/AdminPage.php:177 scb/AdminPage.php:187
 msgid "Save Changes"
 msgstr ""
 
-#: scb/AdminPage.php:371
+#: scb/AdminPage.php:369
 msgid "Settings"
 msgstr ""
 
