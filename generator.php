@@ -19,15 +19,15 @@ class SAR_Generator {
 
 	protected function load_data( $qv ) {
 		$qv = array_merge( $qv, array(
-			'caller_get_posts' => true,
+			'ignore_sticky_posts' => true,
 			'nopaging' => true,
 			'cache_results' => false,
 			'suppress_filters' => false,
+			'months_with_posts' => true
 		) );
 
 		unset( $qv['year'], $qv['monthnum'] );
 
-		new scbQueryManipulation( array( __CLASS__, 'query_manipulation' ) );
 		$rows = get_posts( $qv );
 
 		if ( empty( $rows ) )
@@ -43,8 +43,10 @@ class SAR_Generator {
 	}
 
 	function query_manipulation( $bits, $wp_query ) {
-		$bits['fields'] = 'DISTINCT YEAR( post_date ) AS year, MONTH( post_date ) AS month';
-		$bits['orderby'] = 'year DESC, month ASC';
+		if ( $wp_query->get( 'months_with_posts' ) ) {
+			$bits['fields'] = 'DISTINCT YEAR( post_date ) AS year, MONTH( post_date ) AS month';
+			$bits['orderby'] = 'year DESC, month ASC';
+		}
 
 		return $bits;
 	}
@@ -79,7 +81,7 @@ class SAR_Generator {
 		$qv = array_merge( $this->query_vars, array(
 			'year' => $year,
 			'monthnum' => $month,
-			'caller_get_posts' => true,
+			'ignore_sticky_posts' => true,
 			'cache_results' => false,
 			'no_found_rows' => true,
 		) );
@@ -347,3 +349,4 @@ class SAR_Generator {
 	}
 }
 
+add_filter( 'posts_clauses', array( 'SAR_Generator', 'query_manipulation' ), 10, 2 );

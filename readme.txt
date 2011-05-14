@@ -2,8 +2,8 @@
 Contributors: scribu
 Donate link: http://scribu.net/wordpress
 Tags: archive, archives, post list
-Requires at least: 3.0
-Tested up to: 3.0
+Requires at least: 3.1
+Tested up to: 3.1
 Stable tag: trunk
 
 Easily display posts grouped by year and month, in one or more elegant formats
@@ -80,7 +80,8 @@ If you want to translate this plugin, please read [this](http://scribu.net/wordp
 == Changelog ==
 
 = 2.0.4 =
-* fix menu when on date archives
+* fixed menu when on date archives
+* WP 3.1 compatibility
 
 = 2.0.3 =
 * fixed year order in menu & fancy modes
