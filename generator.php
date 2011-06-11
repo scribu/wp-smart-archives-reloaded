@@ -233,20 +233,22 @@ class SAR_Generator {
 		if ( empty( $posts ) )
 			return false;
 
-		$post_list = '';
+		$data = array();
+
 		foreach ( $posts as $post ) {
 			$list_item = $this->args->list_format;
 
-			foreach ( SAR_Core::get_available_tags() as $tag )
-				if ( false !== strpos( $this->args->list_format, $tag ) )
+			foreach ( SAR_Core::get_available_tags() as $tag ) {
+				if ( false !== strpos( $this->args->list_format, $tag ) ) {
 					$list_item = str_replace( $tag, call_user_func( array( $this, 'substitute_' . substr( $tag, 1, -1 ) ), $post ), $list_item );
+				}
+			}
 
-			$post_list .= $indent . html( 'li', $list_item );
+			$data['posts'][] = array( 'item' => $list_item );
 		}
 
-		return $post_list;
+		return self::mustache_render( 'post-list.html', $data );
 	}
-
 
 	protected function get_months( $format = 'long' ) {
 		global $wp_locale;
@@ -333,3 +335,4 @@ class SAR_Generator {
 }
 
 add_filter( 'posts_clauses', array( 'SAR_Generator', 'query_manipulation' ), 10, 2 );
+
