@@ -193,15 +193,17 @@ class SAR_Generator {
 
 
 	protected function generate_year_list( $current_year = 0 ) {
-		$year_list = '';
+		$data = array();
+
 		foreach ( $this->get_years_with_posts( 'asc' ) as $year ) {
-			$year_list .=
-			html( 'li',
-				$this->a_link( get_year_link( $year ), $year, $year == $current_year )
+			$data['years'][] = array(
+				'year-link' => get_year_link( $year ),
+				'year' => $year,
+				'is-current' => ( $year == $current_year ) ? array(true) : false
 			);
 		}
 
-		return $year_list;
+		return self::mustache_render( 'year-list.html', $data );
 	}
 
 	protected function generate_month_list( $year, $current_month = 0, $inline = false ) {
@@ -265,12 +267,6 @@ class SAR_Generator {
 		}
 
 		return $months;
-	}
-
-	protected function a_link( $link, $title, $current ) {
-		$el = $current ? 'a class="current"' : 'a';
-
-		return html( $el . ' href="' . $link . '"', $title );
 	}
 
 
