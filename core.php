@@ -23,6 +23,8 @@ class SAR_Core {
 	private static $fancy = false;
 	private static $css = false;
 
+	private static $mustache;
+
 	static function get_available_tags() {
 		return array(
 			'%post_link%',
@@ -158,6 +160,17 @@ jQuery( document ).ready( function( $ ) {
 } );
 </script>
 <?php
+	}
+
+	static function mustache_render( $file_path, $data ) {
+		if ( null == self::$mustache ) {
+			if ( !class_exists( 'Mustache' ) ) {
+				require dirname(__FILE__) . '/mustache/Mustache.php';
+			}
+			self::$mustache = new Mustache;
+		}
+
+		return self::$mustache->render( file_get_contents( $file_path ), $data );
 	}
 }
 

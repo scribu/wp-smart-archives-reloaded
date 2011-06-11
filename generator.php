@@ -227,7 +227,7 @@ class SAR_Generator {
 		return self::mustache_render( 'month-list.html', $data );
 	}
 
-	protected function generate_post_list( $year, $i, $indent ) {
+	protected function generate_post_list( $year, $i ) {
 		$posts = $this->get_posts( $year, $i );
 
 		if ( empty( $posts ) )
@@ -327,15 +327,11 @@ class SAR_Generator {
 	}
 
 	static function mustache_render( $file, $data ) {
-		if ( !class_exists( 'Mustache' ) )
-			require dirname(__FILE__) . '/mustache/Mustache.php';
-
 		$template_path = locate_template( 'sar-templates/' . $file );
 		if ( !$template_path )
 			$template_path = dirname(__FILE__) . '/templates/' . $file;
 
-		$m = new Mustache;
-		return $m->render( file_get_contents( $template_path ), $data );
+		return SAR_Core::mustache_render( $template_path, $data );
 	}
 }
 

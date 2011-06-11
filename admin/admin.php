@@ -31,77 +31,82 @@ class SAR_Settings extends scbAdminPage {
 
 		$default_date = __( 'Default', $this->textdomain ) . ': ' . get_option( 'date_format' ) . ' ( ' . date_i18n( get_option( 'date_format' ) ) . ' )';
 
-		$output = $this->_subsection( __( 'General settings', $this->textdomain ), 'general', array(
-			array(
-				'title' => __( 'Exclude Categories by ID', $this->textdomain ),
-				'desc' => __( '(comma separated)', $this->textdomain ),
-				'type' => 'text',
-				'name' => 'exclude_cat',
-				'value' => implode( ', ', (array) $this->options->exclude_cat )
-			),
+		$data = array();
 
-			array(
-				'title' => __( 'Format', $this->textdomain ),
-				'type' => 'radio',
-				'name' => 'format',
-				'value' => array( 'block', 'list', 'both', 'fancy' ),
-				'desc' => array(
-					__( 'block', $this->textdomain ),
-					__( 'list', $this->textdomain ),
-					__( 'both', $this->textdomain ),
-					__( 'fancy', $this->textdomain ),
-				)
-			),
-		) )
+		$data['sections'][] = array(
+			'title' => __( 'General settings', $this->textdomain ),
+			'id' => 'general',
+			'rows' => $this->table( array(
+				array(
+					'title' => __( 'Exclude Categories by ID', $this->textdomain ),
+					'desc' => __( '(comma separated)', $this->textdomain ),
+					'type' => 'text',
+					'name' => 'exclude_cat',
+					'value' => implode( ', ', (array) $this->options->exclude_cat )
+				),
 
-		.$this->_subsection( __( 'Specific settings', $this->textdomain ), 'specific', array(
-			array(
-				'title' => __( 'List format', $this->textdomain ),
-				'desc' => html( 'p', __( 'Available substitution tags', $this->textdomain ) )
+				array(
+					'title' => __( 'Format', $this->textdomain ),
+					'type' => 'radio',
+					'name' => 'format',
+					'value' => array( 'block', 'list', 'both', 'fancy' ),
+					'desc' => array(
+						__( 'block', $this->textdomain ),
+						__( 'list', $this->textdomain ),
+						__( 'both', $this->textdomain ),
+						__( 'fancy', $this->textdomain ),
+					)
+				),
+			) )
+		);
+
+		$data['sections'][] = array(
+			'title' => __( 'Specific settings', $this->textdomain ),
+			'id' => 'specific',
+			'rows' => $this->table( array(
+				array(
+					'title' => __( 'List format', $this->textdomain ),
+					'desc' => html( 'p', __( 'Available substitution tags', $this->textdomain ) )
 					.html( 'ul', $tags ),
-				'type' => 'text',
-				'name' => 'list_format',
-			),
-
-			array(
-				'title' => sprintf( __( '%s format', $this->textdomain ), '%date%' ),
-				'desc' => html( 'p', $default_date )
-					.html( 'p',
-						html( 'em', __( 'See available date formatting characters <a href="http://php.net/date" target="_blank">here</a>.'
-						, $this->textdomain ) )
+						'type' => 'text',
+						'name' => 'list_format',
 					),
-				'type' => 'text',
-				'name' => 'date_format',
-			),
 
-			array(
-				'title' => __( 'Month names', $this->textdomain ),
-				'type' => 'radio',
-				'name' => 'month_format',
-				'value' => array( 'numeric', 'short', 'long' ),
-				'desc' => array(
-					__( 'numeric', $this->textdomain ),
-					__( 'short', $this->textdomain ),
-					__( 'long', $this->textdomain ),
-				)
-			),
+					array(
+						'title' => sprintf( __( '%s format', $this->textdomain ), '%date%' ),
+						'desc' => html( 'p', $default_date )
+						.html( 'p',
+							html( 'em', __( 'See available date formatting characters <a href="http://php.net/date" target="_blank">here</a>.'
+							, $this->textdomain ) )
+						),
+						'type' => 'text',
+						'name' => 'date_format',
+					),
 
-			array(
-				'title' => __( 'Use anchor links in block', $this->textdomain ),
-				'desc' => __( 'The month links in the block will point to the month links in the list', $this->textdomain ),
-				'type' => 'checkbox',
-				'name' => 'anchors',
-			),
-		) );
+					array(
+						'title' => __( 'Month names', $this->textdomain ),
+						'type' => 'radio',
+						'name' => 'month_format',
+						'value' => array( 'numeric', 'short', 'long' ),
+						'desc' => array(
+							__( 'numeric', $this->textdomain ),
+							__( 'short', $this->textdomain ),
+							__( 'long', $this->textdomain ),
+						)
+					),
+
+					array(
+						'title' => __( 'Use anchor links in block', $this->textdomain ),
+						'desc' => __( 'The month links in the block will point to the month links in the list', $this->textdomain ),
+						'type' => 'checkbox',
+						'name' => 'anchors',
+					),
+				) )
+			);
+
+		$output = SAR_Core::mustache_render( dirname( __FILE__ ) . '/admin.html', $data );
 
 		echo $this->form_wrap( $output );
-	}
-
-	function _subsection( $title, $id, $rows ) {
-		return html( "div id='$id'",
-			"\n" . html( 'h3', $title )
-			."\n" . $this->table( $rows )
-		);
 	}
 }
 
