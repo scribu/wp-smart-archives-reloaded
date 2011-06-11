@@ -1,0 +1,21 @@
+<div id="smart-archives-fancy">
+	<ul class="tabs year-list">
+		{{{year-list}}}
+	</ul>
+
+	{{#year-panes}}
+	<div class="pane">
+		<ul id="month-list-{{year}}" class="tabs month-list">
+			{{{month-list}}}
+		</ul>
+		{{#post-lists}}
+		<div class="pane">
+			<h2 class="month-heading">{{heading}} <span class="month-archive-link">( <a href="{{archive-link}}">{{archive-text}}</a> )</span></h2>
+			<ul class="archive-list">
+				{{{post-list}}}
+			</ul>
+		</div>
+		{{/post-lists}}
+	</div>
+	{{/year-panes}}
+</div>
