@@ -1,0 +1,6 @@
+{{#months}}
+{{^inline}}<li>{{/inline}}
+	{{^is-empty}}<a {{#is-current}}class="current"{{/is-current}} href="{{month-link}}">{{month}}</a>{{/is-empty}}
+	{{#is-empty}}<span class="empty-month">{{month}}</span>{{/is-empty}}
+{{^inline}}</li>{{/inline}}
+{{/months}}

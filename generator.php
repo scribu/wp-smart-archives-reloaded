@@ -209,25 +209,20 @@ class SAR_Generator {
 
 		$in_current_year = ( get_query_var( 'year' ) == $year );
 
-		$month_list = '';
+		$data = array(
+			'inline' => $inline ? array(true) : false
+		);
+
 		foreach ( range( 1, 12 ) as $i ) {
-			$month = $month_names[$i];
-
-			if ( in_array( $i, $this->get_months_with_posts( $year ) ) ) {
-				$url = $this->args->anchors ? "#{$year}{$i}" : get_month_link( $year, $i );
-				$tmp = $this->a_link( $url, $month, $in_current_year && $i == $current_month );
-			}
-			else {
-				$tmp = html( 'span class="empty-month"', $month );
-			}
-
-			if ( $inline )
-				$month_list .= " $tmp";
-			else
-				$month_list .= "\n\t\t" . html( 'li', $tmp );
+			$data['months'][] = array(
+				'month' => $month_names[$i],
+				'month-link' => $this->args->anchors ? "#{$year}{$i}" : get_month_link( $year, $i ),
+				'is-current' => ( $in_current_year && $i == $current_month ) ? array(true) : false,
+				'is-empty' => ( !in_array( $i, $this->get_months_with_posts( $year ) ) ) ? array(true) : false
+			);
 		}
 
-		return $month_list;
+		return self::mustache_render( 'month-list.html', $data );
 	}
 
 	protected function generate_post_list( $year, $i, $indent ) {
