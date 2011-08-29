@@ -3,7 +3,7 @@ Contributors: scribu
 Donate link: http://scribu.net/wordpress
 Tags: archive, archives, post list
 Requires at least: 3.1
-Tested up to: 3.1
+Tested up to: 3.2
 Stable tag: 2.0.4
 
 Easily display posts grouped by year and month, in one or more elegant formats
@@ -29,11 +29,9 @@ Links: [Plugin News](http://scribu.net/wordpress/smart-archives-reloaded) | [Aut
 
 == Installation ==
 
-The plugin can be installed in 3 easy steps:
+See [Installing Plugins](http://codex.wordpress.org/Managing_Plugins#Installing_Plugins).
 
-1. Unzip "Smart Archives Reloaded" archive and put the folder into your plugins folder (/wp-content/plugins/).
-1. Activate the plugin from the Plugins menu.
-1. Create a new page or post and add `[smart_archives]` to the content.
+After activating it, create a new page or post and add `[smart_archives]` to the content.
 
 Alternatively, you can add `<?php smart_archives(); ?>` anywhere in your theme, where you want the archives displayed.
 
@@ -78,6 +76,9 @@ Read this: [Advanced Tweaking](http://scribu.net/wordpress/smart-archives-reload
 If you want to translate this plugin, please read [this](http://scribu.net/wordpress/translating-plugins.html).
 
 == Changelog ==
+
+= 2.0.5 =
+* prevent useless SQL queries
 
 = 2.0.4 =
 * fixed menu when on date archives

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Smart Archives Reloaded
-Version: 2.0.4
+Version: 2.0.5-alpha
 Description: An elegant and easy way to present your posts, grouped by year and month.
 Author: scribu
 Author URI: http://scribu.net
