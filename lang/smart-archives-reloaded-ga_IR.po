@@ -1,0 +1,117 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: smart archives reloaded\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Sarvita Kuamri <sarvita@outshinesolutions.com>\n"
+"Language-Team: Lets Be Famous <ray.s@letsbefamous.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Irish\n"
+"X-Poedit-Country: IRELAND\n"
+
+#: admin.php:14
+msgid "Smart Archives Settings"
+msgstr "Cartlann Cliste Socruithe"
+
+#: admin.php:15
+msgid "Smart Archives"
+msgstr "Cartlann cliste"
+
+#: admin.php:88
+msgid "General settings"
+msgstr "suímh ginearálta"
+
+#: admin.php:90
+msgid "Exclude Categories by ID"
+msgstr "Fág amach Catagóirí ag ID"
+
+#: admin.php:91
+msgid "(space separated)"
+msgstr "(spás eatarthu)"
+
+#: admin.php:97
+msgid "Use wp-cron"
+msgstr "Bain úsáid as WP-cron"
+
+#: admin.php:98
+msgid "Uncheck this if your archive isn't being updated"
+msgstr "Díthiceáil seo más rud é nach bhfuil do  cartlann  á thabhairt suas chun dáta"
+
+#: admin.php:104
+msgid "Format"
+msgstr "formáid"
+
+#: admin.php:109
+msgid "list"
+msgstr "liosta"
+
+#: admin.php:110
+msgid "block"
+msgstr "bloc"
+
+#: admin.php:111
+msgid "both"
+msgstr "an dá"
+
+#: admin.php:116
+msgid "Specific settings"
+msgstr "socruithe sonracha"
+
+#: admin.php:118
+msgid "List format"
+msgstr "bhformáid liosta"
+
+#: admin.php:119
+msgid "Available substitution tags"
+msgstr "Clibeanna chur in ionad  ar Fáil"
+
+#: admin.php:130
+msgid "Numeric months in block"
+msgstr "Mhí uimhriúil i mbloc"
+
+#: admin.php:131
+msgid "The month links in the block will be shown as numbers"
+msgstr "Beidh an naisc mhí sa bhloc a thaispeáint mar  uimhreacha"
+
+#: admin.php:137
+msgid "Use anchor links in block"
+msgstr "Úsáid naisc ancaire i mbloc"
+
+#: admin.php:138
+msgid "The month links in the block will point to the month links in the list"
+msgstr "Beidh an naisc mhí sa bhloc bpointe chun na naisc mí sa liosta"
+
+#: scb/AdminPage.php:105
+msgid "Settings <strong>saved</strong>."
+msgstr "Socruithe <strong>  shábháil  </ strong>."
+
+#: scb/AdminPage.php:163
+msgid "Save Changes"
+msgstr "Athruithe Sábháil"
+
+#: scb/AdminPage.php:338
+msgid "Settings"
+msgstr "Socruithe"
+
+#. Plugin Name of an extension
+msgid "Smart Archives Reloaded"
+msgstr "Cartlann Cliste Reloaded"
+
+#. Plugin URI of an extension
+msgid "http://scribu.net/wordpress/smart-archives-reloaded"
+msgstr "http://scribu.net/wordpress/smart-archives-reloaded"
+
+#. Description of an extension
+msgid "An elegant and easy way to present your archives."
+msgstr "Ar bhealach galánta agus éasca a chur i láthair  do chartlanna."
+
+#. Author of an extension
+msgid "scribu"
+msgstr "scribu"
+
+#. Author URI of an extension
+msgid "http://scribu.net"
+msgstr "http://scribu.net"
+
