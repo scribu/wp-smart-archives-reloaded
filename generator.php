@@ -281,8 +281,10 @@ class SAR_Generator {
 
 
 	protected function substitute_post_link( $post ) {
+		unset( $post->filter );
+
 		return html_link(
-			get_permalink( $post->ID ),
+			get_permalink( $post ),
 			apply_filters( 'smart_archives_title', $post->post_title, $post->ID )
 		);
 	}
