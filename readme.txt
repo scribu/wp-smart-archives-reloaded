@@ -17,7 +17,7 @@ Smart Archives Reloaded allows you to display a list of posts grouped by year an
 * **list** = a list of posts grouped by month
 * **block** = a compact block of links to year and date archive pages
 * **menu** = a two-level menu with links to year and date archive pages
-* **both** = block + list ([example](http://scribu.net/arhiva))
+* **both** = block + list ([example](http://scribu.net/archive))
 * **fancy** = menu + list + JavaScript ([example](http://www.conceptfusion.co.nz/archive))
 
 **Credits:**
