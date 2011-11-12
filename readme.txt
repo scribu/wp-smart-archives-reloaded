@@ -1,6 +1,5 @@
 === Smart Archives Reloaded ===
 Contributors: scribu
-Donate link: http://scribu.net/wordpress
 Tags: archive, archives, post list
 Requires at least: 3.1
 Tested up to: 3.2
