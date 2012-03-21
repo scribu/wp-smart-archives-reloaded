@@ -60,20 +60,6 @@ Read this: [Advanced Tweaking](http://scribu.net/wordpress/smart-archives-reload
 1. A fancy archive
 2. The Settings Page
 
-== Translations ==
-
-* Belarusian - [ilyuha](http://antsar.info/)
-* Chinese - [Yorick Chen](http://www.pihai.net/technology/smart-archives-reloaded-chinese-translation.html)
-* Danish - jos
-* Dutch - [Lourens Rolograaf](http://rolograaf.nl)
-* French - [Référenceur Freelance](http://www.referenceurfreelance.com), [Li-An](http://www.li-an.fr)
-* German - [Cornelius Schiffer](http://schiffr.de/)
-* Italian - [Gianni Diurno](http://gidibao.net/)
-* Russian - [Fat Cow](http://www.fatcow.com)
-* Uzbek - [Alexandra Bolshova](http://comfi.com)
-
-If you want to translate this plugin, please read [this](http://scribu.net/wordpress/translating-plugins.html).
-
 == Changelog ==
 
 = 2.0.5 =
