@@ -126,40 +126,44 @@ class SAR_Core {
 		if ( !self::$fancy && !$add_css )
 			return;
 
-		$css_dev = defined( 'STYLE_DEBUG' ) && STYLE_DEBUG ? '.dev' : '';
-
 		$plugin_url = plugin_dir_url( __FILE__ ) . 'inc/';
 
-		$css_url = add_query_arg( 'ver', '1.8', $plugin_url . "styles$css_dev.css" );
-
-		wp_print_scripts( 'jquery' );
-
 		if ( self::$fancy ) {
-			wp_register_script( 'tools-tabs', $plugin_url . 'tools.tabs.min.js', array( 'jquery' ), '1.0.4', true );
-			wp_print_scripts( 'tools-tabs' );
+			wp_register_script(
+				'tools-tabs',
+				$plugin_url . 'tools.tabs.min.js',
+				array( 'jquery' ),
+				'1.1.2',
+				true
+			);
+			scbUtil::do_scripts( 'tools-tabs' );
 		}
-?>
+
+		if ( $add_css ) {
+			$css_dev = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.dev' : '';
+
+			wp_register_style(
+				'smart-archives',
+				$plugin_url . "styles$css_dev.css",
+				array(),
+				SAR_VERSION
+			);
+			scbUtil::do_styles( 'smart-archives' );
+		}
+
+		if ( self::$fancy ) { ?>
 <script type="text/javascript">
 jQuery( document ).ready( function( $ ) {
-<?php if ( $add_css ) : ?>
-	$( 'head' ).prepend( $( '<link>' ).attr( {
-		rel: 'stylesheet',
-		type: 'text/css',
-		media: 'screen',
-		href: '<?php echo $css_url; ?>'
-	} ) );
-<?php endif; ?>
-<?php if ( self::$fancy ) : ?>
 	$( '.tabs' ).tabs( '> .pane' );
 	$( '#smart-archives-fancy .year-list' )
 		.find( 'a' ).click( function( ev ) {
 			$( '.pane .tabs:visible a:last' ).click();
 		} ).end()
 		.find( 'a:last' ).click();
-<?php endif; ?>
 } );
 </script>
 <?php
+		}
 	}
 
 	static function mustache_render( $file_path, $data ) {

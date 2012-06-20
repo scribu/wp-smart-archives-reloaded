@@ -10,7 +10,9 @@ Text Domain: smart-archives-reloaded
 Domain Path: /lang
 */
 
-@include dirname( __FILE__ ) . '/scb/load.php';
+require dirname( __FILE__ ) . '/scb/load.php';
+
+define( 'SAR_VERSION', '2.0' );
 
 function _sar_init() {
 	load_plugin_textdomain( 'smart-archives-reloaded', '', dirname( plugin_basename( __FILE__ ) ) . '/lang' );
