@@ -33,16 +33,18 @@ class SAR_Settings extends scbAdminPage {
 
 		$data = array();
 
+		$formdata = $this->options->get();
+		$formdata['exclude_cat'] = implode( ', ', (array) $formdata['exclude_cat'] );
+
 		$data['sections'][] = array(
 			'title' => __( 'General settings', $this->textdomain ),
 			'id' => 'general',
-			'rows' => $this->table( array(
+			'rows' => scbForms::table( array(
 				array(
 					'title' => __( 'Exclude Categories by ID', $this->textdomain ),
 					'desc' => __( '(comma separated)', $this->textdomain ),
 					'type' => 'text',
 					'name' => 'exclude_cat',
-					'value' => implode( ', ', (array) $this->options->exclude_cat )
 				),
 
 				array(
@@ -57,13 +59,13 @@ class SAR_Settings extends scbAdminPage {
 						__( 'fancy', $this->textdomain ),
 					)
 				),
-			) )
+			), $formdata )
 		);
 
 		$data['sections'][] = array(
 			'title' => __( 'Specific settings', $this->textdomain ),
 			'id' => 'specific',
-			'rows' => $this->table( array(
+			'rows' => scbForms::table( array(
 				array(
 					'title' => __( 'List format', $this->textdomain ),
 					'desc' => html( 'p', __( 'Available substitution tags', $this->textdomain ) )
@@ -101,7 +103,7 @@ class SAR_Settings extends scbAdminPage {
 						'type' => 'checkbox',
 						'name' => 'anchors',
 					),
-				) )
+				), $formdata )
 			);
 
 		$output = SAR_Core::mustache_render( dirname( __FILE__ ) . '/admin.html', $data );
