@@ -1,0 +1,157 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Smart Archives Reloaded 1.8.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-12-10 17:16+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Anders Nordby <anders@fupp.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Norwegian Bokmal\n"
+"X-Poedit-Country: NORWAY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_c;_e;_n:1,2;_nc:1,2;_n_noop:1,2;__ngettext:1,2;__ngettext_noop:1,2\n"
+"X-Poedit-Basepath: d:\\wordpress\\plugins\\smart-archives-reloaded\n"
+"Plural-Forms: nplurals=2;nplural=n != 1;\n"
+"Language-Team: \n"
+"X-Poedit-SearchPath-0: d:\\wordpress\\plugins\\smart-archives-reloaded\n"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:8
+msgid "Smart Archives Settings"
+msgstr "Innstillinger for Smart Archives"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:9
+msgid "Smart Archives"
+msgstr "Smart Archives"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:49
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:133
+msgid "Clear"
+msgstr "Tøm"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:52
+msgid "Cache <strong>cleared</strong>."
+msgstr "Cache <strong>tømt</strong>."
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:62
+msgid "Default"
+msgstr "Standard"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:64
+msgid "General settings"
+msgstr "Generelle innstillinger"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:66
+msgid "Exclude Categories by ID"
+msgstr "Ekskluder kategori via Id"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:67
+msgid "(comma separated)"
+msgstr "(kommaseparert)"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:74
+msgid "Format"
+msgstr "Format"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:79
+msgid "block"
+msgstr "blokk"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:80
+msgid "list"
+msgstr "liste"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:81
+msgid "both"
+msgstr "begge"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:82
+msgid "fancy"
+msgstr "smart"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:87
+msgid "Specific settings"
+msgstr "Spesifikke innstillinger"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:89
+msgid "List format"
+msgstr "Listeformat"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:90
+msgid "Available substitution tags"
+msgstr "Tilgjengelige variabler"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:97
+#, php-format
+msgid "%s format"
+msgstr "%s format"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:100
+msgid "See available date formatting characters <a href=\"http://php.net/date\" target=\"_blank\">here</a>."
+msgstr "Se mulige tegn for tid- og datokoding <a href=\"http://php.net/date\" target=\"_blank\">her</a>."
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:108
+msgid "Numeric months in block"
+msgstr "Numeriske måneder i blokk"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:109
+msgid "The month links in the block will be shown as numbers"
+msgstr "Månedslink i blokken vil bli vist med nummer"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:115
+msgid "Use anchor links in block"
+msgstr "Bruk anker-links i blokken"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:116
+msgid "The month links in the block will point to the month links in the list"
+msgstr "Månedslinks i blokken vil peke på månedslenkene i listen"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:122
+msgid "Cache control"
+msgstr "Cache-kontroll"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:124
+msgid "Use wp-cron"
+msgstr "Bruk wp-cron"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/admin.php:130
+msgid "Clear cache"
+msgstr "Tøm cache"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/generator.php:119
+msgid "View complete archive page"
+msgstr "Se komplett arkivside"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/scb/AdminPage.php:101
+msgid "Settings <strong>saved</strong>."
+msgstr "Innstillinger <strong>lagret</strong>."
+
+#: d:\wordpress\plugins\smart-archives-reloaded/scb/AdminPage.php:111
+msgid "Save Changes"
+msgstr "Lagre endringer"
+
+#: d:\wordpress\plugins\smart-archives-reloaded/scb/AdminPage.php:314
+msgid "Settings"
+msgstr "Innstillinger"
+
+#~ msgid "Updates the archives in the background"
+#~ msgstr "Opdaterer arkiverne i baggrunden"
+
+#~ msgid "Uncheck this if your archive isn't being updated"
+#~ msgstr "Fjern flueben, hvis dit arkiv ikke opdateres"
+
+#~ msgid "Smart Archives Reloaded"
+#~ msgstr "Smart Archives Reloaded"
+
+#~ msgid "http://scribu.net/wordpress/smart-archives-reloaded"
+#~ msgstr "http://scribu.net/wordpress/smart-archives-reloaded"
+
+#~ msgid "An elegant and easy way to present your archives."
+#~ msgstr "En elegant og let måde at præsentere dit arkiv"
+
+#~ msgid "scribu"
+#~ msgstr "scribu"
+
+#~ msgid "http://scribu.net"
+#~ msgstr "http://scribu.net"
