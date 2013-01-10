@@ -1,0 +1,182 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Smart Archives Reloaded in italiano\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/smart-archives-reloaded\n"
+"POT-Creation-Date: 2009-09-26 03:54+0300\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Gabriel Fjellander <fjellander@me.com>\n"
+"Language-Team: Gianni Diurno | http://gidibao.net/ <gidibao@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
+"_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
+"X-Textdomain-Support: yes\n"
+"Language: it_IT\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#  SOME DESCRIPTIVE TITLE.
+#  Copyright (C) YEAR scribu
+#  This file is distributed under the same license as the PACKAGE package.
+#  FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# @ smart-archives-reloaded
+#: admin.php:8
+msgid "Smart Archives Settings"
+msgstr "Inställningar för Smart Archives"
+
+# @ smart-archives-reloaded
+#: admin.php:9
+msgid "Smart Archives"
+msgstr "Smart Archives"
+
+# @ smart-archives-reloaded
+#: admin.php:43
+msgid "Default"
+msgstr "Standard"
+
+# @ smart-archives-reloaded
+#: admin.php:45
+msgid "General settings"
+msgstr "Inställningar"
+
+# @ smart-archives-reloaded
+#: admin.php:47
+msgid "Exclude Categories by ID"
+msgstr "Uteslut kategorier med ID"
+
+# @ smart-archives-reloaded
+#: admin.php:111
+msgid "Use wp-cron"
+msgstr "Använd wp-cron"
+
+# @ smart-archives-reloaded
+#: admin.php:55
+msgid "Format"
+msgstr "Format"
+
+# @ smart-archives-reloaded
+#: admin.php:61
+msgid "list"
+msgstr "lista"
+
+# @ smart-archives-reloaded
+#: admin.php:60
+msgid "block"
+msgstr "block"
+
+# @ smart-archives-reloaded
+#: admin.php:62
+msgid "both"
+msgstr "båda"
+
+# @ smart-archives-reloaded
+#: admin.php:63
+msgid "fancy"
+msgstr "fancy"
+
+# @ smart-archives-reloaded
+#: admin.php:68
+msgid "Specific settings"
+msgstr "Specifika inställningar"
+
+# @ smart-archives-reloaded
+#: admin.php:70
+msgid "List format"
+msgstr "Listformat"
+
+# @ smart-archives-reloaded
+#: admin.php:71
+msgid "Available substitution tags"
+msgstr "Tillgängliga utbytestaggar"
+
+# @ smart-archives-reloaded
+#: admin.php:78
+#, php-format
+msgid "%s format"
+msgstr "%s format"
+
+# @ smart-archives-reloaded
+#: admin.php:81
+msgid ""
+"See available date formatting characters <a href=\"http://php.net/date\" "
+"target=\"_blank\">here</a>."
+msgstr ""
+"Tillgängliga datumformat: <a href=\"http://php.net/date\" target=\"_blank\">"
+
+# @ smart-archives-reloaded
+#: admin.php:102
+msgid "Use anchor links in block"
+msgstr "Använd ankarlänkar i block"
+
+# @ smart-archives-reloaded
+#: admin.php:103
+msgid "The month links in the block will point to the month links in the list"
+msgstr "Månadslänkarna i blocket kommer länka till månadslänkarna i listan"
+
+# @ smart-archives-reloaded
+#: scb/AdminPage.php:101
+msgid "Settings <strong>saved</strong>."
+msgstr "Inställningar <strong>sparade</strong>."
+
+# @ smart-archives-reloaded
+#: scb/AdminPage.php:112 scb/AdminPage.php:123
+msgid "Save Changes"
+msgstr "Spara ändringarna"
+
+# @ smart-archives-reloaded
+#: scb/AdminPage.php:329
+msgid "Settings"
+msgstr "Inställningar"
+
+# @ smart-archives-reloaded
+#: admin.php:29 admin.php:120
+msgid "Clear"
+msgstr "Rensa"
+
+# @ smart-archives-reloaded
+#: admin.php:32
+msgid "Cache <strong>cleared</strong>."
+msgstr "Cachen <strong>rensad</strong>."
+
+# @ smart-archives-reloaded
+#: admin.php:48
+msgid "(comma separated)"
+msgstr "(kommaseparerade)"
+
+# @ smart-archives-reloaded
+#: admin.php:109
+msgid "Cache control"
+msgstr "Cache-kontroll"
+
+# @ smart-archives-reloaded
+#: admin.php:117
+msgid "Clear cache"
+msgstr "Rensa cachen"
+
+# @ smart-archives-reloaded
+#: generator.php:197
+msgid "View complete archive page"
+msgstr "Visa arkiv-sidan"
+
+# @ smart-archives-reloaded
+#: admin.php:89
+msgid "Month names"
+msgstr "Månadsnamn"
+
+# @ smart-archives-reloaded
+#: admin.php:95
+msgid "numeric"
+msgstr "numerisk"
+
+# @ smart-archives-reloaded
+#: admin.php:96
+msgid "short"
+msgstr "kort"
+
+# @ smart-archives-reloaded
+#: admin.php:97
+msgid "long"
+msgstr "lång"
