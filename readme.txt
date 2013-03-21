@@ -21,6 +21,10 @@ Smart Archives Reloaded allows you to display a list of posts grouped by year an
 * **both** = block + list ([example](http://scribu.net/archive))
 * **fancy** = menu + list + JavaScript ([example](http://www.conceptfusion.co.nz/archive))
 
+**No support**
+
+I do not offer support for this plugin, either free or paid.
+
 **Credits:**
 
 * [Justin Blanton](http://justinblanton.com), for the original [Smart Archives](http://justinblanton.com/projects/smartarchives/) plugin
