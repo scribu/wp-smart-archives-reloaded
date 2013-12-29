@@ -42,7 +42,7 @@ class SAR_Generator {
 		return true;
 	}
 
-	function query_manipulation( $bits, $wp_query ) {
+	public static function query_manipulation( $bits, $wp_query ) {
 		if ( $wp_query->get( 'months_with_posts' ) ) {
 			$bits['fields'] = 'DISTINCT YEAR( post_date ) AS year, MONTH( post_date ) AS month';
 			$bits['orderby'] = 'year DESC, month ASC';
