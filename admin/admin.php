@@ -20,8 +20,15 @@ class SAR_Settings extends scbAdminPage {
 		echo $this->css_wrap( 'h3 {margin-bottom: 0 !important}' );
 	}
 
-	function validate( $args ) {
-		return SAR_Core::validate_args( $args );
+	/**
+	 * validate - revised to eliminate PHP 7 warning. Adhere's to parent class's scbAdminPage::validate
+	 *
+	 * @param  {Array} $new_data new settings
+	 * @param  {Array} $old_data old settings	 - unused in SAR_Core::validate_args, as it queries settings on its own
+	 * @return {type}
+	 */
+	function validate( $new_data, $old_data ) {
+		return SAR_Core::validate_args( $new_data );
 	}
 
 	function page_content() {
@@ -111,4 +118,3 @@ class SAR_Settings extends scbAdminPage {
 		echo $this->form_wrap( $output );
 	}
 }
-
